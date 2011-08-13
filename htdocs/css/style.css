@@ -1,0 +1,27 @@
+html {
+    overflow-y: scroll;
+    background: #5F5F5F
+        url('../img/html_bg.png') repeat-x scroll;
+}
+
+body {
+    font-family: "Arial", "Helvetica", "Verdana", "sans-serif";
+    background: transparent url('../img/body_bg.jpg') no-repeat center top;
+    min-height: 100%;
+    margin: 0;
+    padding: 0 0 20px;
+}
+
+.clear {
+    clear: both;
+}
+
+.error {
+    padding-top: 150px;
+}
+
+.error p {
+    text-align: center;
+    color: white;
+    font-size: 2em; 
+}
