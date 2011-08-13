@@ -1,0 +1,3 @@
+[submodule "htdocs/js/d3"]
+	path = htdocs/js/d3
+	url = git@github.com:PrototypeAlex/d3.git
