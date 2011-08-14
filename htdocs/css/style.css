@@ -6,10 +6,25 @@ html {
 
 body {
     font-family: "Arial", "Helvetica", "Verdana", "sans-serif";
+    font-size: 10px;
     background: transparent url('../img/body_bg.jpg') no-repeat center top;
     min-height: 100%;
     margin: 0;
     padding: 0 0 20px;
+}
+
+#content {
+    width: 980px;
+    margin: auto;
+}
+
+.vis-container {
+    width: 98%;
+    padding: 15px 15px 15px 15px;
+    float: left;
+    border: thin solid black;
+    margin-top: 10px;
+    background: white;
 }
 
 .clear {
@@ -24,4 +39,28 @@ body {
     text-align: center;
     color: white;
     font-size: 2em; 
+}
+
+.chart div {
+    font: 10px sans-serif;
+    background-color: steelblue;
+    text-align: right;
+    padding: 3px;
+    margin: 1px;
+    color: white;
+}
+
+.chart rect {
+    stroke: white;
+    fill: steelblue;
+}
+
+.chart text.bar {
+    font-family: arial, freesans, clean, sans-serif;
+    fill: white;
+    font-size: .8em;
+}
+
+svg {
+  shape-rendering: crispEdges;
 }
