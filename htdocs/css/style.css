@@ -53,6 +53,7 @@ body {
 .chart rect {
     stroke: white;
     fill: steelblue;
+    shape-rendering: crispEdges;
 }
 
 .chart text.bar {
@@ -62,5 +63,11 @@ body {
 }
 
 svg {
-  shape-rendering: crispEdges;
+  
+}
+
+.chart circle.little {
+  fill: #aaa;
+  stroke: #666;
+  stroke-width: 1.5px;
 }
