@@ -136,7 +136,9 @@ NZSIC.manufacturing.gdppc = GDP.manufacturing / NZSIC.manufacturing.people
 NZSIC.ele_gas_wat_was.gdppc = GDP.electricity_gas_water / NZSIC.ele_gas_wat_was.people	
 NZSIC.construction.gdppc = GDP.construction / NZSIC.construction.people			
 NZSIC.whole.gdppc = GDP.wholesale_trade / NZSIC.whole.people
-NZSIC.fin_ins.gdppc = GDP.finance_insurance_business_trade / NZSIC.fin_ins.people
+NZSIC.fin_ins.gdppc = GDP.finance_insurance_business / NZSIC.fin_ins.people
+
+NZSIC.no_class.gdppc = GDP.not_specified / NZSIC.no_class.people
 
 //About the smae
 NZSIC.pub_admin_saftey.gdppc = GDP.gov_admin_defence / NZSIC.pub_admin_saftey.people	
@@ -165,54 +167,134 @@ NZSIC.admin_sup.gdppc = 15598.2073265783
 NZSIC.edu_train.gdppc = 15896.7069414831	
 NZSIC.health_social.gdppc = 16461.1307420495	
 NZSIC.arts_rec.gdppc = 16035.1317440402	
-NZSIC.no_class.gdppc = 21490
+
 		
 //Work hours per Industry per capita 2009, source QES quartley dec 2009 by  totalweekly hours / jobsfilled
-var QES2010 = 
+var QES = 
 {
-forestry_mining	: 			38.4,
-manufacturing :				35.6,
-electricity_gas_water_waste	: 	36.7,
-construction	: 			30.4,
-wholesale	: 			33.4,
-retail	: 				26.2,
-accommodation_food : 			21.5,
-transport_postal_warehousing	: 	34.2,
-information_media_tele	: 		31.3,
-finance_insurance	: 		32.0,
-rental_hiring_realestate	: 	25.9,
-professional_sci_technical_admin: 	28.3,
-public_administration_safety	: 	34.3,
-education_training	: 		28.7,
-health_social	: 			27.1,
-arts_recreation_other	: 		24.7
+forestry_mining	: 			38.4,//
+manufacturing :				35.6,//
+electricity_gas_water_waste	: 	36.7,//
+construction	: 			30.4,//
+wholesale	: 			33.4,//
+retail	: 				26.2,//
+accommodation_food : 			21.5,//
+transport_postal_warehousing	: 	34.2,//
+information_media_tele	: 		31.3,//
+finance_insurance	: 		32.0,//
+rental_hiring_realestate	: 	25.9,//
+professional_sci_technical_admin: 	28.3,//
+public_administration_safety	: 	34.3,//
+education_training	: 		28.7,//
+health_social	: 			27.1,//
+arts_recreation_other	: 		24.7//
+}
+
+//clear mapping
+NZSIC.manufacturing.work = QES.manufacturing
+NZSIC.prof_sci_tech.work = QES.professional_sci_technical_admin
+NZSIC.ele_gas_wat_was.work = QES.electricity_gas_water_waste
+NZSIC.construction.work = QES.construction
+NZSIC.whole.work = QES.wholesale
+NZSIC.retail.work = QES.retail
+NZSIC.acc_food.work = QES.accommodation_food
+NZSIC.tran_post_ware.work = QES.transport_postal_warehousing
+NZSIC.inform_tele.work = QES.information_media_tele
+
+NZSIC.fin_ins.work = QES.finance_insurance	
+NZSIC.rent_hir_real.work = QES.rental_hiring_realestate	
+
+	
+NZSIC.pub_admin_saftey.work = QES.public_administration_safety		
+NZSIC.edu_train.work = QES.education_training	
+NZSIC.health_social.work = QES.health_social		
+NZSIC.arts_rec.work = QES.arts_recreation_other	
+	
+
+//grouping
+NZSIC.forestry.work = QES.forestry_mining
+NZSIC.mining.work = QES.forestry_mining
+
+
+//We use Australian Statistics for these variables
+NZSIC.admin_sup.work = 38.9
+NZSIC.no_class.work = 38.1
+
+//This is currently guess work, as there seem to be little to no information on this. So here it goes	
+NZSIC.agriculture.work = 40
+NZSIC.fishing.work = 40
+
+//Some utility functions
+var gdp = function()
+{
+	var gdp = 0;
+	for(x in NZSIC)
+	{
+		gdp += NZSIC[x].gdppc * NZSIC[x].people
+	}
+	
+	return gdp
+
+}
+
+var population = function()
+{
+	var totpeople = 0;
+	for(x in NZSIC)
+	{
+		totpeople += NZSIC[x].people
+	}
+	
+	return totpeople
+}
+
+var gdppc = function()
+{
+	var gdp = 0;
+	var totpeople = 0;
+	for(x in NZSIC)
+	{
+		gdp += NZSIC[x].gdppc * NZSIC[x].people
+		totpeople += NZSIC[x].people
+	}
+	
+	return gdp/totpeople
+}
+	
+var avgwork = function()
+{
+	var totwork = 0;
+	var totpeople = 0;
+	for(x in NZSIC)
+	{
+		totwork += NZSIC[x].work * NZSIC[x].people
+		totpeople += NZSIC[x].people
+	}
+	return totwork/totpeople
+}
+
+var avgwage = function()
+{
+	var totwage = 0;
+	var totpeople = 0;
+	for(x in NZSIC)
+	{
+		totwage += NZSIC[x].wage * NZSIC[x].people
+		totpeople += NZSIC[x].people
+	}
+	return totwage/totpeople
 }
 
 
-NZSIC.agriculture.people = 119710	
-NZSIC.forestry.people = 5400
-NZSIC.fishing.people = 4180
-NZSIC.agriculture.people += agchange
-NZSIC.forestry.people += forestc
-NZSIC.fishing.people += fishc
-NZSIC.mining.people = 6670
-NZSIC.manufacturing.people = 264540
-NZSIC.ele_gas_wat_was.people = 13910	
-NZSIC.construction.people = 186860		
-NZSIC.whole.people = 120660	
-NZSIC.retail.people = 226640	
-NZSIC.acc_food.people = 150020	
-NZSIC.tran_post_ware.people = 98370	
-NZSIC.inform_tele.people = 47040	
-NZSIC.fin_ins.people = 62150	
-NZSIC.rent_hir_real.people = 50770	
-NZSIC.prof_sci_tech.people = 201870	
-NZSIC.admin_sup.people = 121340	
-NZSIC.pub_admin_saftey.people = 106370		
-NZSIC.edu_train.people = 177130		
-NZSIC.health_social.people = 194520		
-NZSIC.arts_rec.people = 119960		
-NZSIC.no_class.people = 21490		
+
+//The problem with these guesses is that they will not corrospond to the information from other countries,
+//So to make them more accurate we need to scale the numbers
+
+//Scaling Hours worked per week, to OECD numbers from http://stats.oecd.org/Index.aspx?DataSetCode=ANHRS
+
+var OECDWorkPerWeek = 37.4
+var avgw = avgwork()
+for(x in NZSIC) {NZSIC[x].work =  NZSIC[x].work * OECDWorkPerWeek/avgw }
 
 
 
