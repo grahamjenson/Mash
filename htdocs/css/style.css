@@ -68,6 +68,6 @@ svg {
 
 .chart circle.little {
   fill: #aaa;
-  stroke: #666;
+  stroke: #333;
   stroke-width: 1.5px;
 }

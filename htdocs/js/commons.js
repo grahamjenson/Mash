@@ -20,6 +20,8 @@ $(document).ready( function() {
 	    {"country": "United States", "gdpPC": 47284, "avgHoursWorked": 1778, "avgWage": 52507},
 	    {"country": "New Zealand", "gdpPC": 32145, "avgHoursWorked": 1758, "avgWage": 40111}];
 	
+	var n = new NewZealand();
+	var world = new World();
 	
 	var data = d3.range(10).map(Math.random);
 	
@@ -28,7 +30,10 @@ $(document).ready( function() {
 	bargraph.CreateBarGraph();
 	
 	var bubbleChart = new BubbleChart('bubble-chart');
-	bubbleChart.CreateBubbleChart(mockGDP, 600, 400);
+	var ll = []
+	for(x in world.stats){ll.push(world.stats[x]);}
+	ll.push({name: "New Zealand", gdppc : n.gdppc(), work : n.avgwork(), wage : n.avgwage()})
+	bubbleChart.CreateBubbleChart(ll, 600, 400);
 	
 	
 });
@@ -140,20 +145,21 @@ function BubbleChart(container) {
 	
 	var chart;
 	var data = [];
-	var x, y, w, h;
+	var x, y, z, w, h;
 	
 	this.CreateBubbleChart = function(data, w, h) {
 		this.data = data;
 		this.w = w;
 		this.h = h;
 		
-		var xData = $.map(data, function(o){ return o.avgWage; });
-		var yData = $.map(data, function(o){ return o.avgHoursWorked; });
-		var zData = $.map(data, function(o){ return o.gdpPC; });
+		var xData = $.map(data, function(o){ return o.wage; });
+		var yData = $.map(data, function(o){ return o.work; });
+		var zData = $.map(data, function(o){ return o.gdppc; });
+		var fill = d3.scale.category20c();
 		
 		x = d3.scale.linear().domain([d3.min(xData), d3.max(xData)]).rangeRound([65, w - 65]);
-	    y = d3.scale.linear().domain([d3.min(yData), d3.max(yData)]).rangeRound([65, h - 65]);
-		z = d3.scale.ordinal().domain([d3.min(zData), d3.max(zData)]).range([40, 60]);
+	    y = d3.scale.linear().domain([d3.max(yData), d3.min(yData)]).rangeRound([65, h - 65]);
+		z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([35, 60]);
 		
 		chart = d3.select("#" + container)
 			.append("svg:svg")
@@ -166,17 +172,19 @@ function BubbleChart(container) {
 		var g = chart.selectAll("g")
 	        .data(data)
 	      .enter().append("svg:g")
-	    	.attr("transform", function(d) { return "translate(" + x(d.avgWage) + "," + y(d.avgHoursWorked) + ")"; });
+	    	.attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; });
 		
 		g.append("svg:circle")
 	      .attr("class", "little")
-	      .attr("r",  function(d) { return z(d.gdpPC); });
+	      .attr("r",  function(d) { return z(d.gdppc); })
+	      .style("fill", function(d) { if (d.name == "New Zealand") { return 'green'; } else { return fill(d.name); } })
+	      .style("opacity", function (d) { if (d.name == "New Zealand") { return .75; } else { return .25; } });
 		
 
 		g.append("svg:text")
 	      .attr("dy", ".35em")
 	      .attr("text-anchor", "middle")
-	      .text(function(d, i) { return d.country; });
+	      .text(function(d, i) { return d.name; });
 		
 		chart.append("svg:line")
 	    .attr("y1", 0)
