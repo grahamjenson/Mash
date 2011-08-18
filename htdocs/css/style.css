@@ -27,11 +27,7 @@ body {
     background: white;
 }
 
-.button-container {
-    width: 98%;
-    padding: 5px 15px 5px 15px;
-    
-}
+
 
 .clear {
     clear: both;
@@ -76,4 +72,29 @@ svg {
   fill: #aaa;
   stroke: #333;
   stroke-width: 1.5px;
+}
+
+/* GDPPC Chart */
+#bubble-chart {
+    float: left;	
+}
+
+#gdp-container {
+    width: 460px;
+    padding: 0px 15px 5px 15px;
+    float: right;
+    cursor: pointer;
+}
+
+#gdp-container p {
+    text-align: center;
+    padding-left: 40px;	
+}
+
+
+/* Industry Chart */
+#industry-container {
+    width: 460px;
+    padding: 5px 15px 5px 15px;
+    float: right;
 }

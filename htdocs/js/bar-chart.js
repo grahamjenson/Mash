@@ -4,27 +4,28 @@ function BarGraph(container) {
 	
 	var chart;
 	var data = [];
-	var h, w, x, y;
+	var w, h, x, y;
+	var paddingWidth = 150;
 	
-	this.CreateBarGraph = function() {
+	this.CreateBarGraph = function(dataInput, width, hieght , totalWorkforce) {
 		
-		var w = 800,
-	    h = 230,
-	    //x = d3.scale.linear().domain([0, 1]).range([0, w - 150]);
-	    y = d3.scale.ordinal().domain(d3.range(data.length)).rangeBands([0, h], .2),
-		
-		//var splicedArray = $.map(data, function(o){ return o.value; });
-		x = d3.scale.linear().domain([0, 1]).range([0, w - 150]);
+		data = dataInput;
+		w = width;
+	    h = hieght;
+	    
+	    
+	    y = d3.scale.ordinal().domain(d3.range(data.length)).rangeBands([0, h], .2);
+		x = d3.scale.linear().domain([0, totalWorkforce / 4]).range([0, w - paddingWidth]);
 		
 		// The graph container
 		chart = d3.select("#" + container)
 		    .append("svg:svg")
 			.attr("class", "chart")
 			.attr("id", "d3-" + container)
-			.attr("width", w + 40)
-		    .attr("height", h + 20)
+			.attr("width", w)
+		    .attr("height", h)
 			.append("svg:g")
-			.attr("transform", "translate(175,0)");
+			.attr("transform", "translate(250,0)");
 		
 		var bars = chart.selectAll("g.bar")
 		    .data(data)
@@ -34,17 +35,17 @@ function BarGraph(container) {
 		
 		bars.append("svg:rect")
 		    .attr("fill", "steelblue")
-		    .attr("width", function(d, i) { return x(d.value); })
+		    .attr("width", function(d, i) { return x(d.people); })
 		    .attr("height", y.rangeBand());
 		
 		bars.append("svg:text")
-		    .attr("x", function(d, i) { return x(d.value); })
+		    .attr("x", function(d, i) { return x(d.people); })
 		    .attr("y", y.rangeBand() / 2)
 		    .attr("dx", -6)
 		    .attr("dy", ".35em")
 		    .attr("fill", "white")
 		    .attr("text-anchor", "end")
-		    .text(function(d, i) { return d.value * 100 + '%'; });
+		    .text(function(d, i) { return Math.round(d.people / totalWorkforce * 100) + '%'; });
 
 		bars.append("svg:text")
 		    .attr("x", 0)
@@ -52,7 +53,7 @@ function BarGraph(container) {
 		    .attr("dx", -6)
 		    .attr("dy", ".35em")
 		    .attr("text-anchor", "end")
-		    .text(function(d, i) { return d.industry; });
+		    .text(function(d, i) { return d.name; });
 		
 		var rules = chart.selectAll("g.rule")
 		    .data(x.ticks(10))

@@ -4,67 +4,76 @@ function BubbleChart(container) {
 	
 	var chart;
 	var data = [];
+	var paddingwidth = 50;
+	var paddinghieght = 20;
+	var maxcirclesize = 60;
+	var mincirclesize = 20;
+	var fill = d3.scale.category20c();
+	var yticks = 7;
+	var xticks = 7;
 	var x, y, z, w, h;
 	
 	this.CreateBubbleChart = function(dataInput, width, hieght) {
 		data = dataInput;
+		
 		w = width;
 		h = hieght;
 		
 		var xData = $.map(data, function(o){ return o.wage; });
 		var yData = $.map(data, function(o){ return o.work; });
 		var zData = $.map(data, function(o){ return o.gdppc; });
-		var fill = d3.scale.category20c();
 		
-		x = d3.scale.linear().domain([d3.min(xData), d3.max(xData)]).rangeRound([65, w - 65]);
-	    y = d3.scale.linear().domain([d3.max(yData), d3.min(yData)]).rangeRound([65, h - 65]);
-		z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([35, 60]);
+		
+		x = d3.scale.linear().domain([20000, 120000]).rangeRound([paddingwidth + (maxcirclesize / 1.5), w - (maxcirclesize / 2)]);
+	    y = d3.scale.linear().domain([50, 32]).rangeRound([(maxcirclesize / 2), h - (maxcirclesize / 2)]);
+		z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([mincirclesize, maxcirclesize]);
 		
 		chart = d3.select("#" + container)
 			.append("svg:svg")
-			.attr("width", w + 50)
-			.attr("height", h + 20)
+			.attr("width", w)
+			.attr("height", h + paddinghieght)
 			.attr("id", "d3-" + container)
-			.attr("class", "chart")
-			.attr("transform", "translate(50,0)");;
-	
+			.attr("class", "chart");	
 		
 		var g = chart.selectAll("g")
 	        .data(data)
 	      .enter().append("svg:g")
 	    	.attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; });
 		
-		this.addRules();
-		
 	    g.append("svg:circle")
 	        .attr("class", "little")
 	        .attr("r",  function(d) { return z(d.gdppc); })
-	        .style("fill", function(d) { if (d.name == "New Zealand") { return 'green'; } else { return fill(d.name); } })
-	        .style("opacity", function (d) { if (d.name == "New Zealand") { return .75; } else { return .25; } });
-		
+	        .style("fill", function(d) { if (d.name == "New Zealand *") { return 'green'; } else { return fill(d.name); } })
+	        .style("opacity", function (d) { if (d.name == "New Zealand *") { return .85; } else { return .25; } });		
 
 		g.append("svg:text")
 	        .attr("dy", ".35em")
 	        .attr("text-anchor", "middle")
 	        .text(function(d, i) { return d.name; });
 		
+		this.addLines();
+		this.addRules();
+	};
+	
+	this.addLines = function() {
 		chart.append("svg:line")
+			.attr("x1", paddingwidth)
 		    .attr("y1", 0)
 		    .attr("y2", h)
+		    .attr("x2", paddingwidth)
 		    .attr("stroke", "black");
-			
+		
 		chart.append("svg:line")
-		    .attr("x1", 0)
+		    .attr("x1", paddingwidth)
 		    .attr("y1", h)
 		    .attr("x2", w)
 		    .attr("y2", h)
 		    .attr("stroke", "black");
-
 	};
 	
 	this.addRules = function() {
 		var rules = chart.selectAll("g.x-rule")
-		    .data(x.ticks(10))
+		    .data(x.ticks(xticks))
 		    .enter().append("svg:g")
 		    .attr("class", "x-rule")
 		    .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
@@ -80,72 +89,92 @@ function BubbleChart(container) {
 		    .attr("text-anchor", "middle")
 		    .text(x.tickFormat(10));
 		
-/*		var rules = chart.selectAll("g.y-rule")
-		    .data(y.ticks(10))
+		rules.append("svg:line")
+		    .attr("y1", 0)
+		    .attr("y2", h)
+		    .attr("stroke", "grey")
+		    .attr("stroke-opacity", .2);
+		
+		rules = chart.selectAll("g.y-rule")
+		    .data(y.ticks(yticks))
 		    .enter().append("svg:g")
 		    .attr("class", "y-rule")
 		    .attr("transform", function(d) { return "translate(0, " + y(d) + ")"; });
 		
 		rules.append("svg:line")
-		    .attr("x1", 45)
-		    .attr("x2", 50)
+		    .attr("x1", paddingwidth - 5)
+		    .attr("x2", paddingwidth)
 		    .attr("stroke", "black");
 		
 		rules.append("svg:text")
 		    .attr("y", 0)
-		    .attr("dy", ".71em")
+		    .attr("dy", ".3em")
+		    .attr("x", paddingwidth - 20)
 		    .attr("text-anchor", "middle")
-		    .text(y.tickFormat(10));*/
+		    .text(y.tickFormat(10));
+		
+		rules.append("svg:line")
+		    .attr("x1", paddingwidth)
+		    .attr("x2", w)
+		    .attr("stroke", "grey")
+		    .attr("stroke-opacity", .2);
 	};
 	
-	this.rescaleChart = function(width, height) {
+	this.redrawChart = function(newData, width, height, newxticks, newyticks) {
 		w = width;
 		h = height;
+		xticks = newxticks;
+		yticks = newyticks;
+		data = newData;
 		
 		d3.select("#" + container)
 			.attr("width", w)
 			.attr("height", h);
 		
 		chart.attr("width", w)
-			.attr("height", h);
+			.attr("height", h + paddinghieght);
 		
-		chart.selectAll("g.x-rule")
-			.remove();
-		this.addRules();
-		
-		var lines = chart.selectAll("x-rule");
 		
 		chart.selectAll("line")
+			.remove();		
+		$(".x-rule")
 			.remove();
+		$(".y-rule")
+			.remove();		
 		
-		chart.append("svg:line")
-		    .attr("y1", 0)
-		    .attr("y2", h)
-		    .attr("stroke", "black");
-		
-		chart.append("svg:line")
-		    .attr("x1", 0)
-		    .attr("y1", h)
-		    .attr("x2", w)
-		    .attr("y2", h)
-		    .attr("stroke", "black");
-		
-		this.refreshData(data);
+		this.refreshData();
 	};
 	
-	this.refreshData = function(data) {
-		
-		var xData = $.map(data, function(o){ return o.wage; });
-		var yData = $.map(data, function(o){ return o.work; });
+	this.refreshData = function() {
+	
+		//var xData = $.map(data, function(o){ return o.wage; });
+		//var yData = $.map(data, function(o){ return o.work; });
 		var zData = $.map(data, function(o){ return o.gdppc; });
 		
-		x = d3.scale.linear().domain([d3.min(xData), d3.max(xData)]).rangeRound([65, w - 65]);
-	    y = d3.scale.linear().domain([d3.max(yData), d3.min(yData)]).rangeRound([65, h - 65]);
-		z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([35, 60]);
+		//x = d3.scale.linear().domain([d3.min(xData), d3.max(xData)]).rangeRound([65, w - 65]);
+	    //y = d3.scale.linear().domain([d3.max(yData), d3.min(yData)]).rangeRound([65, h - 65]);
+		//z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([35, 60]);
+		
+		x = d3.scale.linear().domain([20000, 120000]).rangeRound([paddingwidth + (maxcirclesize / 1.5), w - (maxcirclesize / 2)]);
+	    y = d3.scale.linear().domain([50, 32]).rangeRound([(maxcirclesize / 2), h - (maxcirclesize / 2)]);
+		z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([mincirclesize, maxcirclesize]);
 		
 		var transitionSpeed = 1000;
 		var g = chart.selectAll("g")
         	.data(data);
+		
+		g.enter().insert("svg:g")
+    		.attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; })
+			.append("svg:circle")
+	        .attr("class", "little")
+	        .attr("r",  function(d) { return z(d.gdppc); })
+	        .style("fill", function(d) { return fill(d.name);  })
+	        .style("opacity", .25 );		
+	
+		g.append("svg:text")
+	        .attr("dy", ".35em")
+	        .attr("text-anchor", "middle")
+	        .text(function(d, i) { return d.name; });
 		
 		g.transition()
 			.duration(transitionSpeed)
@@ -158,16 +187,9 @@ function BubbleChart(container) {
 			.duration(transitionSpeed)
 	        .attr("r",  function(d) { return z(d.gdppc); });
 		
+		this.addRules();
+		this.addLines();
 		
-	};
-	
-	this.SetData = function(x) {
-		data = x;
-	};
-	
-	this.GetData = function(x) {
-		return data;
-	};
-	
-	
+		
+	};	
 }
