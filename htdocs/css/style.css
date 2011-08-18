@@ -27,6 +27,12 @@ body {
     background: white;
 }
 
+.button-container {
+    width: 98%;
+    padding: 5px 15px 5px 15px;
+    
+}
+
 .clear {
     clear: both;
 }

@@ -30,185 +30,24 @@ $(document).ready( function() {
 	bargraph.CreateBarGraph();
 	
 	var bubbleChart = new BubbleChart('bubble-chart');
-	var ll = []
+	var ll = [];
 	for(x in world.stats){ll.push(world.stats[x]);}
-	ll.push({name: "New Zealand", gdppc : n.gdppc(), work : n.avgwork(), wage : n.avgwage()})
+	ll.push({name: "New Zealand", gdppc : n.gdppc(), work : n.avgwork(), wage : n.avgwage()});
+	
+	
 	bubbleChart.CreateBubbleChart(ll, 600, 400);
+	
+	$('#randomize').button().click( function () {
+		ll[27] = {name: "New Zealand", gdppc : Math.random() * 100000, work : Math.random() * 100, wage : Math.random() * 100000};
+		
+		bubbleChart.refreshData(ll);
+	});
+	$('#rescale').button().click( function () {
+		bubbleChart.rescaleChart(900, 600);
+	});
 	
 	
 });
 
-function BarGraph(container) {
 
-	this.container = container;
-	
-	var chart;
-	var data = [];
-	var h, w, x, y;
-	
-	this.CreateBarGraph = function() {
-		
-		var w = 800,
-	    h = 230,
-	    //x = d3.scale.linear().domain([0, 1]).range([0, w - 150]);
-	    y = d3.scale.ordinal().domain(d3.range(data.length)).rangeBands([0, h], .2),
-		
-		//var splicedArray = $.map(data, function(o){ return o.value; });
-		x = d3.scale.linear().domain([0, 1]).range([0, w - 150]);
-		
-		// The graph container
-		chart = d3.select("#" + container)
-		    .append("svg:svg")
-			.attr("class", "chart")
-			.attr("id", "d3-" + container)
-			.attr("width", w + 40)
-		    .attr("height", h + 20)
-			.append("svg:g")
-			.attr("transform", "translate(175,0)");
-		
-		var bars = chart.selectAll("g.bar")
-		    .data(data)
-		    .enter().append("svg:g")
-		    .attr("class", "bar")
-		    .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; });
-		
-		bars.append("svg:rect")
-		    .attr("fill", "steelblue")
-		    .attr("width", function(d, i) { return x(d.value); })
-		    .attr("height", y.rangeBand());
-		
-		bars.append("svg:text")
-		    .attr("x", function(d, i) { return x(d.value); })
-		    .attr("y", y.rangeBand() / 2)
-		    .attr("dx", -6)
-		    .attr("dy", ".35em")
-		    .attr("fill", "white")
-		    .attr("text-anchor", "end")
-		    .text(function(d, i) { return d.value * 100 + '%'; });
 
-		bars.append("svg:text")
-		    .attr("x", 0)
-		    .attr("y", y.rangeBand() / 2)
-		    .attr("dx", -6)
-		    .attr("dy", ".35em")
-		    .attr("text-anchor", "end")
-		    .text(function(d, i) { return d.industry; });
-		
-		var rules = chart.selectAll("g.rule")
-		    .data(x.ticks(10))
-		    .enter().append("svg:g")
-		    .attr("class", "rule")
-		    .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
-
-		rules.append("svg:line")
-		    .attr("y1", h)
-		    .attr("y2", h + 6)
-		    .attr("stroke", "black");
-	
-		rules.append("svg:line")
-		    .attr("y1", 0)
-		    .attr("y2", h)
-		    .attr("stroke", "white")
-		    .attr("stroke-opacity", .3);
-	
-		rules.append("svg:text")
-		    .attr("y", h + 9)
-		    .attr("dy", ".71em")
-		    .attr("text-anchor", "middle")
-		    .text(x.tickFormat(10));
-	
-		chart.append("svg:line")
-		    .attr("y1", 0)
-		    .attr("y2", h)
-		    .attr("stroke", "black");
-			
-		
-	};
-	
-	this.RefreshGraph = function() {
-		
-	};
-	
-	this.SetData = function(x) {
-		data = x;
-	};
-	
-	this.GetData = function(x) {
-		return data;
-	};
-
-}
-
-function BubbleChart(container) {
-
-	this.container = container;
-	
-	var chart;
-	var data = [];
-	var x, y, z, w, h;
-	
-	this.CreateBubbleChart = function(data, w, h) {
-		this.data = data;
-		this.w = w;
-		this.h = h;
-		
-		var xData = $.map(data, function(o){ return o.wage; });
-		var yData = $.map(data, function(o){ return o.work; });
-		var zData = $.map(data, function(o){ return o.gdppc; });
-		var fill = d3.scale.category20c();
-		
-		x = d3.scale.linear().domain([d3.min(xData), d3.max(xData)]).rangeRound([65, w - 65]);
-	    y = d3.scale.linear().domain([d3.max(yData), d3.min(yData)]).rangeRound([65, h - 65]);
-		z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([35, 60]);
-		
-		chart = d3.select("#" + container)
-			.append("svg:svg")
-			.attr("width", w)
-			.attr("height", h)
-			.attr("id", "d3-" + container)
-			.attr("class", "chart");
-	
-		
-		var g = chart.selectAll("g")
-	        .data(data)
-	      .enter().append("svg:g")
-	    	.attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; });
-		
-		g.append("svg:circle")
-	      .attr("class", "little")
-	      .attr("r",  function(d) { return z(d.gdppc); })
-	      .style("fill", function(d) { if (d.name == "New Zealand") { return 'green'; } else { return fill(d.name); } })
-	      .style("opacity", function (d) { if (d.name == "New Zealand") { return .75; } else { return .25; } });
-		
-
-		g.append("svg:text")
-	      .attr("dy", ".35em")
-	      .attr("text-anchor", "middle")
-	      .text(function(d, i) { return d.name; });
-		
-		chart.append("svg:line")
-	    .attr("y1", 0)
-	    .attr("y2", h)
-	    .attr("stroke", "black");
-		
-		chart.append("svg:line")
-	    .attr("x1", 0)
-	    .attr("y1", h)
-	    .attr("x2", w)
-	    .attr("y2", h)
-
-	    .attr("stroke", "black");
-		
-		
-	};
-	
-	this.SetData = function(x) {
-		data = x;
-	};
-	
-	this.GetData = function(x) {
-		return data;
-	};
-	
-	
-}
