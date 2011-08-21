@@ -8,7 +8,8 @@ function BubbleChart(container) {
 	var paddinghieght = 20;
 	var maxcirclesize = 60;
 	var mincirclesize = 20;
-	var fill = d3.scale.category20c();
+	var colour = d3.scale.category20();
+	var transitionSpeed = 1000;
 	var yticks = 7;
 	var xticks = 7;
 	var x, y, z, w, h;
@@ -41,15 +42,24 @@ function BubbleChart(container) {
 	    	.attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; });
 		
 	    g.append("svg:circle")
-	        .attr("class", "little")
-	        .attr("r",  function(d) { return z(d.gdppc); })
-	        .style("fill", function(d) { if (d.name == "New Zealand *") { return 'green'; } else { return fill(d.name); } })
-	        .style("opacity", function (d) { if (d.name == "New Zealand *") { return .85; } else { return .25; } });		
+	        .attr("class", "circles")
+	        .attr('r', 0)
+	        .attr("fill", function(d, i) { if (d.name == "New Zealand") { return 'green'; } else { return colour(i); } })
+	        .style("opacity", function (d) { if (d.name == "New Zealand") { return .85; } else { return .25; } })
+	        .style("stroke", 'grey')
+		    .style("stroke-opacity", 1)
+		    .transition()
+		    .duration(transitionSpeed)
+		    .attr("r",  function(d) { return z(d.gdppc); });		
 
 		g.append("svg:text")
 	        .attr("dy", ".35em")
 	        .attr("text-anchor", "middle")
-	        .text(function(d, i) { return d.name; });
+	        .style("opacity", 0)
+	        .text(function(d, i) { return d.name; })
+	        .transition()
+		    .duration(transitionSpeed + 500)
+		    .style("opacity", 1);
 		
 		this.addLines();
 		this.addRules();
@@ -120,12 +130,12 @@ function BubbleChart(container) {
 		    .attr("stroke-opacity", .2);
 	};
 	
-	this.redrawChart = function(newData, width, height, newxticks, newyticks) {
+	this.redrawChart = function(width, height, newxticks, newyticks) {
 		w = width;
 		h = height;
 		xticks = newxticks;
 		yticks = newyticks;
-		data = newData;
+		
 		
 		d3.select("#" + container)
 			.attr("width", w)
@@ -135,18 +145,13 @@ function BubbleChart(container) {
 			.attr("height", h + paddinghieght);
 		
 		
-		chart.selectAll("line")
-			.remove();		
-		$(".x-rule")
-			.remove();
-		$(".y-rule")
-			.remove();		
-		
-		this.refreshData();
+		chart.selectAll("line").remove();		
+		chart.selectAll(".x-rule").remove();
+		chart.selectAll(".y-rule").remove();		
 	};
 	
-	this.refreshData = function() {
-	
+	this.refreshData = function(newData) {
+		data = newData;
 		//var xData = $.map(data, function(o){ return o.wage; });
 		//var yData = $.map(data, function(o){ return o.work; });
 		var zData = $.map(data, function(o){ return o.gdppc; });
@@ -159,33 +164,19 @@ function BubbleChart(container) {
 	    y = d3.scale.linear().domain([50, 32]).rangeRound([(maxcirclesize / 2), h - (maxcirclesize / 2)]);
 		z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([mincirclesize, maxcirclesize]);
 		
-		var transitionSpeed = 1000;
-		var g = chart.selectAll("g")
-        	.data(data);
 		
-		g.enter().insert("svg:g")
-    		.attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; })
-			.append("svg:circle")
-	        .attr("class", "little")
-	        .attr("r",  function(d) { return z(d.gdppc); })
-	        .style("fill", function(d) { return fill(d.name);  })
-	        .style("opacity", .25 );		
-	
-		g.append("svg:text")
-	        .attr("dy", ".35em")
-	        .attr("text-anchor", "middle")
-	        .text(function(d, i) { return d.name; });
+		var g = chart.selectAll("g")
+        	.data(data, function(d) { return d.name; });
+			
+
 		
 		g.transition()
 			.duration(transitionSpeed)
 	        .attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; });
 		
-	        
-		var circles = chart.selectAll("circle");
+
 		
-		circles.transition()
-			.duration(transitionSpeed)
-	        .attr("r",  function(d) { return z(d.gdppc); });
+	        
 		
 		this.addRules();
 		this.addLines();

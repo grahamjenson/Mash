@@ -17,22 +17,32 @@
         <!--  <script type="text/javascript" src="js/google-analytics.js"></script> -->
         <script type="text/javascript" src="js/bar-chart.js"></script>
         <script type="text/javascript" src="js/bubble-chart.js"></script>
+        <script type="text/javascript" src="js/pie-chart.js"></script>
         <script type="text/javascript" src="js/commons.js"></script>
     
     </head>
     <body>
         <div id="content">
-            <div class='vis-container'>                
+            <div class='vis-container'>  
+                <h2 id='current-chapter'></h2>
+                <div id='main-container'>
+                    <p></p>
+                </div>              
                 <div id='gdp-container'> 
                     <p><b>OECD Prosperity: GDP/Per Capita</b><br />
                     Avg. Hours Worked vs. Avg. Annual Wage</p>                
                     <div id="bubble-chart" class="chart-wrapper"></div>
-                    <div class='clear'></div>
+                    
                 </div>        
                 <div id='industry-container'>                  
                     <div id="bar-graph" class="chart-wrapper"></div>
-                    <div class='clear'></div>
-                </div>                
+                    
+                </div> 
+                <div class='clear'></div> 
+                <div id='navigation'>
+                    <a href='#' id='nav-backward'></a>
+                    <a href='#' id='nav-foreward'></a>
+                </div>              
             </div>
         </div>
     
