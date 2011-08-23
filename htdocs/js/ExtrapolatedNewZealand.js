@@ -251,11 +251,158 @@ function NewZealand()
 	this.NZSIC.agriculture.work = 40;
 	this.NZSIC.fishing.work = 40;
 
+
+
+
+	//tourism section, from the 2010 tourism satalite
+	var tourismworkers = 92900
+	this.Tourism = {
+		accom : 13600/tourismworkers,
+		cafes_res : 20000/tourismworkers,
+		g_trans : 5300/tourismworkers,
+		a_trans : 7300/tourismworkers,
+		o_trans : 4600/tourismworkers,
+		mech_hire : 1200/tourismworkers,
+		cult : 5800/tourismworkers,
+		retail : 21700/tourismworkers,
+		tour : 13400/tourismworkers
+		
+	}
+	
+	this.NZSIC.retail.tourism_dist = this.Tourism.retail;
+	
+	this.NZSIC.acc_food.tourism_dist = (this.Tourism.accom + this.Tourism.cafes_res) ;
+	
+	this.NZSIC.tran_post_ware.tourism_dist = (this.Tourism.g_trans + this.Tourism.a_trans + this.Tourism.o_trans);
+
+	this.NZSIC.rent_hir_real.tourism_dist = this.Tourism.mech_hire;	
+	
+	this.NZSIC.arts_rec.tourism_dist = this.Tourism.cult;	
+
+	
+	//This is a guess about likely other tourist industries
+	
+	var ppleleft = this.NZSIC.manufacturing.people + this.NZSIC.prof_sci_tech.people + this.NZSIC.ele_gas_wat_was.people + this.NZSIC.construction.people + this.NZSIC.whole.people + this.NZSIC.inform_tele.people + this.NZSIC.fin_ins.people + this.NZSIC.pub_admin_saftey.people + this.NZSIC.edu_train.people + this.NZSIC.health_social.people + this.NZSIC.forestry.people + this.NZSIC.mining.people + this.NZSIC.admin_sup.people + this.NZSIC.no_class.people + this.NZSIC.agriculture.people + this.NZSIC.fishing.people;
+	
+	this.NZSIC.manufacturing.tourism_dist = this.Tourism.tour * (this.NZSIC.manufacturing.people/ppleleft);
+	this.NZSIC.prof_sci_tech.tourism_dist = this.Tourism.tour * (this.NZSIC.prof_sci_tech.people/ppleleft);;
+	this.NZSIC.ele_gas_wat_was.tourism_dist = this.Tourism.tour * (this.NZSIC.ele_gas_wat_was.people/ppleleft);;
+	this.NZSIC.construction.tourism_dist = this.Tourism.tour * (this.NZSIC.construction.people/ppleleft);;
+	this.NZSIC.whole.tourism_dist = this.Tourism.tour * (this.NZSIC.whole.people/ppleleft);;
+	this.NZSIC.inform_tele.tourism_dist = this.Tourism.tour * (this.NZSIC.inform_tele.people/ppleleft);;
+	this.NZSIC.fin_ins.tourism_dist = this.Tourism.tour * (this.NZSIC.fin_ins.people/ppleleft);;
+	this.NZSIC.pub_admin_saftey.tourism_dist = this.Tourism.tour * (this.NZSIC.pub_admin_saftey.people/ppleleft);;	
+	this.NZSIC.edu_train.tourism_dist = this.Tourism.tour * (this.NZSIC.edu_train.people/ppleleft);;
+	this.NZSIC.health_social.tourism_dist = this.Tourism.tour * (this.NZSIC.health_social.people/ppleleft);;	
+	this.NZSIC.forestry.tourism_dist = this.Tourism.tour * (this.NZSIC.forestry.people/ppleleft);;
+	this.NZSIC.mining.tourism_dist = this.Tourism.tour * (this.NZSIC.mining.people/ppleleft);;
+	this.NZSIC.admin_sup.tourism_dist = this.Tourism.tour * (this.NZSIC.admin_sup.people/ppleleft);;	
+	this.NZSIC.no_class.tourism_dist = this.Tourism.tour * (this.NZSIC.no_class.people/ppleleft);;	
+	this.NZSIC.agriculture.tourism_dist = this.Tourism.tour * (this.NZSIC.agriculture.people/ppleleft);;	
+	this.NZSIC.fishing.tourism_dist = this.Tourism.tour * (this.NZSIC.fishing.people/ppleleft);
+
+
+	this.tourists = 2499102 //source tourism satelitte
+	var touristsperworker = this.tourists/ tourismworkers;
+	
+	for(var x in this.NZSIC)
+	{
+			this.NZSIC[x].tourismEmployees = function(tourists) 
+			{ 
+				var v = this.tourism_dist * (tourists / touristsperworker) ;
+				assert(v < this.people,"more tourists workers than actual workers");
+				return v;
+				
+				
+			}
+	}
+	
+	
+	this.totaltourismworkers = function()
+	{
+		var workers = 0;
+		
+		for(var x in this.NZSIC)
+		{
+			workers += this.NZSIC[x].tourism_dist * (this.tourists / touristsperworker)
+		}
+	
+		return workers
+		
+	}
+	
+	this.changeTourists = function(delta)
+	{
+		var workpop = this.workingpopulation();
+		var tourtismworkers = this.totaltourismworkers();
+		
+		delta = Math.max(-this.tourists,delta);
+		
+		var dworkers = delta / touristsperworker;
+		
+		dworkers = Math.max(-tourtismworkers,Math.min(workpop-tourtismworkers,dworkers));
+		delta = dworkers * touristsperworker;
+		
+		var oldTourists = this.tourists
+		this.tourists += delta;
+		
+		var aiming = tourtismworkers + dworkers;
+		
+		//what we want is to alter the people in different industries to make the total working in tourists true
+		
+		//so the equation is i0.t0 + i1.t1 ... in.tn = totallTourismWorkers
+		//where ix=industry workers and tx=tourists/touristsperworker
+		
+		//for a given industry ix * tourists/toursits per worker is the number of people working in that industry
+		var percent = {};
+		
+		//this.NZSIC.acc_food.people += 100000
+		for(var x in this.NZSIC)
+		{
+			percent[x] = (this.NZSIC[x].tourism_dist - (this.NZSIC[x].tourismEmployees(oldTourists)/this.NZSIC[x].people))
+		}
+		//we scale the percentages so that the sum equals zero (so we move an equal amount of workers from one place to the next)
+		
+		var sum = 0
+		var cnt = 0
+		for(var i in percent)
+		{
+			cnt += 1
+			sum += percent[i]
+		}
+		//scale
+		var t = sum/(-cnt)
+		for(var i in percent)
+		{
+			percent[i] = percent[i] + t
+		}
+		
+		var total = 0;
+		
+		for(var i in percent)
+		{
+			var d = dworkers * percent[i]
+			total += d
+			this.NZSIC[i].people += d
+		}
+		
+		this._firechanged();
+		
+	}
+	
+	//Greenhouse gasses per tourist : source http://www.tourism.govt.nz/Documents/Policy%20Website/Documents/Environment/TMTEnvironmentalIndicatorsReport.pdf
+	var ghgpertourist = 187.0/1000000
+	
+	this.touristGreenHouse = function()
+	{
+		return this.tourists * ghgpertourist
+	}
+	
 	//Some utility functions
 	this.gdp = function()
 	{
 		var gdp = 0;
-		for(x in this.NZSIC)
+		for(var x in this.NZSIC)
 		{
 			gdp += this.NZSIC[x].gdppc * this.NZSIC[x].people
 		}
@@ -267,7 +414,7 @@ function NewZealand()
 	this.workingpopulation = function()
 	{
 		var totpeople = 0;
-		for(x in this.NZSIC)
+		for(var x in this.NZSIC)
 		{
 			totpeople += this.NZSIC[x].people
 		}
@@ -285,7 +432,7 @@ function NewZealand()
 	{
 		var totwork = 0;
 		var totpeople = 0;
-		for(x in this.NZSIC)
+		for(var x in this.NZSIC)
 		{
 			totwork += this.NZSIC[x].work * this.NZSIC[x].people
 			totpeople += this.NZSIC[x].people
@@ -297,7 +444,7 @@ function NewZealand()
 	{
 		var totwage = 0;
 		var totpeople = 0;
-		for(x in this.NZSIC)
+		for(var x in this.NZSIC)
 		{
 			totwage += this.NZSIC[x].wage * this.NZSIC[x].people
 			totpeople += this.NZSIC[x].people
@@ -313,7 +460,7 @@ function NewZealand()
 	//Scaling Hours worked per week, to OECD numbers from http://stats.oecd.org/
 	var OECDWorkPerWeek = 37.4
 	var avgw = this.avgwork()
-	for(x in this.NZSIC) {this.NZSIC[x].work =  this.NZSIC[x].work * OECDWorkPerWeek/avgw }
+	for(var x in this.NZSIC) {this.NZSIC[x].work =  this.NZSIC[x].work * OECDWorkPerWeek/avgw }
 
 
 	//Scaling GDPPC
@@ -323,12 +470,12 @@ function NewZealand()
 	var gdpT = gdppcT * this.population
 	var scale = gdpT/this.gdp()
 
-	for(x in this.NZSIC) {this.NZSIC[x].gdppc =  this.NZSIC[x].gdppc * scale }
+	for(var x in this.NZSIC) {this.NZSIC[x].gdppc =  this.NZSIC[x].gdppc * scale }
 
 	//Scaling Wage
 	var averageWage = 43524 //source NZStats weeklyincome*52
 	var scale = averageWage/this.avgwage()
-	for(x in this.NZSIC) {this.NZSIC[x].wage =  this.NZSIC[x].wage * scale }
+	for(var x in this.NZSIC) {this.NZSIC[x].wage =  this.NZSIC[x].wage * scale }
 
 
 	this._listeners = []
@@ -339,7 +486,7 @@ function NewZealand()
 	
 	this._firechanged = function()
 	{
-		for(l in this._listeners)
+		for(var l in this._listeners)
 		{
 			this._listeners[l]();
 		}
@@ -485,7 +632,7 @@ function World()
 
 	//Change values to NZD
 	var USDtoNZD2000 = 2.20;
-	for(x in this.stats){this.stats[x].gdppc *= USDtoNZD2000}
+	for(var x in this.stats){this.stats[x].gdppc *= USDtoNZD2000}
 
 
 	//wage
@@ -520,7 +667,7 @@ function World()
 
 	//Change values to NZD
 	var USDtoNZD2009 = 1.60
-	for(x in this.stats){this.stats[x].wage *= USDtoNZD2009}
+	for(var x in this.stats){this.stats[x].wage *= USDtoNZD2009}
 
 
 
