@@ -5,12 +5,26 @@ html {
 }
 
 body {
-    font-family: "Arial", "Helvetica", "Verdana", "sans-serif";
+    font-family: verdana, helvetica, arial, sans-serif;
     font-size: 10px;
     background: transparent url('../img/body_bg.jpg') no-repeat center top;
     min-height: 100%;
     margin: 0;
     padding: 0 0 20px;
+}
+
+p {
+    font-size: 1.2em;	
+}
+
+b {
+    font-size: 1.2em;	
+}
+
+h2 {
+    font-size: 2.2em;
+    font-stretch: expanded;
+    margin-left: 20px;	
 }
 
 #content {
@@ -26,6 +40,8 @@ body {
     margin-top: 10px;
     background: white;
 }
+
+
 
 .clear {
     clear: both;
@@ -68,6 +84,69 @@ svg {
 
 .chart circle.little {
   fill: #aaa;
-  stroke: #666;
+  stroke: #333;
   stroke-width: 1.5px;
+}
+
+/* Main Container */
+#main-container {
+	width: 500px;
+	min-height: 500px;
+    float: left;
+    cursor: pointer;
+}
+
+#main-container p {
+    margin-left: 20px;
+    margin-right: 10px;
+    text-align: justify;
+}
+/* GDPPC Chart */
+#bubble-chart {
+    float: left;	
+}
+
+#gdp-container {
+    width: 460px;
+    float: right;
+    margin-bottom: 25px;
+    cursor: pointer;
+}
+
+#gdp-container p {
+    text-align: center;
+    padding-left: 40px; 	
+}
+
+/* Industry Chart */
+#industry-container {
+    width: 460px;
+    margin-bottom: 25px;
+    float: right;
+}
+
+/* Navigation */
+#navigation {
+    margin: 20px 0 10px 0;
+    width: 98%; 
+}
+
+#navigation a {
+    text-decoration: none;
+	color: black;
+	background-color: transparent;
+	font-size: 1.5em;	
+}
+
+#navigation a:hover {
+    color: steelblue;
+}
+
+
+#nav-backward {
+    float: left; 
+}
+
+#nav-foreward {
+	float: right;
 }
