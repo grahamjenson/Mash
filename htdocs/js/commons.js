@@ -15,7 +15,7 @@ $(document).ready( function() {
 	$('#nav-backward').click(function() { currentState--; navigate(currentState); });
 	introduction();
 	createOECDBubbleChart();
-	createIndustryChart();
+	
 });
 
 function navigate(nextState) {
@@ -34,20 +34,25 @@ function navigate(nextState) {
 	
 	switch(currentState) {
 		case 0:
-			$('#main-container').empty();
+			cleanup();
 			introduction();
 			break;
 		case 1:
-			$('#main-container').empty();
+			cleanup();
 			tourism();
 			break;
 		case 2:
-			$('#main-container').empty();
+			cleanup();
 			dairy();
 			break;
 	
 	}
 	
+}
+
+function cleanup() {
+	$('#main-container').empty();
+	$('#bottom-container').empty();
 }
 
 function introduction() {
@@ -58,15 +63,24 @@ function introduction() {
 		t-bone drumstick pastrami beef. Turducken bresaola shank, leberkase turkey \
 		pork chop sausage sirloin prosciutto kielbasa biltong spare ribs tongue. Rump \
 		meatball ham, meatloaf tongue spare ribs ball tip andouille tail pancetta cow \
-		shank kielbasa sausage. Prosciutto rump sausage, pork chop sirloin short ribs \
-		ball tip kielbasa short loin. Pancetta turkey tongue drumstick pastrami. Pork \
-		chop leberkase venison, jerky andouille ribeye turkey filet mignon biltong strip \
-		steak rump drumstick meatloaf t-bone.';
+		shank kielbasa sausage.';
 	
-	$('#main-container').html('<p><b>' + title + '</b></p><p>' + text + '</p>');
+	$('#main-container').html("<p><b>" + title + "</b></p><p>" + text + "</p>\
+		<p style='text-align:center; padding-top:10px;'><b>New Zealand's Current GDP Per Capita</b><br /></p>\
+		<div id='counter-wrapper'>\
+            <div id='flip-counter' class='flip-counter'></div>\
+            <div class='clear'></div>\
+        </div>");
+	
+	$('#bottom-container').html("<div id='industry-title'><p><b>Total NZ Workforce: Per Industry:</b><br /></p></div>\
+                    <div id='industry-chart' class='chart-wrapper'></div> ");
+	
+	createCounter();
+	createIndustryChart();
 }
 
 function tourism() {
+	
 	var nzGeography = new NZGeograhpy('main-container');
 	nzGeography.createMap(350, 350);
 	//var pieChart = new PieChart('main-container');
@@ -91,15 +105,13 @@ function createOECDBubbleChart() {
 		}
 		oecdStats.push(world.stats[x]);
 	}
-	oecdStatsFiltered.push({name: "New Zealand", gdppc : n.gdppc(), work : n.avgwork(), wage : n.avgwage()});
-	//oecdStatsFiltered.push({name: "New Zealand *", gdppc : n.gdppc(), work : n.avgwork(), wage : n.avgwage()});	
+	oecdStatsFiltered.push({name: "New Zealand", gdppc : n.gdppc(), work : n.avgwork(), wage : n.avgwage()});	
 	oecdStats.push({name: "New Zealand", gdppc : n.gdppc(), work : n.avgwork(), wage : n.avgwage()});
-	//oecdStats.push({name: "New Zealand *", gdppc : n.gdppc(), work : n.avgwork(), wage : n.avgwage()});	
 
 	bubbleChart.CreateBubbleChart(oecdStatsFiltered, 450, 250);
 
 	$('#gdp-container').toggle( function () {
-			$('#industry-graph').hide('slow');
+			$('#bottom-container').hide('slow');
 			$('#main-container').hide('slow');
 			$('#current-chapter').hide();
 			$('#gdp-container').animate({
@@ -116,7 +128,7 @@ function createOECDBubbleChart() {
 				width: '-=500'
 			}, 1000, function() {
 				$('#main-container').show('slow');
-				$('#industry-graph').show('slow');
+				$('#bottom-container').show('slow');
 				$('#current-chapter').show('slow');
 			}); }, 1000);
 						
@@ -125,6 +137,8 @@ function createOECDBubbleChart() {
 }
 
 function createIndustryChart() {
+	var width = 600;
+	var height = 235;
 	var industryFilter = ['Mining', 'Fishing and Aquaculture', 'Forestry and Logging', 'Rental, Hiring and Real Estate Services',
 	                      'Financial and Insurance Services', 'Not elsewhere classified', 'Electricity, Gas, Water and Waste Services',
 	                      'Wholesale Trade', 'Transport, Postal and Warehousing', 'Information Media and Telecommunications',
@@ -134,17 +148,29 @@ function createIndustryChart() {
 	var totalWorkforce = d3.sum(peopleInWorkforce);
 
 	var nzIndustryStats = [];
+	var totalPeople = 0;
+	var other = 0;
 	for(x in n.NZSIC) {
 		if ($.inArray(n.NZSIC[x].name, industryFilter) == -1) {
 			nzIndustryStats.push(n.NZSIC[x]);
+		} else {
+			other += n.NZSIC[x].people;
 		}
+		totalPeople += n.NZSIC[x].people;
 	}
-	var data = d3.range(10).map(Math.random);
-	var pieChart = new PieChart('industry-graph');
-	pieChart.CreatePieChart(nzIndustryStats, 300, 250);
+	nzIndustryStats.push({people: other, name: 'Other'});
+	
+	pieData = $.map(nzIndustryStats, function(d) { return totalPeople/d.people; });
+	
+	var pieChart = new PieChart('industry-chart');
+	pieChart.CreatePieChart(pieData, nzIndustryStats, width, height);
 
-	//bargraph = new BarGraph('industry-graph');
-	//bargraph.CreateBarGraph(nzIndustryStats, nzIndustryStats.length * 50, 200, totalWorkforce);
+}
+
+function createCounter() {
+	var myCounter = new flipCounter('flip-counter', {value:10000, inc:1000, pace:50, auto:true});
+	console.log(n.gdppc());
+	myCounter.incrementTo(Math.round(n.gdppc()));
 }
 
 
