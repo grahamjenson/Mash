@@ -11,7 +11,8 @@ function PieChart(container) {
 	this.CreatePieChart = function(dataInput, width, hieght) {
 		
 		data = dataInput;
-		data = d3.range(10).map(Math.random);
+		pieData = $.map(data, function(d) { return d.people; });
+		
 		w = width;
 	    h = hieght;
 	    r = Math.min(w, h) / 2;
@@ -20,7 +21,7 @@ function PieChart(container) {
 
 	    var vis = d3.select("#" + container)
 	      .append("svg:svg")
-	        .data([data.sort(d3.descending)])
+	        .data([data])
 	        .attr("width", w)
 	        .attr("height", h);
 	    
@@ -50,7 +51,7 @@ function PieChart(container) {
 		  b.innerRadius = 0;
 		  var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
 		  return function(t) {
-		    return arc(i(t));
+		    return arc(i(t.people));
 		  };
 		}
 
@@ -58,7 +59,7 @@ function PieChart(container) {
 		  b.innerRadius = r * .6;
 		  var i = d3.interpolate({innerRadius: 0}, b);
 		  return function(t) {
-		    return arc(i(t));
+		    return arc(i(t.people));
 		  };
 		}
 	

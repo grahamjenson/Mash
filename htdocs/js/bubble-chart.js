@@ -61,27 +61,35 @@ function BubbleChart(container) {
 		    .duration(transitionSpeed + 500)
 		    .style("opacity", 1);
 		
-		this.addLines();
-		this.addRules();
+		addLines(1000);
+		addRules();
 	};
 	
-	this.addLines = function() {
+	function addLines(speed) {
 		chart.append("svg:line")
+			.attr("stroke", "black")
 			.attr("x1", paddingwidth)
-		    .attr("y1", 0)
+		    .attr("y1", h)
 		    .attr("y2", h)
 		    .attr("x2", paddingwidth)
-		    .attr("stroke", "black");
+		    .attr("class", "y-axis")
+		    .transition()
+			.duration(speed)
+		    .attr("y1", 0);
 		
 		chart.append("svg:line")
 		    .attr("x1", paddingwidth)
 		    .attr("y1", h)
-		    .attr("x2", w)
+		    .attr("x2", paddingwidth)
 		    .attr("y2", h)
-		    .attr("stroke", "black");
+		    .attr("stroke", "black")
+		    .attr("class", "x-axis")
+		    .transition()
+			.duration(speed)
+			.attr("x2", w);
 	};
 	
-	this.addRules = function() {
+	 function addRules(speed) {
 		var rules = chart.selectAll("g.x-rule")
 		    .data(x.ticks(xticks))
 		    .enter().append("svg:g")
@@ -131,34 +139,40 @@ function BubbleChart(container) {
 	};
 	
 	this.redrawChart = function(width, height, newxticks, newyticks) {
+		
+		if (width < w) {
+			shrink = true;
+		} else {
+			shrink = false;
+		}
 		w = width;
 		h = height;
 		xticks = newxticks;
 		yticks = newyticks;
 		
-		
-		d3.select("#" + container)
-			.attr("width", w)
-			.attr("height", h);
-		
-		chart.attr("width", w)
-			.attr("height", h + paddinghieght);
-		
-		
-		chart.selectAll("line").remove();		
-		chart.selectAll(".x-rule").remove();
-		chart.selectAll(".y-rule").remove();		
+		if (shrink) {
+			setTimeout(function() {
+				d3.select("#" + container)
+					.attr("width", w)
+					.attr("height", h);
+				
+				chart.attr("width", w)
+					.attr("height", h + paddinghieght);}, 1000);
+		} else {
+			d3.select("#" + container)
+				.attr("width", w)
+				.attr("height", h);
+			
+			chart.attr("width", w)
+				.attr("height", h + paddinghieght);
+		}
+
 	};
 	
 	this.refreshData = function(newData) {
 		data = newData;
-		//var xData = $.map(data, function(o){ return o.wage; });
-		//var yData = $.map(data, function(o){ return o.work; });
 		var zData = $.map(data, function(o){ return o.gdppc; });
 		
-		//x = d3.scale.linear().domain([d3.min(xData), d3.max(xData)]).rangeRound([65, w - 65]);
-	    //y = d3.scale.linear().domain([d3.max(yData), d3.min(yData)]).rangeRound([65, h - 65]);
-		//z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([35, 60]);
 		
 		x = d3.scale.linear().domain([20000, 120000]).rangeRound([paddingwidth + (maxcirclesize / 1.5), w - (maxcirclesize / 2)]);
 	    y = d3.scale.linear().domain([50, 32]).rangeRound([(maxcirclesize / 2), h - (maxcirclesize / 2)]);
@@ -173,14 +187,21 @@ function BubbleChart(container) {
 		g.transition()
 			.duration(transitionSpeed)
 	        .attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; });
-		
 
 		
-	        
-		
-		this.addRules();
-		this.addLines();
-		
-		
+		if (shrink) {
+			setTimeout(function() {
+				chart.selectAll("line").remove();		
+				chart.selectAll(".x-rule").remove();
+				chart.selectAll(".y-rule").remove();
+				addRules();
+				addLines();}, 1000);
+		} else {
+			chart.selectAll("line").remove();		
+			chart.selectAll(".x-rule").remove();
+			chart.selectAll(".y-rule").remove();
+			addRules();
+			addLines();
+		}		
 	};	
 }

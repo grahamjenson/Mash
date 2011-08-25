@@ -67,8 +67,10 @@ function introduction() {
 }
 
 function tourism() {
-	var pieChart = new PieChart('main-container');
-	pieChart.CreatePieChart([], 490, 490);
+	var nzGeography = new NZGeograhpy('main-container');
+	nzGeography.createMap(350, 350);
+	//var pieChart = new PieChart('main-container');
+	//pieChart.CreatePieChart([], 490, 490);
 }
 
 function dairy() {
@@ -97,12 +99,13 @@ function createOECDBubbleChart() {
 	bubbleChart.CreateBubbleChart(oecdStatsFiltered, 450, 250);
 
 	$('#gdp-container').toggle( function () {
-			$('#bar-graph').hide('slow');
+			$('#industry-graph').hide('slow');
 			$('#main-container').hide('slow');
+			$('#current-chapter').hide();
 			$('#gdp-container').animate({
 				width: '+=500'
 			}, 1000, function() {
-				bubbleChart.redrawChart(960, 600, 10, 10);
+				bubbleChart.redrawChart(920, 520, 10, 10);
 				bubbleChart.refreshData(oecdStats);
 			});			
 			
@@ -113,7 +116,8 @@ function createOECDBubbleChart() {
 				width: '-=500'
 			}, 1000, function() {
 				$('#main-container').show('slow');
-				$('#bar-graph').show('slow');
+				$('#industry-graph').show('slow');
+				$('#current-chapter').show('slow');
 			}); }, 1000);
 						
 		});
@@ -135,9 +139,12 @@ function createIndustryChart() {
 			nzIndustryStats.push(n.NZSIC[x]);
 		}
 	}
+	var data = d3.range(10).map(Math.random);
+	var pieChart = new PieChart('industry-graph');
+	pieChart.CreatePieChart(nzIndustryStats, 300, 250);
 
-	bargraph = new BarGraph('bar-graph');
-	bargraph.CreateBarGraph(nzIndustryStats, nzIndustryStats.length * 50, 200, totalWorkforce);
+	//bargraph = new BarGraph('industry-graph');
+	//bargraph.CreateBarGraph(nzIndustryStats, nzIndustryStats.length * 50, 200, totalWorkforce);
 }
 
 
