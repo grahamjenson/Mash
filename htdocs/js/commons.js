@@ -92,18 +92,23 @@ function dairy() {
 }
 
 function createOECDBubbleChart() {
-	var countryFilter = ['Slovak Republic', 'Sweden', 'Switzerland', 'Belgium', 'Czech Republic', 'Germany', 
+	var minCountryFilter = ['Slovak Republic', 'Sweden', 'Switzerland', 'Belgium', 'Czech Republic', 'Germany', 
 	                     'Denmark', 'Ireland', 'Austria', 'Finland', 'Poland', 'Netherlands', 'Portugal', 'France', 'Canada'];
+	
+	var maxCountryFilter = ['Slovak Republic', 'Sweden', 'Belgium', 'Czech Republic', 
+		                     'Denmark', 'Austria', 'Finland', 'France', 'Canada'];
 
 	var bubbleChart = new BubbleChart('bubble-chart');
 	var oecdStatsFiltered = [];
 	var oecdStats = [];
 	
 	for(x in world.stats){
-		if ($.inArray(world.stats[x].name, countryFilter) == -1) {
+		if ($.inArray(world.stats[x].name, minCountryFilter) == -1) {
 			oecdStatsFiltered.push(world.stats[x]);
 		}
-		oecdStats.push(world.stats[x]);
+		if ($.inArray(world.stats[x].name, maxCountryFilter) == -1) {
+			oecdStats.push(world.stats[x]);
+		}		
 	}
 	oecdStatsFiltered.push({name: "New Zealand", gdppc : n.gdppc(), work : n.avgwork(), wage : n.avgwage()});	
 	oecdStats.push({name: "New Zealand", gdppc : n.gdppc(), work : n.avgwork(), wage : n.avgwage()});
@@ -117,13 +122,11 @@ function createOECDBubbleChart() {
 			$('#gdp-container').animate({
 				width: '+=500'
 			}, 1000, function() {
-				bubbleChart.redrawChart(920, 520, 10, 10);
-				bubbleChart.refreshData(oecdStats);
+				bubbleChart.refresh(920, 520, oecdStats);
 			});			
 			
 		}, function () { 
-			bubbleChart.redrawChart(450, 250, 7, 7);
-			bubbleChart.refreshData(oecdStatsFiltered);
+			bubbleChart.refresh(450, 250, oecdStatsFiltered);
 			setTimeout(function() { $('#gdp-container').animate({
 				width: '-=500'
 			}, 1000, function() {
