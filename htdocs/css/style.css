@@ -93,50 +93,46 @@ svg {
 
 /* Main Container */
 #main-container {
-	width: 500px;
+	padding: 0px 10px 10px 20px;
+	width: 470px;
 	float: left;
 }
 
 #main-container p {
-	margin-left: 20px;
-	margin-right: 10px;
 	text-align: justify;
-}
-
-/* Bottom Container */
-#bottom-container {
-    width : 96%;
-    float: left;
 }
 
 /* GDPPC Chart */
 #bubble-chart {
-	float: left;
+    float: left;
 }
 
 #gdp-container {
-	width: 460px;
-	float: right;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	cursor: pointer;
+    width: 460px;
+    float: right;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
 }
 
 #gdp-container p {
-	text-align: center;
-	padding-left: 40px;
+    text-align: center;
+    padding-left: 40px;
 }
 
-/* Industry Chart */
+/* Bottom Container */
+#bottom-container {
+	padding: 0 0 0 20px;
+    float: left;
+}
+
+/* Bottom Container - Industry Pie Chart */
 #industry-chart {
 	padding-top: 25px;
-	width: 65%;
     float: left;	
 }
 
 #industry-title {
-	padding-left: 25px;
-	width:30%;
 	float:left;
 }
 
@@ -167,10 +163,16 @@ svg {
 	float: right;
 }
 
+/* Nz Map*/
+#nz-map {
+    width: 300px;
+    float: left;	
+}
+
 /* Apple Counter */
 #counter-wrapper {
 	padding-top: 10px;
-	padding-left: 118px;	
+	padding-left: 98px;	
 }
 .flip-counter ul.cd {
 	float: left;

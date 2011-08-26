@@ -2,13 +2,14 @@ function NZGeograhpy(container) {
 	
 	var container = container;
 	var w, h;
-	var d3color = d3.interpolateRgb("#339900", "#FF0000");
+	var d3color = d3.interpolateRgb("#333", "#CA2303");
+	var R;
 	
 	this.createMap = function(width, height) {
 		
 		w = width;
 		h = height;
-		var R = Raphael(container, w, h);
+		R = Raphael(container, w, h);
 		var attr = {
 			fill : "#333",
 			stroke : "#666",
@@ -153,6 +154,10 @@ function NZGeograhpy(container) {
 	        return (cs.width / 750) * 1;
 	    }
 	    return (cs.height / 940) * 1;
+	};
+	
+	this.createLengend = function(container, width, height) {
+		
 	};
 	
 	

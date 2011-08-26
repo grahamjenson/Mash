@@ -5,17 +5,18 @@ var STATES = [
     'Introduction',
     'We Need More Tourists',
     'Let\'s make more Milk',
-    'Should we work harder?'
+    'Should we mine more?',
+    'Made in New Zealand',
+    'R&#x26;D ROI FTW',
+    'To The Future'
 ];
 
 $(document).ready( function() {
-	$('#nav-foreward').html('Next Chapter: ' + STATES[currentState + 1] + ' &#187');
-	$('#current-chapter').html(STATES[currentState]);
+	navigate(0);
 	$('#nav-foreward').click(function() { currentState++; navigate(currentState); });
 	$('#nav-backward').click(function() { currentState--; navigate(currentState); });
-	introduction();
-	createOECDBubbleChart();
-	
+
+	createOECDBubbleChart();	
 });
 
 function navigate(nextState) {
@@ -44,10 +45,8 @@ function navigate(nextState) {
 		case 2:
 			cleanup();
 			dairy();
-			break;
-	
-	}
-	
+			break;	
+	}	
 }
 
 function cleanup() {
@@ -64,15 +63,17 @@ function introduction() {
 		pork chop sausage sirloin prosciutto kielbasa biltong spare ribs tongue. Rump \
 		meatball ham, meatloaf tongue spare ribs ball tip andouille tail pancetta cow \
 		shank kielbasa sausage.';
+	var subtitle1 = 'New Zealand\'s Current GDP Per Capita';
+	var subtitle2 = 'Total NZ Workforce: Per Industry:';
 	
 	$('#main-container').html("<p><b>" + title + "</b></p><p>" + text + "</p>\
-		<p style='text-align:center; padding-top:10px;'><b>New Zealand's Current GDP Per Capita</b><br /></p>\
+		<p style='text-align:center; padding-top:10px;'><b>" + subtitle1 + "</b><br /></p>\
 		<div id='counter-wrapper'>\
             <div id='flip-counter' class='flip-counter'></div>\
             <div class='clear'></div>\
         </div>");
 	
-	$('#bottom-container').html("<div id='industry-title'><p><b>Total NZ Workforce: Per Industry:</b><br /></p></div>\
+	$('#bottom-container').html("<div id='industry-title'><p><b>" + subtitle2 + "</b><br /></p></div>\
                     <div id='industry-chart' class='chart-wrapper'></div> ");
 	
 	createCounter();
@@ -81,10 +82,23 @@ function introduction() {
 
 function tourism() {
 	
-	var nzGeography = new NZGeograhpy('main-container');
-	nzGeography.createMap(350, 350);
-	//var pieChart = new PieChart('main-container');
-	//pieChart.CreatePieChart([], 490, 490);
+	var title = 'Welcome to 100 Companies.';
+	var text = 'Bacon ipsum dolor sit amet cow meatloaf bacon turducken, meatball \
+		flank spare ribs hamburger beef jerky pancetta ball tip. Hamburger ham hock \
+		t-bone drumstick pastrami beef.';
+	var subtitle1 = 'Current Regional Accomdation Levels:';
+	
+	$('#main-container').html("<p><b>" + title + "</b></p><p>" + text + "</p>\
+				<div id='tourist-slider'></div>\
+			    <p style='text-align:center; padding-top:10px;'><b>" + subtitle1 + "</b><br /></p>\
+	            <div class='clear'></div>\
+	            <div id='nz-map'></div>\
+	        </div>");
+	
+	$('#tourist-slider').slider();
+	
+	var nzGeography = new NZGeograhpy('nz-map');
+	nzGeography.createMap(300, 350);
 }
 
 function dairy() {
