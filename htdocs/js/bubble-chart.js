@@ -145,7 +145,7 @@ function BubbleChart(container) {
 		    .attr("stroke-opacity", .2);
 	};
 	
-	this.refresh = function(width, height, newData) {
+	this.rescale = function(width, height, newData) {
 		data = newData;
 		h = height;
 		
@@ -157,6 +157,11 @@ function BubbleChart(container) {
 			expand();
 		}
 
+	};
+	
+	this.refresh = function(newData) {
+		data = newData;
+		refreshData();
 	};
 	
 	function shrink() {

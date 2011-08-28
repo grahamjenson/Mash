@@ -157,9 +157,67 @@ function NZGeograhpy(container) {
 	};
 	
 	this.createLengend = function(container, width, height) {
+		var paddingTop = 20;
+		var squareSize = 20;
 		
+		var data = ['Normal Capacity', 'More Tourists than Citizens', 'Over Capacity'];
+		
+		y = d3.scale.linear().domain([0, data.length]).rangeRound([paddingTop, height]);
+		
+		chart = d3.select("#" + container)
+			.append("svg:svg")
+			.attr("width", width)
+			.attr("height", height);
+		
+		var legend = chart.selectAll("g.bar")
+		    .data(data)
+		    .enter().append("svg:g")
+		    .attr("class", "bar")
+		    .attr("transform", function(d, i) { return "translate(0" + "," + y(i) + ")"; });
+		
+		legend.append("svg:rect")
+		    .attr("fill", function(d, i) {  return getLegendColour(i); })
+		    .attr('class', function(d, i) { if (i == 2) { return 'flashing'; } } )
+		    .attr("width", squareSize)
+		    .attr("height", squareSize);
+    
+	    legend.append("svg:text")	    	
+		    .attr("dx", 25)
+		    .attr("dy", 13)
+		    .attr("fill", "black")
+		    .attr("text-anchor", "start")
+		    .text(String);
+	    
+	    flashColour();
+	    
+	    	
 	};
 	
+	function getLegendColour(i) {
+		if (i == 0) { 
+			return 'rgb(51,51,51)'; 
+		} else {
+			return 'rgb(202,35,3)';
+		} 
+	}
 	
+	function flashColour() {
+		var currentColour = chart.selectAll(".flashing")    		
+		.attr('fill');
+		if (currentColour == 'rgb(51,51,51)') {
+	    	var flashing = chart.selectAll(".flashing")
+	    		.transition()
+	    		.duration(500)
+	    		.attr('fill', 'rgb(202,35,3)');
+		} else {
+			var flashing = chart.selectAll(".flashing")
+	    		.transition()
+	    		.duration(500)
+	    		.attr('fill', 'rgb(51,51,51)');
+		}
+		setTimeout(function () {
+			flashColour();
+	    }, 500);
+	}
 };
 

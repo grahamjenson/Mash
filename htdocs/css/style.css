@@ -9,7 +9,6 @@ body {
 	background: transparent url('../img/body_bg.jpg') no-repeat center top;
 	min-height: 100%;
 	margin: 0;
-	padding: 0 0 20px;
 }
 
 p {
@@ -40,10 +39,10 @@ b {
 
 .vis-container {
 	width: 98%;
-	padding: 15px 15px 15px 15px;
+	padding: 0 15px 5px 15px;
 	margin-top: 10px;
 	background: white;
-	min-height: 625px;
+	min-height: 610px;
 }
 
 .clear {
@@ -128,7 +127,7 @@ svg {
 
 /* Bottom Container - Industry Pie Chart */
 #industry-chart {
-	padding-top: 25px;
+	padding-top: 15px;
     float: left;	
 }
 
@@ -139,7 +138,7 @@ svg {
 /* Navigation */
 #navigation {
 	margin: 10px 0 10px 0;
-	padding: 15px 15px 15px 15px;
+	padding: 10px 15px 10px 15px;
 	width: 98%;
 	background: white;
 }
@@ -167,6 +166,10 @@ svg {
 #nz-map {
     width: 300px;
     float: left;	
+}
+
+#nz-map-legend {
+    float: left;    
 }
 
 /* Apple Counter */
