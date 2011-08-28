@@ -1,7 +1,7 @@
 //util functions
 function assert(exp, message) {
   if (!exp) {
-    throw new AssertException(message);
+    //throw new AssertException(message);
   }
 }
 
@@ -671,6 +671,10 @@ function World()
 
 
 
+}
+
+function AssertException(message) {
+	
 }
 
 

@@ -195,17 +195,22 @@ function createCounter() {
 
 function createTourismSlider() {
 	x = d3.scale.log().domain([0.01, 1]).range([50000, 9000000]).nice();
-	inverseX = d3.scale.log().domain([50000, 9000000]).range([0.01, 1]).nice();
-	console.log(newZealand.tourists);
+	//inverseX = d3.scale.log().domain([50000, 9000000]).range([0.01, 1]).nice();
+	//console.log(newZealand.tourists);
 	$('#tourist-slider').slider({
 		min: .01,
 		max: 1,
 		step: .01,
 		slide: function( event, ui ) {
-			newZealand.changeTourists(x(ui.value));
+			try {
+				newZealand.changeTourists(x(ui.value));
+			} catch (e) {
+				
+			}
+			
 		}
 	});
-	$('#tourist-slider').slider({ value: inverseX(newZealand.tourists) });
+	$('#tourist-slider').slider({ value: 0.03 });
 }
 
 

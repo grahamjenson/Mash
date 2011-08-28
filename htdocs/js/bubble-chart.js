@@ -160,8 +160,10 @@ function BubbleChart(container) {
 	};
 	
 	this.refresh = function(newData) {
+		transitionSpeed = 1;
 		data = newData;
 		refreshData();
+		transitionSpeed = 1000;
 	};
 	
 	function shrink() {
