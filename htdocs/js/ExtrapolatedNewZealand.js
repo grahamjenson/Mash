@@ -44,6 +44,27 @@ function NewZealand()
 		arts_rec : 		{name: "Arts and Recreation Services and Other Services"},
 		no_class : 		{name: "Not elsewhere classified"}
 	};
+	
+	this.Region =
+	{
+		northland : 			{name : "Northland"},
+		auckland : 			{name : "Auckland"}, 			
+		waikato: 			{name : "Waikato"},
+		bop:	 			{name : "Bay of Plenty"},
+		gisborne:			{name : "Gisborne"},
+		hawkesbay:			{name : "Hawkes Bay"},
+		manawatu: 			{name : "Manawatu"},
+		taranaki:			{name : "Taranaki"},
+		wellington: 			{name : "Wellington"},
+		nelson: 			{name : "Nelson"},
+		marlborough: 			{name : "Marlborough"},
+		tasman: 			{name : "Tasman"},
+		canterbury: 			{name : "Canterbury"},
+		westCoast: 			{name : "West Coast"},
+		otago: 				{name : "Otago"},
+		southland: 			{name : "Southland"}
+	};
+	
 	this.noOfIndustries = 0;
 	for (n in this.NZSIC )
 	{
@@ -331,6 +352,91 @@ function NewZealand()
 		
 	}
 	
+	//percent of beds taken source http://www.stats.govt.nz/browse_for_stats/industry_sectors/accommodation/Accommodation-Survey_HOTPFeb11/Commentary.aspx
+	var guestnights = 
+	{
+		Northland:			135.6666666667,
+		Auckland:			477.8333333333,
+		Waikato:			223.6666666667,
+		BayofPlenty:			259.5,
+		HawkeBayGisborne:		104.1666666667,
+		TaranakiManawatu:	137.0833333333,
+		Wellington:			215.9166666667,
+		NelsonMarlboroughTasman:	157.5833333333,
+		Canterbury:			429.1666666667,
+		WestCoast:			97.4166666667,
+		Otago:				370.25,
+		Southland:			70
+	}
+	
+	var totalGN = 0;
+	for(var loc in guestnights)
+	{
+		totalGN += guestnights[loc];
+	}
+	
+	this.Region.northland.touristsdist 	= guestnights.Northland / totalGN;
+	this.Region.auckland.touristsdist  	= guestnights.Auckland / totalGN;		
+	this.Region.waikato.touristsdist 	= guestnights.Waikato / totalGN; 		
+	this.Region.bop.touristsdist 		= guestnights.BayofPlenty / totalGN;	 		
+	this.Region.gisborne.touristsdist 	= (guestnights.HawkeBayGisborne / 2) / totalGN;			
+	this.Region.hawkesbay.touristsdist 	= (guestnights.HawkeBayGisborne / 2) / totalGN;			
+	this.Region.manawatu.touristsdist 	= (guestnights.TaranakiManawatu / 2) / totalGN; 			
+	this.Region.taranaki.touristsdist 	= (guestnights.TaranakiManawatu / 2) / totalGN;			
+	this.Region.wellington.touristsdist 	= guestnights.Wellington / totalGN; 			
+	this.Region.nelson.touristsdist 	= (guestnights.NelsonMarlboroughTasman/3) / totalGN; 			
+	this.Region.marlborough.touristsdist 	= (guestnights.NelsonMarlboroughTasman/3) / totalGN; 			
+	this.Region.tasman.touristsdist 	= (guestnights.NelsonMarlboroughTasman/3) / totalGN; 			
+	this.Region.canterbury.touristsdist 	= guestnights.Canterbury / totalGN; 		
+	this.Region.westCoast.touristsdist 	= guestnights.WestCoast / totalGN; 			
+	this.Region.otago.touristsdist 		= guestnights.Otago / totalGN; 			
+	this.Region.southland.touristsdist 	= guestnights.Southland / totalGN; 	
+	
+	for(var loc in this.Region)
+	{
+			
+			this.Region[loc].tourists = function(tsts) 
+			{ 
+				return this.touristsdist * tsts;
+			}
+	}
+	
+	var occupancypercent =
+	{
+		northland:			38.9166666667,
+		auckland:			59.3083333333,
+		waikato:			43.0416666667,
+		bop:				48.775,
+		gisborne:			45.2333333333,
+		hawkesbay:			45.2333333333,
+		taranaki:			35.55,
+		manawatu: 			35.55,
+		wellington:			55.4333333333,
+		nelson:				42.2416666667,
+		marlborough:			42.2416666667,
+		tasman:				42.2416666667,
+		canterbury:			49.1833333333,
+		westCoast:			39.4916666667,
+		otago:				53.2166666667,
+		southland:			39.5083333333
+
+	}
+	
+	this.totalCapacity = 0;
+	for(var loc in this.Region)
+	{
+			
+			this.Region[loc].capacity = this.Region[loc].tourists(this.tourists) / (occupancypercent[loc]/100);
+			this.totalCapacity += this.Region[loc].capacity;
+	}
+	
+	//aerage length of stay source http://www.tourismresearch.govt.nz/Data--Analysis/Analytical-Tools/International-Visitor-Value/
+	this.touristsInCountryToday = function()
+	{
+		return this.tourists * 20.3922905527/365;
+	}
+	
+	//Function to change the tourists by tourist number
 	this.changeTourists = function(delta)
 	{
 		var workpop = this.workingpopulation();
@@ -397,6 +503,13 @@ function NewZealand()
 	{
 		return this.tourists * ghgpertourist
 	}
+	
+	
+	//TODO more milk
+	
+	//TODO Cow density
+	
+	//Land Use
 	
 	//Some utility functions
 	this.gdp = function()
