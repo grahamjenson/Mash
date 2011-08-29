@@ -436,6 +436,12 @@ function NewZealand()
 		return this.tourists * 20.3922905527/365;
 	}
 	
+	this.setTourists = function(t)
+	{
+		this.changeTourists(t - this.tourists)
+	}
+
+
 	//Function to change the tourists by tourist number
 	this.changeTourists = function(delta)
 	{
