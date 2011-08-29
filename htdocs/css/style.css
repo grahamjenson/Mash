@@ -128,7 +128,9 @@ svg {
 /* Bottom Container - Industry Pie Chart */
 #industry-chart {
 	padding-top: 15px;
-    float: left;	
+    float: right;	
+    width: 650px;
+    cursor: pointer;
 }
 
 #industry-title {

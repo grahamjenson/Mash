@@ -65,7 +65,7 @@ function introduction() {
 		meatball ham, meatloaf tongue spare ribs ball tip andouille tail pancetta cow \
 		shank kielbasa sausage.';
 	var subtitle1 = 'New Zealand\'s Current GDP Per Capita';
-	var subtitle2 = 'Total NZ Workforce: Per Industry:';
+	var subtitle2 = 'Total NZ Workforce/Per Industry:';
 	
 	$('#main-container').html("<p><b>" + title + "</b></p><p>" + text + "</p>\
 		<p style='text-align:center; padding-top:10px;'><b>" + subtitle1 + "</b><br /></p>\
@@ -140,7 +140,7 @@ function createOECDBubbleChart() {
 			$('#gdp-container').animate({
 				width: '+=500'
 			}, 1000, function() {
-				bubbleChart.rescale(920, 520, oecdStats.concat(extras));
+				bubbleChart.rescale(920, 513, oecdStats.concat(extras));
 			});			
 			
 		}, function () { 
@@ -163,29 +163,68 @@ function createIndustryChart() {
 	var industryFilter = ['Mining', 'Fishing and Aquaculture', 'Forestry and Logging', 'Rental, Hiring and Real Estate Services',
 	                      'Financial and Insurance Services', 'Not elsewhere classified', 'Electricity, Gas, Water and Waste Services',
 	                      'Wholesale Trade', 'Transport, Postal and Warehousing', 'Information Media and Telecommunications',
-	                      'Administrative and Support Services', 'Arts and Recreation Services and Other Services'];
+	                      'Public Administration and Safety', 'Arts and Recreation Services and Other Services'];
 
 	var peopleInWorkforce = $.map(newZealand.NZSIC, function(o){ return o.people; });
 	var totalWorkforce = d3.sum(peopleInWorkforce);
 
-	var nzIndustryStats = [];
+	var filteredNZIndustries = [];
+	var allNZIndustries = [];
 	var totalPeople = 0;
 	var other = 0;
+	
 	for(x in newZealand.NZSIC) {
 		if ($.inArray(newZealand.NZSIC[x].name, industryFilter) == -1) {
-			nzIndustryStats.push(newZealand.NZSIC[x]);
+			filteredNZIndustries.push(newZealand.NZSIC[x]);
 		} else {
-			other += newZealand.NZSIC[x].people;
+			other += newZealand.NZSIC[x].people;			
 		}
-		totalPeople += newZealand.NZSIC[x].people;
+		allNZIndustries.push(newZealand.NZSIC[x]);
+		totalPeople += Math.round(newZealand.NZSIC[x].people);
 	}
-	nzIndustryStats.push({people: other, name: 'Other'});
+	filteredNZIndustries.push({people: other, name: 'Other'});
 	
-	pieData = $.map(nzIndustryStats, function(d) { return totalPeople/d.people; });
+	// Sort the filtered mutlidemensional array in a decending order.
+	filteredNZIndustries.sort(function(a, b) {
+		return ((b.people < a.people) ? -1 : ((b.people > a.people) ? 1 : 0));
+	});
+	allNZIndustries.sort(function(a, b) {
+		return ((b.people < a.people) ? -1 : ((b.people > a.people) ? 1 : 0));
+	});
+	
+	// Map percentages to hand to the pie chart, makes easier to do out here with the count of people.
+	filteredPieData = $.map(filteredNZIndustries, function(d) { return (Math.round(d.people) / totalPeople); });
+	allPieData = $.map(allNZIndustries, function(d) { return (Math.round(d.people) / totalPeople); });
 	
 	var pieChart = new PieChart('industry-chart');
-	pieChart.CreatePieChart(pieData, nzIndustryStats, width, height);
-
+	pieChart.CreatePieChart(filteredPieData, filteredNZIndustries, width, height);
+	
+	$('#industry-chart').toggle( function() {	
+		$('#gdp-container').hide('slow');
+		$('#main-container').hide('slow');
+		$('#current-chapter').hide();
+		$('#industry-chart').empty();
+		$('#industry-chart').css('width', '920px');
+		setTimeout(function() {
+			var pieChart = new PieChart('industry-chart');
+			pieChart.CreatePieChart(allPieData, allNZIndustries, 920, 520);
+				
+		}, 400);
+			
+		
+	}, function() {
+		$('#gdp-container').show('slow');
+		$('#main-container').show('slow');
+		$('#current-chapter').show();
+		$('#industry-chart').empty();
+		
+		$('#industry-chart').css('width', '600px');
+		setTimeout(function() {
+			var pieChart = new PieChart('industry-chart');
+			pieChart.CreatePieChart(filteredPieData, filteredNZIndustries, width, height);
+			
+		}, 300);	
+	});
 }
 
 function createCounter() {
@@ -212,5 +251,8 @@ function createTourismSlider() {
 	});
 	$('#tourist-slider').slider({ value: 0.03 });
 }
+
+
+
 
 
