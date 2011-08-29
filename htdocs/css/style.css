@@ -207,3 +207,16 @@ svg {
 	width: 14px;
 	height: 103px
 }
+
+#footer {
+	text-align: right;
+}
+
+#footer p {
+    color: white;	
+    font-size: .95em;
+}
+
+#footer a {
+    color: white;   
+}
