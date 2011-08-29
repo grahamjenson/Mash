@@ -12,38 +12,45 @@
 		<script type="text/javascript" src="js/d3/d3.min.js"></script>
 		<script type="text/javascript" src="js/d3/d3.layout.js"></script>
 		<script type="text/javascript" src="js/d3/src/core/sum.js"></script>
+		<script type="text/javascript" src="js/raphael.min.js"></script>
 		<script type="text/javascript" src="js/ExtrapolatedNewZealand.js"></script>
 		<script type="text/javascript" src="js/modernizer.min.js"></script>
         <!--  <script type="text/javascript" src="js/google-analytics.js"></script> -->
         <script type="text/javascript" src="js/bar-chart.js"></script>
         <script type="text/javascript" src="js/bubble-chart.js"></script>
+        <script type="text/javascript" src="js/nz-geography.js"></script>
         <script type="text/javascript" src="js/pie-chart.js"></script>
+        <script type="text/javascript" src="js/flipcounter.min.js"></script>
         <script type="text/javascript" src="js/commons.js"></script>
     
     </head>
     <body>
         <div id="content">
-            <div class='vis-container'>  
-                <h2 id='current-chapter'></h2>
-                <div id='main-container'>
-                    <p></p>
-                </div>              
+            <div class='vis-container'> 
+                <div class="title">
+                    <div id='current-chapter'></div>
+                </div> 
+                              
                 <div id='gdp-container'> 
                     <p><b>OECD Prosperity: GDP/Per Capita</b><br />
                     Avg. Hours Worked vs. Avg. Annual Wage</p>                
-                    <div id="bubble-chart" class="chart-wrapper"></div>
-                    
-                </div>        
-                <div id='industry-container'>                  
-                    <div id="bar-graph" class="chart-wrapper"></div>
-                    
-                </div> 
-                <div class='clear'></div> 
-                <div id='navigation'>
+                    <div id="bubble-chart" class="chart-wrapper"></div>                    
+                </div>   
+                
+                <div id='main-container'></div>                     
+                <div id='bottom-container'></div> 
+                <div class='clear'></div>                               
+            </div>
+            <div id='navigation'>
                     <a href='#' id='nav-backward'></a>
                     <a href='#' id='nav-foreward'></a>
-                </div>              
+                    <div class='clear'></div>       
             </div>
+            <div id='footer'>
+                <p>Infographic Produced By: <a href='http://maori.geek.nz/'>Graham Jenson</a> &amp; <a href='http://www.hashbang.co.nz/'>Alex Gibson</a>. References &amp; Datasources can be found <a href='/references'>here</a></p>
+                <p>Licensed under a Creative Commons Attribution 3.0 Unported License.</p>
+            </div>
+                
         </div>
     
     </body>
