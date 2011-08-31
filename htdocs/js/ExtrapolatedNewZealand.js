@@ -1,7 +1,7 @@
 //util functions
 function assert(exp, message) {
   if (!exp) {
-    //throw new AssertException(message);
+    throw new AssertException(message);
   }
 }
 
@@ -439,12 +439,14 @@ function NewZealand()
 	this.setTourists = function(t)
 	{
 		this.changeTourists(t - this.tourists)
+		
 	}
 
 
 	//Function to change the tourists by tourist number
 	this.changeTourists = function(delta)
 	{
+		console.log(base)
 		var workpop = this.workingpopulation();
 		var tourtismworkers = this.totaltourismworkers();
 		
@@ -654,6 +656,7 @@ function NewZealand()
 }
 
 
+var base = new NewZealand()
 
 function World()
 {
