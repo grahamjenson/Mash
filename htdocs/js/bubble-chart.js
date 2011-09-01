@@ -247,7 +247,9 @@ function BubbleChart(container) {
 		
 		g.exit()
 			.transition()
-		    .duration(transitionSpeed - 750)
+		    .duration(transitionSpeed)
+		    .style("opacity", 0)
+		    .attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; })
 		    .remove();
 		
 		

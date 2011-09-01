@@ -18,7 +18,14 @@ $(document).ready( function() {
 	$('#nav-backward').click(function() { currentState--; navigate(currentState); });
 
 	createOECDBubbleChart();	
+	flashText();
 });
+
+function flashText() {
+	for (var i = 0; i < 1000; i++) {
+		$('#nav-foreward a');
+	}
+}
 
 function navigate(nextState) {
 	currentState = nextState;
@@ -100,6 +107,10 @@ function tourism() {
 	var nzGeography = new NZGeograhpy('nz-map');
 	nzGeography.createMap(300, 350);
 	nzGeography.createLengend('nz-map-legend', 170, 100);
+	nzGeography.refresh(newZealand.Region);
+	newZealand.addListener(function() {			
+		nzGeography.refresh(newZealand.Region);
+	});
 }
 
 function dairy() {
@@ -241,11 +252,8 @@ function createTourismSlider() {
 		max: 1,
 		step: .01,
 		slide: function( event, ui ) {
-			try {
-				newZealand.changeTourists(x(ui.value));
-			} catch (e) {
-				
-			}
+				newZealand.setTourists(x(ui.value));
+
 			
 		}
 	});
