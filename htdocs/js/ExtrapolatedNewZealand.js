@@ -48,13 +48,17 @@ function NewZealand()
 	//returns nothing
 	this.setWorkers = function(industry,workers){throw "Not implemented YET"}
 	
-	
+	//
+	this.setCows = function(cows){throw "Not implemented YET"}
 	
 	//READONLY Variables FOR ALEX
 	this.workersByIndustry = {}
 	this.tourismWorkersByIndustry = {}
 	this.touristsByRegion = {}
 	this.tourists = 2499102 //source tourism satelitte
+	
+	this.dairycattlebyregion = {}
+	this.dairylandusagebyregion = {}
 	
 	//END OF API
 	
@@ -415,10 +419,8 @@ function NewZealand()
 	
 	for(var loc in this.Region)
 	{
-			this.Region[loc].tourists = function(tsts) 
-			{ 
-				return this.touristsdist * tsts;
-			}
+			this.touristsByRegion[loc] = this.Region[loc].touristsdist * this.tourists;
+		
 	}
 	
 	var occupancypercent =
@@ -442,12 +444,9 @@ function NewZealand()
 
 	}
 	
-	this.totalCapacity = 0;
-	
 	for(var loc in this.Region)
 	{
-			this.Region[loc].capacity = this.Region[loc].tourists(this.tourists) / (occupancypercent[loc]/100);
-			this.totalCapacity += this.Region[loc].capacity;
+			this.Region[loc].capacity = this.touristsByRegion[loc] / (occupancypercent[loc]/100);
 	}
 	
 
@@ -457,11 +456,93 @@ function NewZealand()
 
 	
 	
-	//TODO more milk
-	
+	//TODO more milk source: http://www.stats.govt.nz/browse_for_stats/industry_sectors/agriculture-horticulture-forestry/AgriculturalProduction_HOTPJun09final.aspx
+		//source: http://www.stats.govt.nz/browse_for_stats/industry_sectors/agriculture-horticulture-forestry/2007-agricultural-census-tables/land-use-farm-counts.aspx
 	//TODO Cow density
+
+	//source:http://www.stats.govt.nz/browse_for_stats/industry_sectors/agriculture-horticulture-forestry/~/media/Statistics/browse-categories/industry-sectors/agriculture-horticulture-forestry/2003-agricultural-production-survey-tables/hectares-used-farms-land-use-region.ashx 
 	
-	//Land Use
+	
+	this.dairycattlebyregion =
+	{
+		northland:			393000,
+		auckland:			94000,
+		waikato:			1787000,
+		bop:				300000,
+		gisborne:			16000, //2008 figure
+		hawkesbay:			94000,
+		taranaki:			607000,
+		manawatu: 			425000,
+		wellington:			85000,
+		nelson:				1000, //smallest figure
+		marlborough:			16000,
+		tasman:				87000,
+		canterbury:			918000,
+		westCoast:			179000,
+		otago:				257000,
+		southland:			589000
+	}
+	
+
+	
+	this.Region.northland.land=			7942
+	this.Region.auckland.land=			2979
+	this.Region.waikato.land=			16843
+	this.Region.bop.land=				6226
+	this.Region.gisborne.land=			6725
+	this.Region.hawkesbay.land=			9589
+	this.Region.taranaki.land=			4510
+	this.Region.manawatu.land= 			15453
+	this.Region.wellington.land=			5115
+	this.Region.nelson.land=			445 //wiki
+	this.Region.marlborough.land=			6512
+	this.Region.tasman.land=			2666
+	this.Region.canterbury.land=			31232
+	this.Region.westCoast.land=			23276 //wiki
+	this.Region.otago.land=				23346
+	this.Region.southland.land=			11867
+
+	
+	var totaldairylandusage = 19627
+	
+	this.dairylandusagebyregion = {}
+	
+	this.totalland = 0
+	this.totaldairycattle = 0
+	
+	for(var loc in this.Region)
+	{
+			this.totalland += this.Region[loc].land
+			this.totaldairycattle += this.dairycattlebyregion[loc]
+	}	
+	
+	var dairycattleperkm  = this.totaldairycattle/this.totalland
+	var agworkerspercow = this.workersByIndustry.agriculture / this.totaldairycattle
+	
+	for(var loc in this.Region)
+	{
+			this.dairylandusagebyregion[loc] = this.dairycattlebyregion[loc] / dairycattleperkm
+			this.Region[loc].distdairyprod = this.dairycattlebyregion[loc] / this.totaldairycattle
+	}
+	
+	
+	//Alters dairycattlecows by region, dairy land usage by region, and workersbyIndustry
+	
+	this.setCows = function(cows)
+	{
+		this.totaldairycattle = cows
+		
+		
+		for(var loc in this.Region)
+		{
+			this.dairycattlebyregion[loc] = this.Region[loc].distdairyprod * this.totaldairycattle
+			this.dairylandusagebyregion[loc] = this.dairycattlebyregion[loc] / dairycattleperkm
+		}
+		
+		
+		this.setWorkers("agriculture",agworkerspercow*this.totaldairycattle)
+	}
+	
 	
 	//Some utility functions
 	this.gdp = function()
@@ -553,7 +634,7 @@ function NewZealand()
 	
 	//API INPUT
 	
-	//This function will alter the tourist worker and work by indtry values
+	//This function will alter the tourist worker and work by indtry values and regoin values
 	this.setTourists = function(t)
 	{
 		
@@ -571,6 +652,10 @@ function NewZealand()
 			this.workersByIndustry[x] = this.NZSIC[x].defaultWorkerDistribution * nontourismworkers + this.tourismWorkersByIndustry[x]
 		}
 		
+		for(var loc in this.Region)
+		{
+				this.touristsByRegion[loc] = this.Region[loc].touristsdist * this.tourists;
+		}
 		
 	}
 	
@@ -606,7 +691,9 @@ function NewZealand()
 			}
 		}
 		this._firechanged()
-	}	
+	}
+	
+		
 
 }
 
