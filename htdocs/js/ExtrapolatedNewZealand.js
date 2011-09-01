@@ -570,7 +570,7 @@ function NewZealand()
 			this.tourismWorkersByIndustry[x] = this.NZSIC[x].tourism_dist * tourismworkers
 			this.workersByIndustry[x] = this.NZSIC[x].defaultWorkerDistribution * nontourismworkers + this.tourismWorkersByIndustry[x]
 		}
-		
+		this._firechanged();
 		
 	}
 	

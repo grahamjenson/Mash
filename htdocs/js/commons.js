@@ -1,65 +1,56 @@
-var newZealand = new NewZealand();
+var nz = new NewZealand();
 var world = new World();
+var OECDBubbleChart = new BubbleChart('bubble-chart');
+var oecdStats = [];
+
 var currentState = 0;
 var STATES = [
-    'Introduction',
-    'We Need More Tourists',
-    'Let\'s make more Milk',
-    'Should we mine more?',
-    'Made in New Zealand',
-    'R&#x26;D ROI FTW',
-    'To The Future'
+    {name: 'intro', title: 'Introduction', nz: nz, action: function(){ introduction(); }},
+    {name: 'tourism', title: 'We Need More Tourists', nz: nz, action: function(){ tourism(); }},
+    {name: 'dairy', title: 'Let\'s make more Milk', nz: nz, action: function(){ dairy(); }},
+    {name: 'mining', title: 'Should we mine more?', nz: nz, action: function(){ introduction(); }},
+    {name: 'manufactoring', title: 'Made in New Zealand', nz: nz, action: function(){ introduction(); }},
+    {name: 'research', title: 'R&#x26;D ROI FTW', nz: nz, action: function(){ introduction(); }},
+    {name: 'outro', title: 'To The Future', nz: nz, action: function(){ introduction(); }}
 ];
-var oecdStats;
 
 $(document).ready( function() {
+	createOECDBubbleChart();
 	navigate(0);
 	$('#nav-foreward').click(function() { currentState++; navigate(currentState); });
-	$('#nav-backward').click(function() { currentState--; navigate(currentState); });
-
-	createOECDBubbleChart();	
-	flashText();
+	$('#nav-backward').click(function() { currentState--; navigate(currentState); });	
 });
 
-function flashText() {
-	for (var i = 0; i < 1000; i++) {
-		$('#nav-foreward a');
-	}
-}
 
 function navigate(nextState) {
+	// Setup the title and navigation chapter text when we move states
 	currentState = nextState;
-	$('#current-chapter').html(STATES[currentState]);
+	$('#current-chapter').html(STATES[currentState].title);
 	if ((currentState + 1) >= STATES.length) {
 		$('#nav-foreward').html('');
 	} else {
-		$('#nav-foreward').html('Next Chapter: ' + STATES[currentState + 1] + ' &#187');
+		$('#nav-foreward').html('Next Chapter: ' + STATES[currentState + 1].title + ' &#187');
 	}
 	if (currentState <= 0) {
 		$('#nav-backward').html('');
 	} else {
-		$('#nav-backward').html('&#171 Previous Chapter: ' + STATES[currentState - 1]);
+		$('#nav-backward').html('&#171 Previous Chapter: ' + STATES[currentState - 1].title);
 	}
 	
-	switch(currentState) {
-		case 0:
-			cleanup();
-			introduction();
-			break;
-		case 1:
-			cleanup();
-			tourism();
-			break;
-		case 2:
-			cleanup();
-			dairy();
-			break;	
-	}	
+	nz = STATES[currentState].nz;
+	cleanup();
+	STATES[currentState].action();
 }
 
 function cleanup() {
+	// Empty the main and bottom container
 	$('#main-container').empty();
 	$('#bottom-container').empty();
+	
+	// Cleanup the OECD Chart to contain the next states NZ object
+	oecdStats.pop();
+	oecdStats.push({name: "New Zealand", gdppc : nz.gdppc(), work : nz.avgwork(), wage : nz.avgwage()});	
+	OECDBubbleChart.refresh(oecdStats);
 }
 
 function introduction() {
@@ -104,13 +95,7 @@ function tourism() {
 	         <div id='nz-map' class='state-container'></div>\
 	         <div id='nz-map-legend' class='state-container'></div>");
 	createTourismSlider();
-	var nzGeography = new NZGeograhpy('nz-map');
-	nzGeography.createMap(300, 350);
-	nzGeography.createLengend('nz-map-legend', 170, 100);
-	nzGeography.refresh(newZealand.Region);
-	newZealand.addListener(function() {			
-		nzGeography.refresh(newZealand.Region);
-	});
+	createTourismMap();
 }
 
 function dairy() {
@@ -124,9 +109,7 @@ function createOECDBubbleChart() {
 	var maxCountryFilter = ['Switzerland', 'Germany', 'Ireland', 'Poland', 
 		                     'Netherlands', 'Portugal'];
 
-	var bubbleChart = new BubbleChart('bubble-chart');
-	oecdStats = [];
-	extras = [];
+	var extras = [];
 	
 	for(x in world.stats){
 		if ($.inArray(world.stats[x].name, minCountryFilter) == -1) {
@@ -136,13 +119,13 @@ function createOECDBubbleChart() {
 			extras.push(world.stats[x]);
 		}		
 	}
-	oecdStats.push({name: "New Zealand", gdppc : newZealand.gdppc(), work : newZealand.avgwork(), wage : newZealand.avgwage()});	
+	oecdStats.push({name: "New Zealand", gdppc : nz.gdppc(), work : nz.avgwork(), wage : nz.avgwage()});	
 	
-	bubbleChart.CreateBubbleChart(oecdStats, 450, 250);
-	newZealand.addListener(function() {
+	OECDBubbleChart.CreateBubbleChart(oecdStats, 450, 250);
+	nz.addListener(function() {
 		oecdStats.pop();
-		oecdStats.push({name: "New Zealand", gdppc : newZealand.gdppc(), work : newZealand.avgwork(), wage : newZealand.avgwage()});	
-		bubbleChart.refresh(oecdStats);
+		oecdStats.push({name: "New Zealand", gdppc : nz.gdppc(), work : nz.avgwork(), wage : nz.avgwage()});	
+		OECDBubbleChart.refresh(oecdStats);
 	});
 	$('#gdp-container').toggle( function () {
 			$('#bottom-container').hide('slow');
@@ -151,11 +134,11 @@ function createOECDBubbleChart() {
 			$('#gdp-container').animate({
 				width: '+=500'
 			}, 1000, function() {
-				bubbleChart.rescale(920, 513, oecdStats.concat(extras));
+				OECDBubbleChart.rescale(920, 513, oecdStats.concat(extras));
 			});			
 			
 		}, function () { 
-			bubbleChart.rescale(450, 250, oecdStats);
+			OECDBubbleChart.rescale(450, 250, oecdStats);
 			setTimeout(function() { $('#gdp-container').animate({
 				width: '-=500'
 			}, 1000, function() {
@@ -176,7 +159,7 @@ function createIndustryChart() {
 	                      'Wholesale Trade', 'Transport, Postal and Warehousing', 'Information Media and Telecommunications',
 	                      'Public Administration and Safety', 'Arts and Recreation Services and Other Services'];
 
-	var peopleInWorkforce = $.map(newZealand.NZSIC, function(o){ return o.people; });
+	var peopleInWorkforce = $.map(nz.NZSIC, function(o){ return o.people; });
 	var totalWorkforce = d3.sum(peopleInWorkforce);
 
 	var filteredNZIndustries = [];
@@ -184,28 +167,35 @@ function createIndustryChart() {
 	var totalPeople = 0;
 	var other = 0;
 	
-	for(x in newZealand.NZSIC) {
-		if ($.inArray(newZealand.NZSIC[x].name, industryFilter) == -1) {
-			filteredNZIndustries.push(newZealand.NZSIC[x]);
+	for(x in nz.NZSIC) {
+		var industry;
+		if ($.inArray(nz.NZSIC[x].name, industryFilter) == -1) {
+			industry = nz.NZSIC[x];
+			industry.workers = nz.workersByIndustry[x];
+			
+			filteredNZIndustries.push(industry);
 		} else {
-			other += newZealand.NZSIC[x].people;			
+			industry = nz.NZSIC[x];
+			industry.workers = nz.workersByIndustry[x];
+			
+			other += nz.workersByIndustry[x];			
 		}
-		allNZIndustries.push(newZealand.NZSIC[x]);
-		totalPeople += Math.round(newZealand.NZSIC[x].people);
+		allNZIndustries.push(industry);
+		totalPeople += Math.round(nz.workersByIndustry[x]);
 	}
-	filteredNZIndustries.push({people: other, name: 'Other'});
+	filteredNZIndustries.push({workers: other, name: 'Other'});
 	
 	// Sort the filtered mutlidemensional array in a decending order.
 	filteredNZIndustries.sort(function(a, b) {
-		return ((b.people < a.people) ? -1 : ((b.people > a.people) ? 1 : 0));
+		return ((b.workers < a.workers) ? -1 : ((b.workers > a.workers) ? 1 : 0));
 	});
 	allNZIndustries.sort(function(a, b) {
-		return ((b.people < a.people) ? -1 : ((b.people > a.people) ? 1 : 0));
+		return ((b.workers < a.workers) ? -1 : ((b.workers > a.workers) ? 1 : 0));
 	});
 	
 	// Map percentages to hand to the pie chart, makes easier to do out here with the count of people.
-	filteredPieData = $.map(filteredNZIndustries, function(d) { return (Math.round(d.people) / totalPeople); });
-	allPieData = $.map(allNZIndustries, function(d) { return (Math.round(d.people) / totalPeople); });
+	filteredPieData = $.map(filteredNZIndustries, function(d) { return d.workers / totalPeople; });
+	allPieData = $.map(allNZIndustries, function(d) { return d.workers / totalPeople; });
 	
 	var pieChart = new PieChart('industry-chart');
 	pieChart.CreatePieChart(filteredPieData, filteredNZIndustries, width, height);
@@ -240,24 +230,35 @@ function createIndustryChart() {
 
 function createCounter() {
 	var myCounter = new flipCounter('flip-counter', {value:10000, inc:1000, pace:50, auto:true});
-	myCounter.incrementTo(Math.round(newZealand.gdppc()));
+	myCounter.incrementTo(Math.round(nz.gdppc()));
+}
+
+function createTourismMap() {
+	var nzGeography = new NZGeograhpy('nz-map');
+	nzGeography.createMap(300, 350);
+	nzGeography.createLengend('nz-map-legend', 170, 100);
+	nzGeography.refresh(nz.Region);
+	nz.addListener(function() {			
+		nzGeography.refresh(nz.Region);
+	});
 }
 
 function createTourismSlider() {
 	x = d3.scale.log().domain([0.01, 1]).range([50000, 9000000]).nice();
-	//inverseX = d3.scale.log().domain([50000, 9000000]).range([0.01, 1]).nice();
-	//console.log(newZealand.tourists);
+
 	$('#tourist-slider').slider({
 		min: .01,
 		max: 1,
 		step: .01,
 		slide: function( event, ui ) {
-				newZealand.setTourists(x(ui.value));
-
-			
+			try {
+				nz.setTourists(x(ui.value));
+			} catch (e) {
+				
+			}
 		}
 	});
-	$('#tourist-slider').slider({ value: 0.03 });
+	$('#tourist-slider').slider({ value: x.invert(nz.tourists) });
 }
 
 
