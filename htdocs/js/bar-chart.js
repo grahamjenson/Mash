@@ -1,4 +1,4 @@
-function BarGraph(container) {
+function BarChart(container) {
 
 	this.container = container;
 	
@@ -6,46 +6,51 @@ function BarGraph(container) {
 	var data = [];
 	var w, h, x, y;
 	var paddingWidth = 150;
+	var paddingTop = 0;
+	var paddingBottom = 30;
+	var paddingLeft = 252;
+	var paddingRight = 15;
+	var colour = d3.scale.category20();
+	var transitionSpeed = 1000;
 	
-	this.CreateBarGraph = function(dataInput, width, hieght , totalWorkforce) {
+	this.createBarChart = function(dataInput, width, hieght, totalWorkforce) {
 		
 		data = dataInput;
 		w = width;
 	    h = hieght;
 	    
+	    var workers = $.map(data, function(d) { return d.workers; });
 	    
-	    y = d3.scale.ordinal().domain(d3.range(data.length)).rangeBands([0, h], .2);
-		x = d3.scale.linear().domain([0, totalWorkforce / 4]).range([0, w - paddingWidth]);
+	    //y = d3.scale.linear().domain([0, data.length]).range([paddingTop, h - paddingBottom]);
+	    y = d3.scale.ordinal().domain(d3.range(data.length)).rangeBands([paddingTop, h - paddingBottom], .2);		
+		x = d3.scale.linear().domain([(d3.min(workers)*.3), d3.max(workers)*1.05]).range([0, (w - paddingRight - paddingLeft)]);
 		
 		// The graph container
 		chart = d3.select("#" + container)
 		    .append("svg:svg")
-			.attr("class", "chart")
-			.attr("id", "d3-" + container)
 			.attr("width", w)
-		    .attr("height", h)
-			.append("svg:g")
-			.attr("transform", "translate(250,0)");
+		    .attr("height", h);
 		
 		var bars = chart.selectAll("g.bar")
-		    .data(data)
+		    .data(data, function(d) { return d.name; })
 		    .enter().append("svg:g")
 		    .attr("class", "bar")
-		    .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; });
+		    .attr("transform", function(d, i) { return "translate(" + paddingLeft + "," + y(i) + ")"; });
 		
 		bars.append("svg:rect")
-		    .attr("fill", "steelblue")
-		    .attr("width", function(d, i) { return x(d.people); })
+		    .style("fill", function(d, i) { return colour(i); })
+		    .attr("width", function(d, i) { return x(d.workers); })
+		    .attr("class", "workers")
 		    .attr("height", y.rangeBand());
 		
 		bars.append("svg:text")
-		    .attr("x", function(d, i) { return x(d.people); })
+		    .attr("x", function(d, i) { return x(d.workers); })
 		    .attr("y", y.rangeBand() / 2)
 		    .attr("dx", -6)
 		    .attr("dy", ".35em")
 		    .attr("fill", "white")
 		    .attr("text-anchor", "end")
-		    .text(function(d, i) { return Math.round(d.people / totalWorkforce * 100) + '%'; });
+		    .text(function(d, i) { return Math.round(d.workers); });
 
 		bars.append("svg:text")
 		    .attr("x", 0)
@@ -59,7 +64,7 @@ function BarGraph(container) {
 		    .data(x.ticks(10))
 		    .enter().append("svg:g")
 		    .attr("class", "rule")
-		    .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
+		    .attr("transform", function(d) { return "translate(" + (x(d) + paddingLeft) + ",0)"; });
 
 		rules.append("svg:line")
 		    .attr("y1", h)
@@ -67,8 +72,8 @@ function BarGraph(container) {
 		    .attr("stroke", "black");
 	
 		rules.append("svg:line")
-		    .attr("y1", 0)
-		    .attr("y2", h)
+		    .attr("y1", paddingTop)
+		    .attr("y2", h - paddingBottom)
 		    .attr("stroke", "white")
 		    .attr("stroke-opacity", .3);
 	
@@ -76,26 +81,55 @@ function BarGraph(container) {
 		    .attr("y", h + 9)
 		    .attr("dy", ".71em")
 		    .attr("text-anchor", "middle")
+		    .attr("fill", "black")
 		    .text(x.tickFormat(10));
 	
 		chart.append("svg:line")
-		    .attr("y1", 0)
-		    .attr("y2", h)
+		    .attr("y1", paddingTop)
+		    .attr("y2", h - paddingBottom)
+		    .attr("x1", paddingLeft)
+		    .attr("x2", paddingLeft)
+		    .attr("stroke", "black");
+		
+		chart.append("svg:line")
+		    .attr("y1", h - paddingBottom)
+		    .attr("y2", h - paddingBottom)
+		    .attr("x1", paddingLeft)
+		    .attr("x2", w - paddingRight)
 		    .attr("stroke", "black");
 			
 		
 	};
 	
-	this.RefreshGraph = function() {
+	this.rescale = function(inputData, width, hieght) {
+		data = dataInput;
+	    h = hieght;
 		
+		if (width < w) {
+			w = width;			
+			//shrink();
+		} else {
+			w = width;
+			//expand();
+		}
 	};
 	
-	this.SetData = function(x) {
-		data = x;
+	this.refresh = function(inputData) {
+		data = inputData;
+		refreshData();
+	    
 	};
 	
-	this.GetData = function(x) {
-		return data;
-	};
+	function refreshData() {	
+		
+		var g = chart.selectAll(".bar")
+        	.data(data, function(d) { return d.name; });
+		
+		g.transition()
+			.duration(transitionSpeed)
+		    .attr("transform", function(d, i) { return "translate(" + paddingLeft + "," + y(i) + ")"; })
+		    .attr("width", function(d, i) { return x(d.workers); });
+		
+	}
 
 }

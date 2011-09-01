@@ -8,67 +8,67 @@ function StackedBarChart(container) {
 	var w, h, x, y;
 	var paddingTop = 25;
 	var paddingBottom = 25;
-	var paddingLeft = 30;
-	var paddingRight = 25;
-	var color = d3.interpolateRgb("#339900", "#FF0000");
+	var paddingLeft = 60;
+	var paddingRight = 15;
+	var colour = d3.scale.category20();
 	var duration = 1000;
 	
-	this.createBarChart = function(dataInput, width, height) {
+	this.createStackedBarChart = function(dataInput, width, height) {
 		
 		data = dataInput;		
 		w = width;
 	    h = height;
-	    var min = parseInt(data.min);
-	    var max = parseInt(data.max);
-	    var maxCluster = parseInt(data.maxCluster);
-	    var noOfStudents = parseInt(data.studentCount);
-	    var barWidth = (w - (paddingLeft + paddingRight)) / (data.distinctGrades + 20);
+	    var barWidth = (w - (paddingLeft + paddingRight)) / (data.length + 3);
+	    var workers = $.map(data, function(d) { return d.workers; });
 	    
-		x = d3.scale.linear().domain([100, min]).range([(0 + paddingLeft), (w - paddingRight)]);
-		y = d3.scale.linear().domain([0, maxCluster]).range([(0 + paddingTop), (h - paddingBottom)]);
-		yrules = d3.scale.linear().domain([maxCluster, 0]).range([(0 + paddingTop), (h - paddingBottom)]);
-
-		
-		console.log(data.getGradeCount(100, 50));
-		
-		 chart = d3.select("#" + container)
+		x = d3.scale.linear().domain([0, data.length]).range([(0 + paddingLeft + 5), (w - paddingRight)]);
+		y = d3.scale.linear().domain([0, d3.max(workers)]).range([(0 + paddingTop), (h - paddingBottom)]);
+		yrules = d3.scale.linear().domain([d3.max(workers), 0]).range([(0 + paddingTop), (h - paddingBottom)]);
+				
+		chart = d3.select("#" + container)
 		 	.append("svg:svg")
 		    .attr("width", w)
 		    .attr("height", h);
-		 
-		 addLines();
-		 addTicks();
+		
+		addLines();
+		addTicks();
 		 
 		 var g = chart.selectAll("g.layers")
-		      .data(data.grades)
+		      .data(data)
 		    .enter().append("svg:g")		      
 		      .attr("class", "layer")
-		      .attr("transform", function(d, i) { return "translate(" + (x(d.grade) - barWidth) + ", " + (h - y(d.count)) + ")"; });
+		      .attr("transform", function(d, i) { return "translate(" + (x(i)) + ", " + (h - y(d.workers)) + ")"; });
 		 
 		 g.append("svg:rect")
 		 	.attr("height", 0)
 		 	.attr("width", barWidth)
-		 	.style("fill", function(d, i) { return color(grade(d.grade)); })
+		 	.style("fill", function(d, i) { return colour(i); })
 		 	.transition()
 		 	.duration(duration)		    
-		    .attr("height", function(d, i) { return y(d.count) - (paddingTop + 1); });
+		    .attr("height", function(d, i) { return y(d.workers) - (paddingTop + 1); });
 		 
-		 /*var dist = chart.selectAll("g.dist")
-		     .data(data.guidelines)
-		     .enter().append("svg:g")		      
-		     .attr("class", "dist")
-		     .attr("transform", function(d, i) { return "translate(" + (x(d.start)) + ", " + (h - y(data.getGradeCount(d.start, d.cutoff))) + ")"; });
-		 
-		 dist.append("svg:rect")
+		 g.append("svg:rect")
 		 	.attr("height", 0)
-		 	.attr("width", function(d, i) { return (x(d.cutoff) - x(d.start + 1)); })
-		 	.style("fill", function(d, i) { return color(grade(d.start)); })
+		 	.attr("width", barWidth)
+		 	.style("fill", 'black')
 		 	.transition()
 		 	.duration(duration)		    
-		    .attr("height", function(d, i) { return y(data.getGradeCount(d.start, d.cutoff)) - (paddingTop + 1); });*/
+		    .attr("height", function(d, i) { return y(d.tourismWorkers) - (paddingTop + 1); });
 		 
-
+			// Functions to draw and transition the x axis labels
+/*			var label = chart.selectAll(".x-label")
+				.data(data, function(d, i) { return d.name; });
 		
+			label.enter().append("svg:text")
+				.attr("class", "x-label flip")
+				.attr("x", function(d, i) { return x(i); })
+				.attr("y", 0)				
+				.attr("dx", barWidth * .5)
+				.attr("dy", "1em")
+				.attr("transform", function(d, i) { return "translate(0, 0) rotate(90 " + (x(i)) + " " + paddingTop + ")"; })
+				.attr("text-anchor", "left")
+				.text(function(d) { return d.name; });*/
+		 		
 	};
 	
 	function addLines() {
@@ -111,33 +111,28 @@ function StackedBarChart(container) {
 		    .attr("x", paddingLeft - 20)
 		    .attr("text-anchor", "middle")
 		    .attr("font-size", ".8em")
-		    .text(y.tickFormat(8));
-		
-		rules = chart.selectAll("x-rule")
-		    .data(x.ticks(10))
-		    .enter().append("svg:g")
-		    .attr("class", "x-rule")
-		    .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
+		    .text(y.tickFormat(8));		
+	}
 	
-		rules.append("svg:line")
-		    .attr("y1", (h - paddingBottom))
-		    .attr("y2", (h - paddingBottom) + 5)
-		    .attr("stroke", "black");
+	function redraw() {
 		
-		rules.append("svg:line")
-		    .attr("y1", paddingTop)
-		    .attr("y2", (h - paddingBottom))
-		    .attr("stroke", "grey")
-		    .attr("stroke-opacity", .3);
+		// Functions to draw and transition the x axis labels
+		var label = chart.selectAll(".x-label")
+			.data(data, function(d, i) { return d.name; });
 	
-		rules.append("svg:text")
-		    .attr("y", (h - paddingBottom) + 20)
-		    .attr("dy", ".3em")
-		    .attr("x", 0)
-		    .attr("text-anchor", "middle")
-		    .attr("font-size", ".8em")
-		    .text(x.tickFormat(10));
-		
+		label.enter().append("svg:text")
+			.attr("class", "x-label")
+			.attr("x", function(d, i) { return x(i); })
+			.attr("y", h + 2)
+			.attr("transform", function(d, i) { return "translate(" + textTranslate + ", 0) rotate(-45 " + (x(i)) + " " + h + ")"; })
+			.attr("dx", barWidth * .5)
+			.attr("dy", "1em")
+			.attr("style", "font-size: .7em; fill: black;")
+			.attr("text-anchor", "middle")
+			.text(function(d) { return d.name; });
+
+	
+
 	}
 	
 }

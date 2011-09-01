@@ -163,6 +163,15 @@ svg {
 #nav-foreward {
 	float: right;
 }
+/* Tourism */
+/* Stacked Bar Chart */
+#industry-stacked-chart {
+    float: left;	
+}
+#industry-stacked-chart-title {
+    width: 600px;
+    float: left;  
+}
 
 /* Nz Map*/
 #nz-map {
@@ -219,4 +228,12 @@ svg {
 
 #footer a {
     color: white;   
+}
+
+.flip {
+	    -moz-transform: scaleX(-1); /* Gecko */
+        -o-transform: scaleX(-1); /* Operah */
+        -webkit-transform: scaleX(-1); /* webkit */
+        transform: scaleX(-1); /* standard */
+        filter: FlipH; /* IE 6/7/8 */
 }
