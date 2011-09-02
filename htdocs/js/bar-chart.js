@@ -43,14 +43,14 @@ function BarChart(container) {
 		    .attr("class", "workers")
 		    .attr("height", y.rangeBand());
 		
-		bars.append("svg:text")
+/*		bars.append("svg:text")
 		    .attr("x", function(d, i) { return x(d.workers); })
 		    .attr("y", y.rangeBand() / 2)
 		    .attr("dx", -6)
 		    .attr("dy", ".35em")
 		    .attr("fill", "white")
 		    .attr("text-anchor", "end")
-		    .text(function(d, i) { return Math.round(d.workers); });
+		    .text(function(d, i) { return Math.round(d.workers); });*/
 
 		bars.append("svg:text")
 		    .attr("x", 0)
@@ -61,10 +61,23 @@ function BarChart(container) {
 		    .text(function(d, i) { return d.name; });
 		
 		var rules = chart.selectAll("g.rule")
-		    .data(x.ticks(10))
+		    .data(x.ticks(8))
 		    .enter().append("svg:g")
 		    .attr("class", "rule")
 		    .attr("transform", function(d) { return "translate(" + (x(d) + paddingLeft) + ",0)"; });
+		
+		rules.append("svg:line")
+		    .attr("y1", h - paddingBottom)
+		    .attr("y2", (h - paddingBottom) + 6)
+		    .attr("class", "x-rule-line")
+		    .attr("stroke", "black");
+		
+		rules.append("svg:text")
+		    .attr("y", (h - paddingBottom) + 9)
+		    .attr("dy", ".71em")
+		    .attr("text-anchor", "middle")
+		    .attr("class", "x-rule-text")
+		    .text(x.tickFormat(8));
 
 		rules.append("svg:line")
 		    .attr("y1", h)
@@ -125,10 +138,12 @@ function BarChart(container) {
 		var g = chart.selectAll(".bar")
         	.data(data, function(d) { return d.name; });
 		
-		g.transition()
+		chart.selectAll(".workers")
+			.transition()
 			.duration(transitionSpeed)
-		    .attr("transform", function(d, i) { return "translate(" + paddingLeft + "," + y(i) + ")"; })
-		    .attr("width", function(d, i) { return x(d.workers); });
+	    	.attr("width", function(d, i) { return x(d.workers); });
+		
+		
 		
 	}
 

@@ -167,8 +167,12 @@ function createIndustryChart() {
 	                      'Wholesale Trade', 'Transport, Postal and Warehousing', 'Information Media and Telecommunications',
 	                      'Public Administration and Safety', 'Arts and Recreation Services and Other Services'];
 	var industries = getIndustryWorkersForDisplay(industryFilter);
+	industries.filteredList.push(industries.other);
 	
 	// Map percentages to hand to the pie chart, makes easier to do out here with the count of people.
+	// Sort the filtered mutlidemensional array in a decending order.
+	industries.filteredList.sort(function(a, b) { return ((b.workers < a.workers) ? -1 : ((b.workers > a.workers) ? 1 : 0)); });
+	industries.completeList.sort(function(a, b) { return ((b.workers < a.workers) ? -1 : ((b.workers > a.workers) ? 1 : 0)); });
 	filteredPieData = $.map(industries.filteredList, function(d) { return d.workers / industries.totalWorkers; });
 	completePieData = $.map(industries.completeList, function(d) { return d.workers / industries.totalWorkers; });
 	
@@ -184,7 +188,7 @@ function createIndustryChart() {
 		$('#industry-chart').css('width', '920px');
 		setTimeout(function() {
 			var pieChart = new PieChart('industry-chart');
-			pieChart.CreatePieChart(completePieData, industries.filteredList, 920, 520);				
+			pieChart.CreatePieChart(completePieData, industries.completeList, 920, 520);				
 		}, 400);		
 	}, function() {
 		$('#gdp-container').show('slow');
@@ -243,7 +247,11 @@ function createTourismStackedBarChart() {
 	                      'Transport, Postal and Warehousing', 'Information Media and Telecommunications',
 	                      'Public Administration and Safety'];
 	var industries = getIndustryWorkersForDisplay(industryFilter);
-	industries.filteredList.reverse().pop();
+	
+	// Sort the filtered mutlidemensional array in a decending order.
+	industries.filteredList.sort(function(a, b) { return ((a.name < b.name) ? -1 : ((a.name > b.name) ? 1 : 0)); });
+	industries.completeList.sort(function(a, b) { return ((a.name < b.name) ? -1 : ((a.name > b.name) ? 1 : 0)); });
+	
 	var stackedBarChart = new BarChart('industry-stacked-chart');
 	stackedBarChart.createBarChart(industries.filteredList, width, height, industries.totalWorkers);	
 	nz.addListener(function() {			
@@ -258,7 +266,7 @@ function getIndustryWorkersForDisplay(filter) {
 	var filteredList = [];
 	var completeList = [];
 	var totalWorkers = 0;
-	var other = 0;
+	var filteredWorkers = 0;
 	
 	for(x in nz.NZSIC) {
 		var industry = nz.NZSIC[x];
@@ -268,19 +276,15 @@ function getIndustryWorkersForDisplay(filter) {
 		if ($.inArray(nz.NZSIC[x].name, filter) == -1) {			
 			filteredList.push(industry);
 		} else {
-			other += industry.workers;			
+			filteredWorkers += industry.workers;			
 		}
 		
 		completeList.push(industry);
 		totalWorkers += Math.round(industry.workers);
 	}
-	filteredList.push({workers: other, name: 'Other'});
+	var other = {workers: filteredWorkers, name: 'Other'};
 	
-	// Sort the filtered mutlidemensional array in a decending order.
-	filteredList.sort(function(a, b) { return ((b.workers < a.workers) ? -1 : ((b.workers > a.workers) ? 1 : 0)); });
-	completeList.sort(function(a, b) { return ((b.workers < a.workers) ? -1 : ((b.workers > a.workers) ? 1 : 0)); });
-	
-	return {filteredList: filteredList, completeList: completeList, totalWorkers: totalWorkers};
+	return {filteredList: filteredList, completeList: completeList, totalWorkers: totalWorkers, other: other};
 }
 
 
