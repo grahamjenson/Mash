@@ -122,7 +122,8 @@ function NZGeograhpy(container) {
 		var paddingTop = 20;
 		var squareSize = 20;
 		
-		var data = ['Normal Capacity', 'More Tourists than Citizens', 'Over Capacity'];
+		//var data = ['Normal Capacity', 'More Tourists than Citizens', 'Over Capacity'];
+		var data = ['Tourism @ Normal Capacity', 'Tourism @ Overcapacity'];
 		
 		y = d3.scale.linear().domain([0, data.length]).rangeRound([paddingTop, height]);
 		

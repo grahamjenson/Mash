@@ -2,6 +2,7 @@ var nz = new NewZealand();
 var world = new World();
 var OECDBubbleChart = new BubbleChart('bubble-chart');
 var oecdStats = [];
+var thousands = d3.format(",");
 
 var currentState = 0;
 var STATES = [
@@ -80,8 +81,9 @@ function introduction() {
 	createIndustryChart();
 }
 
-function tourism() {
-	
+
+
+function dairy() {
 	var title = 'Welcome to 100 Companies.';
 	var text = 'Bacon ipsum dolor sit amet cow meatloaf bacon turducken, meatball \
 		flank spare ribs hamburger beef jerky pancetta ball tip. Hamburger ham hock \
@@ -101,10 +103,6 @@ function tourism() {
 	createTourismSlider();
 	createTourismMap();
 	createTourismStackedBarChart();
-}
-
-function dairy() {
-	
 }
 
 function createOECDBubbleChart() {
@@ -209,58 +207,6 @@ function createCounter() {
 	var myCounter = new flipCounter('flip-counter', {value:10000, inc:1000, pace:50, auto:true});
 	myCounter.incrementTo(Math.round(nz.gdppc()));
 }
-
-function createTourismMap() {
-	var nzGeography = new NZGeograhpy('nz-map');
-	nzGeography.createMap(300, 350);
-	nzGeography.createLengend('nz-map-legend', 170, 100);
-	nzGeography.refresh(nz.Region);
-	nz.addListener(function() {			
-		//nzGeography.refresh(nz.Region);
-	});
-}
-
-function createTourismSlider() {
-	var x = d3.scale.log().domain([0.01, 1]).range([50000, 9000000]).nice();
-
-	$('#tourist-slider').slider({
-		min: .01,
-		max: 1,
-		step: .01,
-		slide: function( event, ui ) {
-			try {
-				nz.setTourists(x(ui.value));
-			} catch (e) {
-				
-			}
-		}
-	});
-	$('#tourist-slider').slider({ value: x.invert(nz.tourists) });
-}
-
-function createTourismStackedBarChart() {
-	var width = 660;
-	var height = 220;
-
-	var industryFilter = ['Mining', 'Fishing and Aquaculture', 'Forestry and Logging', 'Rental, Hiring and Real Estate Services',
-	                      'Financial and Insurance Services', 'Not elsewhere classified', 'Electricity, Gas, Water and Waste Services',
-	                      'Transport, Postal and Warehousing', 'Information Media and Telecommunications',
-	                      'Public Administration and Safety'];
-	var industries = getIndustryWorkersForDisplay(industryFilter);
-	
-	// Sort the filtered mutlidemensional array in a decending order.
-	industries.filteredList.sort(function(a, b) { return ((a.name < b.name) ? -1 : ((a.name > b.name) ? 1 : 0)); });
-	industries.completeList.sort(function(a, b) { return ((a.name < b.name) ? -1 : ((a.name > b.name) ? 1 : 0)); });
-	
-	var stackedBarChart = new BarChart('industry-stacked-chart');
-	stackedBarChart.createBarChart(industries.filteredList, width, height, industries.totalWorkers);	
-	nz.addListener(function() {			
-		industries = getIndustryWorkersForDisplay(industryFilter);
-		industries.filteredList.reverse().pop();
-		stackedBarChart.refresh(industries);
-	});
-}
-
 
 function getIndustryWorkersForDisplay(filter) {
 	var filteredList = [];

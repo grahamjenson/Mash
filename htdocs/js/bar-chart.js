@@ -11,7 +11,7 @@ function BarChart(container) {
 	var paddingLeft = 252;
 	var paddingRight = 15;
 	var colour = d3.scale.category20();
-	var transitionSpeed = 1000;
+	var transitionSpeed = 500;
 	
 	this.createBarChart = function(dataInput, width, hieght, totalWorkforce) {
 		
@@ -41,6 +41,12 @@ function BarChart(container) {
 		    .style("fill", function(d, i) { return colour(i); })
 		    .attr("width", function(d, i) { return x(d.workers); })
 		    .attr("class", "workers")
+		    .attr("height", y.rangeBand());
+		
+		bars.append("svg:rect")
+		    .style("fill", function(d, i) { return 'black'; })
+		    .attr("width", function(d, i) { return x(d.tourismWorkers); })
+		    .attr("class", "tourismWorkers")
 		    .attr("height", y.rangeBand());
 		
 /*		bars.append("svg:text")

@@ -183,6 +183,11 @@ svg {
     float: left;    
 }
 
+#tourist-slider {
+    width: 425px;
+    margin: auto;	
+}
+
 /* Apple Counter */
 #counter-wrapper {
 	padding-top: 10px;
