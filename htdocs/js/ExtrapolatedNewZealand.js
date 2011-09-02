@@ -543,6 +543,8 @@ function NewZealand()
 		this.setWorkers("agriculture",agworkerspercow*this.totaldairycattle)
 	}
 	
+	//Mining
+	
 	
 	//Some utility functions
 	this.gdp = function()
