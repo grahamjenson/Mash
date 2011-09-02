@@ -65,7 +65,7 @@ function NewZealand()
 	//Static 
 	var population = 4315800;
 	var noOfIndustries = 21;
-	var workingPopulation = 2333960;
+	this.workingPopulation = 2333960;
 	var touristsperworker = 26.900990312163618;
 	
 	//Using NZSIC06, similar to ANZSIC06, but breaks apart agriculture and foresty two larger industries in NZ
@@ -516,7 +516,7 @@ function NewZealand()
 			this.totaldairycattle += this.dairycattlebyregion[loc]
 	}	
 	
-	var dairycattleperkm  = this.totaldairycattle/this.totalland
+	var dairycattleperkm  = this.totaldairycattle/totaldairylandusage
 	var agworkerspercow = this.workersByIndustry.agriculture / this.totaldairycattle
 	
 	for(var loc in this.Region)
@@ -673,7 +673,7 @@ function NewZealand()
 		//Things not to change
 		var bads = []
 		bads.push(industry)
-		while(Round(delta,10) != 0 )
+		while(Round(delta,10) != 0 && bads.length != noOfIndustries)
 		{
 			var changesize = noOfIndustries - bads.length;
 			var chpi = delta / changesize
