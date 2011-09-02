@@ -191,7 +191,7 @@ function NewZealand()
 	//SET UP DEFAULTS
 	for(var x in this.NZSIC)
 	{
-		this.NZSIC[x].defaultWorkerDistribution = this.workersByIndustry[x] / workingPopulation
+		this.NZSIC[x].defaultWorkerDistribution = this.workersByIndustry[x] / this.workingPopulation
 	}
 	
 	//GDP Per Industry 2009, source GDP quartley report						
@@ -360,7 +360,7 @@ function NewZealand()
 	//SETS THE INITIAL TOURISM WORKERS
 	for(var x in this.NZSIC)
 	{
-		this.tourismWorkersByIndustry[x] = this.NZSIC.tourism_dist * (this.tourists / touristsperworker)
+		this.tourismWorkersByIndustry[x] = this.NZSIC[x].tourism_dist * (this.tourists / touristsperworker)
 	}
 	
 	
@@ -571,7 +571,7 @@ function NewZealand()
 		{
 			totwork += this.NZSIC[x].work * this.workersByIndustry[x]
 		}
-		return totwork/workingPopulation
+		return totwork/this.workingPopulation
 	}
 
 	this.avgwage = function()
@@ -581,7 +581,7 @@ function NewZealand()
 		{
 			totwage += this.NZSIC[x].wage * this.workersByIndustry[x]
 		}
-		return totwage/workingPopulation
+		return totwage/this.workingPopulation
 	}
 
 
@@ -639,7 +639,7 @@ function NewZealand()
 	{
 		
 		this.tourists = t
-		var workpop = workingPopulation;
+		var workpop = this.workingPopulation;
 		var tourismworkers = this.tourists / touristsperworker
 		
 		var nontourismworkers = workpop - tourismworkers
@@ -682,7 +682,7 @@ function NewZealand()
 				//if it is not in bads
 				if(bads.indexOf(i) < 0)
 				{
-					var change = Math.max(-this.workersByIndustry[i],Math.min(workingPopulation-this.workersByIndustry[i],chpi)) 
+					var change = Math.max(-this.workersByIndustry[i],Math.min(this.workingPopulation-this.workersByIndustry[i],chpi)) 
 					
 					this.workersByIndustry[i] += change;
 					delta -= change;
