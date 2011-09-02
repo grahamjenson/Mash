@@ -45,18 +45,9 @@ function BarChart(container) {
 		
 		bars.append("svg:rect")
 		    .style("fill", function(d, i) { return 'black'; })
-		    .attr("width", function(d, i) { return x(d.tourismWorkers); })
+		    .attr("width", function(d, i) { return x(d.tourism_dist*d.workers); })
 		    .attr("class", "tourismWorkers")
 		    .attr("height", y.rangeBand());
-		
-/*		bars.append("svg:text")
-		    .attr("x", function(d, i) { return x(d.workers); })
-		    .attr("y", y.rangeBand() / 2)
-		    .attr("dx", -6)
-		    .attr("dy", ".35em")
-		    .attr("fill", "white")
-		    .attr("text-anchor", "end")
-		    .text(function(d, i) { return Math.round(d.workers); });*/
 
 		bars.append("svg:text")
 		    .attr("x", 0)
@@ -148,6 +139,11 @@ function BarChart(container) {
 			.transition()
 			.duration(transitionSpeed)
 	    	.attr("width", function(d, i) { return x(d.workers); });
+		
+		chart.selectAll(".tourismWorkers")
+			.transition()
+			.duration(transitionSpeed)
+			.attr("width", function(d, i) { return x(d.tourism_dist*d.workers); });
 		
 		
 		

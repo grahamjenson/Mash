@@ -101,6 +101,6 @@ function createTourismStackedBarChart() {
 	nz.addListener(function() {			
 		industries = getIndustryWorkersForDisplay(industryFilter);
 		industries.filteredList.reverse().pop();
-		stackedBarChart.refresh(industries);
+		stackedBarChart.refresh(industries.filteredList);
 	});
 }
