@@ -4,10 +4,10 @@ function tourism() {
 	
 	var text = 'The problem with increasing toursim is that in general it lowers our average wage, \
 		plus it will not scale enough to increase our GDP whilst maintaining our clean green image.\
-		Use the slider below to increase the amount of tourists in New Zealand to see what happens:\
+		Use the slider below to increase the amount of annual tourists in New Zealand:\
 		&nbsp;<span style="float: right; text-align: right; padding-top: 7px;"><b>Current Tourists: </b><b id="current-tourists"></b></span>';
 	
-	var subtitle1 = 'Current Regional Accomdation Levels:';
+	var subtitle1 = 'Regional Tourism Levels: (Tourists/Avail. Accomodation)';
 	var subtitle2 = 'Workers per Industry / Tourist Workers per Industry';
 	
 	$('#main-container').html("<p><b>" + title + "</b></p><p style='padding-bottom: 10px'>" + text + "</p>\
@@ -31,10 +31,10 @@ function tourism() {
 function createTourismMap() {
 	var nzGeography = new NZGeograhpy('nz-map');
 	nzGeography.createMap(300, 350);
-	nzGeography.createLengend('nz-map-legend', 170, 75);
-	nzGeography.refresh(nz.Region);
+	nzGeography.createTourismLegend('nz-map-legend', 170, 75);
+	nzGeography.refreshTourism(nz);
 	nz.addListener(function() {			
-		//nzGeography.refresh(nz.Region);
+		nzGeography.refreshTourism(nz);
 	});
 }
 

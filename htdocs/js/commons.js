@@ -17,13 +17,13 @@ var STATES = [
 
 $(document).ready( function() {
 	createOECDBubbleChart();
-	navigate(getCurrentState());	
-	$('#nav-foreward').click(function() { currentState++; navigate(currentState); });
-	$('#nav-backward').click(function() { currentState--; navigate(currentState); });
+	navigate(getCurrentState(), null);	
+	$('#nav-foreward').click(function(e) { currentState++; navigate(currentState, e); });
+	$('#nav-backward').click(function(e) { currentState--; navigate(currentState, e); });
 	
-	setInterval(function(){
+	setInterval(function(e){
 	    if (window.location.hash != STATES[currentState].hash) {
-	    	navigate(getCurrentState());	
+	    	navigate(getCurrentState(), e);	
 	    }
 	}, 100);
 });
@@ -42,10 +42,10 @@ function getCurrentState() {
 }
 
 
-function navigate(nextState) {
+function navigate(nextState, e) {
 	// Setup the title and navigation chapter text when we move states
-	if (event) {
-		event.preventDefault();
+	if (e) {
+		e.preventDefault();
 	}
 	
 	currentState = nextState;
