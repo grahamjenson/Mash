@@ -6,41 +6,67 @@ var thousands = d3.format(",");
 
 var currentState = 0;
 var STATES = [
-    {name: 'intro', title: 'Introduction', nz: nz, action: function(){ introduction(); }},
-    {name: 'tourism', title: 'We Need More Tourists!', nz: nz, action: function(){ tourism(); }},
-    {name: 'dairy', title: 'Let\'s make more Milk', nz: nz, action: function(){ dairy(); }},
-    {name: 'mining', title: 'Should we mine more?', nz: nz, action: function(){ introduction(); }},
-    {name: 'manufactoring', title: 'Made in New Zealand', nz: nz, action: function(){ introduction(); }},
-    {name: 'research', title: 'R&#x26;D ROI FTW', nz: nz, action: function(){ introduction(); }},
-    {name: 'outro', title: 'To The Future', nz: nz, action: function(){ introduction(); }}
+    {hash: '#intro', title: 'Introduction', nz: nz, action: function(){ introduction(); }},
+    {hash: '#tourism', title: 'We Need More Tourists!', nz: nz, action: function(){ tourism(); }},
+    {hash: '#dairy', title: 'Let\'s make more Milk', nz: nz, action: function(){ dairy(); }},
+    {hash: '#mining', title: 'Should we mine more?', nz: nz, action: function(){ mining(); }},
+    {hash: '#manufactoring', title: 'Made in New Zealand', nz: nz, action: function(){ manufactoring(); }},
+    {hash: '#research', title: 'R&#x26;D ROI FTW', nz: nz, action: function(){ research(); }},
+    {hash: '#outro', title: 'To The Future', nz: nz, action: function(){ outro(); }}
 ];
 
 $(document).ready( function() {
 	createOECDBubbleChart();
-	navigate(0);
+	navigate(getCurrentState());	
 	$('#nav-foreward').click(function() { currentState++; navigate(currentState); });
-	$('#nav-backward').click(function() { currentState--; navigate(currentState); });	
+	$('#nav-backward').click(function() { currentState--; navigate(currentState); });
+	
+	setInterval(function(){
+	    if (window.location.hash != STATES[currentState].hash) {
+	    	navigate(getCurrentState());	
+	    }
+	}, 100);
 });
+
+function getCurrentState() {
+	if (window.location.hash == '') {
+		return 0;
+	} else {
+		for (i in STATES) {
+			if (STATES[i].hash == window.location.hash) {
+				currentState = i;
+			}
+		}
+		return parseInt(currentState);
+	}
+}
 
 
 function navigate(nextState) {
 	// Setup the title and navigation chapter text when we move states
+	if (event) {
+		event.preventDefault();
+	}
+	
 	currentState = nextState;
 	$('#current-chapter').html(STATES[currentState].title);
 	if ((currentState + 1) >= STATES.length) {
 		$('#nav-foreward').html('');
 	} else {
 		$('#nav-foreward').html('Next Chapter: ' + STATES[currentState + 1].title + ' &#187');
+		$('#nav-foreward').attr('href', STATES[currentState + 1].hash);
 	}
 	if (currentState <= 0) {
 		$('#nav-backward').html('');
 	} else {
 		$('#nav-backward').html('&#171 Previous Chapter: ' + STATES[currentState - 1].title);
+		$('#nav-backward').attr('href', STATES[currentState - 1].hash);
 	}
 	
 	//nz = STATES[currentState].nz;
 	cleanup();
 	STATES[currentState].action();
+	window.location.hash = STATES[currentState].hash;
 }
 
 function cleanup() {
@@ -53,32 +79,6 @@ function cleanup() {
 	oecdStats.pop();
 	oecdStats.push({name: "New Zealand", gdppc : nz.gdppc(), work : nz.avgwork(), wage : nz.avgwage()});	
 	OECDBubbleChart.refresh(oecdStats);
-}
-
-
-
-
-
-function dairy() {
-	var title = 'Welcome to 100 Companies.';
-	var text = 'Bacon ipsum dolor sit amet cow meatloaf bacon turducken, meatball \
-		flank spare ribs hamburger beef jerky pancetta ball tip. Hamburger ham hock \
-		t-bone drumstick pastrami beef.';
-	var subtitle1 = 'Current Regional Accomdation Levels:';
-	var subtitle2 = 'Workers per Industry / Tourist Workers per Industry';
-	
-	$('#main-container').html("<p><b>" + title + "</b></p><p>" + text + "</p>\
-				<div id='tourist-slider'></div>\
-			    <p style='text-align:center; padding-top:10px;'><b>" + subtitle1 + "</b><br /></p>\
-	            <div class='clear'></div>\
-	         </div>");
-	$("<div id='nz-map' class='state-container'></div>\
-	         <div id='nz-map-legend' class='state-container'></div>\
-			 <div id='industry-stacked-chart-title' class='state-container'><p style='text-align:center;'><b>" + subtitle2 + "</b><br /></p><div>\
-			 <div id='industry-stacked-chart' class='state-container'></div>").insertAfter('#main-container');
-	createTourismSlider();
-	createTourismMap();
-	createTourismStackedBarChart();
 }
 
 function createOECDBubbleChart() {
@@ -156,8 +156,3 @@ function getIndustryWorkersForDisplay(filter) {
 	
 	return {filteredList: filteredList, completeList: completeList, totalWorkers: totalWorkers, other: other};
 }
-
-
-
-
-
