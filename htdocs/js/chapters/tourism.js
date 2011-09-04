@@ -5,7 +5,7 @@ function tourism() {
 	var text = 'The problem with increasing toursim is that in general it lowers our average wage, \
 		plus it will not scale enough to increase our GDP whilst maintaining our clean green image.\
 		Use the slider below to increase the amount of annual tourists in New Zealand:\
-		&nbsp;<span style="float: right; text-align: right; padding-top: 7px;"><b>Current Tourists: </b><b id="current-tourists"></b></span>';
+		&nbsp;<span style="float: right; text-align: right; padding-top: 7px;"><b>Annual Tourists: </b><b id="current-tourists"></b></span>';
 	
 	var subtitle1 = 'Regional Tourism Levels: (Tourists/Avail. Accomodation)';
 	var subtitle2 = 'Workers per Industry / Tourist Workers per Industry';

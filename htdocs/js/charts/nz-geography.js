@@ -117,10 +117,10 @@ function NZGeograhpy(container) {
 	
 	this.refreshDairy = function(data) {
 		for (var region in data.Region) {
-			var currentCapacity = data.touristsByRegion[region] / data.Region[region].capacity;
+			var currentCapacity = data.dairylandusagebyregion[region] / data.Region[region].land;
 			var colour;
 			if (currentCapacity <= 1) {
-				colour = d3color((data.touristsByRegion[region] / data.Region[region].capacity));
+				colour = d3color((data.dairylandusagebyregion[region] / data.Region[region].land));
 			} else {
 				colour = 'black';
 			}
@@ -177,7 +177,7 @@ function NZGeograhpy(container) {
 	};
 	
 	this.createDairyLegend = function(container, width, height) {
-		var paddingTop = 20;
+		var paddingTop = 5;
 		var squareSize = 20;
 		
 		var data = ['Dairy: Miminum Capacity', 'Dairy: Maximum Capacity', 'Dairy: Overcapacity'];

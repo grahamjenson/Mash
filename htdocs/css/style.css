@@ -187,6 +187,11 @@ svg {
     width: 425px;
     margin: auto;	
 }
+/* Dairy */
+#cow-slider {
+    width: 425px;
+    margin: auto;   
+}
 
 /* Apple Counter */
 #counter-wrapper {
