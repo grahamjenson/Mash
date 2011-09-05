@@ -584,7 +584,7 @@ function NewZealand()
 	for(var loc in this.Region)
 	{
 			this.Region[loc].potentialfarmland = this.Region[loc].land * .8	//source http://motu-www.motu.org.nz/wpapers/09_17.pdf
-			this.totalland += this.Region[loc].potentialfarmland
+			this.totalland += this.Region[loc].land
 			this.totaldairycattle += this.dairycattlebyregion[loc]
 	}	
 	
@@ -645,10 +645,12 @@ function NewZealand()
 	
 		this.mininggrowth = v
 		
-		this.yearlymining = [];
+		this.yearlymining = {};
+		var year = 2011
+		
 		this.yearlymininggdpvalue.push(this.miningtogdp);
 		var remaining = this.totalmininggdp - this.miningtogdp;
-		var year = 2011
+		
 		while(remaining > 0)
 		{
 			var current = this.yearlymininggdpvalue[this.yearlymininggdpvalue.length - 1] * (1.0+this.mininggrowth)
