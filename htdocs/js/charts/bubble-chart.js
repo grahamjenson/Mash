@@ -169,7 +169,7 @@ function BubbleChart(container) {
 	function shrink() {
 		var zData = $.map(data, function(o){ return o.gdppc; });		
 		
-		x = d3.scale.linear().domain([20000, 120000]).rangeRound([paddingwidth + (maxcirclesize / 1.5), w - (maxcirclesize / 2)]);
+		x = d3.scale.linear().domain([40000, 120000]).rangeRound([paddingwidth + (maxcirclesize / 1.5), w - (maxcirclesize / 2)]);
 	    y = d3.scale.linear().domain([50, 32]).rangeRound([(maxcirclesize / 2), h - (maxcirclesize / 2)]);
 		z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([mincirclesize, maxcirclesize]);
 		

@@ -1,4 +1,4 @@
-function research() {
+$(document).ready( function() {
 	var title = 'Under Construction.';
 	var text = '';
 	var subtitle1 = '';
@@ -10,4 +10,4 @@ function research() {
 	            <div class='clear'></div>\
 	         </div>");
 
-}
+});

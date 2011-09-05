@@ -2,7 +2,7 @@
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta name="keywords" content="Data Visualisation, Data Visualization, Mix and Mash, Mix n Mash, mixandmash" />
-		<title>100 Companies</title>
+		<title>100 Companies - Let's make more Milk</title>
 		
 		<link type="text/css" href="css/smoothness/jquery-ui-1.8.15.custom.css" rel="stylesheet" />
 		<link type="text/css" href="css/style.css" type="text/css" rel="stylesheet" />
@@ -23,19 +23,22 @@
         <script type="text/javascript" src="js/charts/bar-chart.js"></script>
         <script type="text/javascript" src="js/charts/bubble-chart.js"></script>
         <script type="text/javascript" src="js/charts/nz-geography.js"></script>
+        <script type="text/javascript" src="js/charts/pie-chart.js"></script>
+        <script type="text/javascript" src="js/charts/flipcounter.min.js"></script>
         
         <!--  The Juicy Logic Layer -->
         <script type="text/javascript" src="js/ExtrapolatedNewZealand.js"></script>
         
+        <!-- Chapters -->        
+        <script type="text/javascript" src="js/chapters/dairy.js"></script>
         <script type="text/javascript" src="js/commons.js"></script>
-        <script type="text/javascript" src="js/chapters/dairy.js"></script>        
     
     </head>
     <body>
         <div id="content">
             <div class='vis-container'> 
                 <div class="title">
-                    <div id='current-chapter'></div>
+                    <div id='current-chapter'>Let's make more Milk</div>
                 </div> 
                               
                 <div id='gdp-container'> 
@@ -44,31 +47,13 @@
                     <div id="bubble-chart" class="chart-wrapper"></div>                    
                 </div>   
                 
-                <div id='main-container'>
-                    <p><b>So we're good at Dairy, why not do more of that?</b></p>
-                    <p style='padding-bottom: 20px'>
-                        (Under Development) Bacon ipsum dolor sit amet cow meatloaf bacon turducken, meatball \
-                        flank spare ribs hamburger beef jerky pancetta ball tip. Hamburger ham hock \
-                        t-bone drumstick pastrami beef.
-                    </p>
-	                <div id='cow-slider'></div>
-	                <div id='cow-slider-legend'></div>
-	                <p style='text-align:center; padding-top:10px;'><b>Regional Cow Densisty: (Cows per land<sup>2</sup>)</b><br /></p>
-	                <div class='clear'></div>
-	               </div>
-                </div>   
-                <div id='nz-map' class='state-container'></div>
-	            <div id='nz-map-legend' class='state-container'></div>
-	            <div id='industry-stacked-chart-title' class='state-container'>
-	               <p style='text-align:center;'><b>Workers per Industry / Dairy Workers per Industry</b><br /></p>
-	            </div>
-	            <div id='industry-stacked-chart' class='state-container'></div>                      
+                <div id='main-container'></div>                     
                 <div id='bottom-container'></div> 
                 <div class='clear'></div>                               
             </div>
             <div id='navigation'>
-                    <a href='#' id='nav-backward'></a>
-                    <a href='#' id='nav-foreward'></a>
+                    <a href='/tourism' id='nav-backward'>Previous Chapter: We Need More Tourists!</a>
+                    <a href='/mining' id='nav-foreward'>Next Chapter: Should we mine more?</a>
                     <div class='clear'></div>       
             </div>
             <div id='footer'>

@@ -143,9 +143,7 @@ function BarChart(container) {
 			.transition()
 			.duration(transitionSpeed)
 			.attr("width", function(d, i) { return x(d.tourism_dist*d.workers); });*/
-		
-		
-		
+				
 	}
 
 }

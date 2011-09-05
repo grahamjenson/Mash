@@ -1,4 +1,4 @@
-function tourism() {
+$(document).ready( function() {
 	
 	var title = 'Can we make New Zealand Richer by increasing Tourism?';
 	
@@ -26,7 +26,7 @@ function tourism() {
 	createTourismSlider();
 	createTourismMap();
 	createTourismStackedBarChart();
-}
+});
 
 function createTourismMap() {
 	var nzGeography = new NZGeograhpy('nz-map');
@@ -100,7 +100,6 @@ function createTourismStackedBarChart() {
 	stackedBarChart.createBarChart(industries.filteredList, width, height, industries.totalWorkers);	
 	nz.addListener(function() {			
 		industries = getIndustryWorkersForDisplay(industryFilter);
-		industries.filteredList.reverse().pop();
 		stackedBarChart.refresh(industries.filteredList);
 	});
 }
