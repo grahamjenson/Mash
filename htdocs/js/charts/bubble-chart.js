@@ -110,7 +110,7 @@ function BubbleChart(container) {
 		    .attr("dy", ".71em")
 		    .attr("text-anchor", "middle")
 		    .attr("class", "x-rule-text")
-		    .text(x.tickFormat(10));
+		    .text(function (d) { return '$' + thousands(d); });
 		
 		rules.append("svg:line")
 		    .attr("y1", 0)

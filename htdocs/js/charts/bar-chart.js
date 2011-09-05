@@ -11,7 +11,7 @@ function BarChart(container) {
 	var paddingLeft = 252;
 	var paddingRight = 15;
 	var colour = d3.scale.category20();
-	var transitionSpeed = 1000;
+	var transitionSpeed = 500;
 	
 	this.createBarChart = function(dataInput, width, hieght, totalWorkforce) {
 		
@@ -21,7 +21,6 @@ function BarChart(container) {
 	    
 	    var workers = $.map(data, function(d) { return d.workers; });
 	    
-	    //y = d3.scale.linear().domain([0, data.length]).range([paddingTop, h - paddingBottom]);
 	    y = d3.scale.ordinal().domain(d3.range(data.length)).rangeBands([paddingTop, h - paddingBottom], .2);		
 		x = d3.scale.linear().domain([(d3.min(workers)*.3), d3.max(workers)*1.05]).range([0, (w - paddingRight - paddingLeft)]);
 		
@@ -43,14 +42,11 @@ function BarChart(container) {
 		    .attr("class", "workers")
 		    .attr("height", y.rangeBand());
 		
-		bars.append("svg:text")
-		    .attr("x", function(d, i) { return x(d.workers); })
-		    .attr("y", y.rangeBand() / 2)
-		    .attr("dx", -6)
-		    .attr("dy", ".35em")
-		    .attr("fill", "white")
-		    .attr("text-anchor", "end")
-		    .text(function(d, i) { return Math.round(d.workers); });
+/*		bars.append("svg:rect")
+		    .style("fill", function(d, i) { return 'black'; })
+		    .attr("width", function(d, i) { return x(d.tourism_dist*d.workers); })
+		    .attr("class", "tourismWorkers")
+		    .attr("height", y.rangeBand());*/
 
 		bars.append("svg:text")
 		    .attr("x", 0)
@@ -61,10 +57,23 @@ function BarChart(container) {
 		    .text(function(d, i) { return d.name; });
 		
 		var rules = chart.selectAll("g.rule")
-		    .data(x.ticks(10))
+		    .data(x.ticks(8))
 		    .enter().append("svg:g")
 		    .attr("class", "rule")
 		    .attr("transform", function(d) { return "translate(" + (x(d) + paddingLeft) + ",0)"; });
+		
+		rules.append("svg:line")
+		    .attr("y1", h - paddingBottom)
+		    .attr("y2", (h - paddingBottom) + 6)
+		    .attr("class", "x-rule-line")
+		    .attr("stroke", "black");
+		
+		rules.append("svg:text")
+		    .attr("y", (h - paddingBottom) + 9)
+		    .attr("dy", ".71em")
+		    .attr("text-anchor", "middle")
+		    .attr("class", "x-rule-text")
+		    .text(x.tickFormat(8));
 
 		rules.append("svg:line")
 		    .attr("y1", h)
@@ -125,10 +134,17 @@ function BarChart(container) {
 		var g = chart.selectAll(".bar")
         	.data(data, function(d) { return d.name; });
 		
-		g.transition()
+		chart.selectAll(".workers")
+			.transition()
 			.duration(transitionSpeed)
-		    .attr("transform", function(d, i) { return "translate(" + paddingLeft + "," + y(i) + ")"; })
-		    .attr("width", function(d, i) { return x(d.workers); });
+	    	.attr("width", function(d, i) { return x(d.workers); });
+		
+/*		chart.selectAll(".tourismWorkers")
+			.transition()
+			.duration(transitionSpeed)
+			.attr("width", function(d, i) { return x(d.tourism_dist*d.workers); });*/
+		
+		
 		
 	}
 

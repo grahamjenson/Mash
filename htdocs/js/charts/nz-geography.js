@@ -2,7 +2,7 @@ function NZGeograhpy(container) {
 	
 	var container = container;
 	var w, h;
-	var d3color = d3.interpolateRgb("#333", "#CA2303");
+	var d3color = d3.interpolateRgb("#008800", "#CA2300");
 	var R;
 	var nz = {};
 	
@@ -99,10 +99,33 @@ function NZGeograhpy(container) {
 		}
 	};
 	
-	this.refresh = function(data) {
-		for (var region in data) {
+	this.refreshTourism = function(data) {
+		for (var region in data.Region) {
+			var currentCapacity = data.touristsByRegion[region] / data.Region[region].capacity;
+			var colour;
+			if (currentCapacity <= 1) {
+				colour = d3color((data.touristsByRegion[region] / data.Region[region].capacity));
+			} else {
+				colour = 'black';
+			}
 			nz[region].animate({
-				fill : d3color(data[region].touristsdist),
+				fill : colour,
+				stroke : "#666"
+			}, 500);
+		}
+	};
+	
+	this.refreshDairy = function(data) {
+		for (var region in data.Region) {
+			var currentCapacity = data.dairylandusagebyregion[region] / data.Region[region].land;
+			var colour;
+			if (currentCapacity <= 1) {
+				colour = d3color((data.dairylandusagebyregion[region] / data.Region[region].land));
+			} else {
+				colour = 'black';
+			}
+			nz[region].animate({
+				fill : colour,
 				stroke : "#666"
 			}, 500);
 		}
@@ -118,11 +141,11 @@ function NZGeograhpy(container) {
 	    return (cs.height / 940) * 1;
 	};
 	
-	this.createLengend = function(container, width, height) {
-		var paddingTop = 20;
+	this.createTourismLegend = function(container, width, height) {
+		var paddingTop = 5;
 		var squareSize = 20;
 		
-		var data = ['Normal Capacity', 'More Tourists than Citizens', 'Over Capacity'];
+		var data = ['Tourism: Miminum Capacity', 'Tourism: Maximum Capacity', 'Tourism: Overcapacity'];
 		
 		y = d3.scale.linear().domain([0, data.length]).rangeRound([paddingTop, height]);
 		
@@ -150,17 +173,56 @@ function NZGeograhpy(container) {
 		    .attr("text-anchor", "start")
 		    .text(String);
 	    
-	    flashColour();
+	    //flashColour();	    	
+	};
+	
+	this.createDairyLegend = function(container, width, height) {
+		var paddingTop = 5;
+		var squareSize = 20;
+		
+		var data = ['Dairy: Miminum Capacity', 'Dairy: Maximum Capacity', 'Dairy: Overcapacity'];
+		
+		y = d3.scale.linear().domain([0, data.length]).rangeRound([paddingTop, height]);
+		
+		chart = d3.select("#" + container)
+			.append("svg:svg")
+			.attr("width", width)
+			.attr("height", height);
+		
+		var legend = chart.selectAll("g.bar")
+		    .data(data)
+		    .enter().append("svg:g")
+		    .attr("class", "bar")
+		    .attr("transform", function(d, i) { return "translate(0" + "," + y(i) + ")"; });
+		
+		legend.append("svg:rect")
+		    .attr("fill", function(d, i) {  return getLegendColour(i); })
+		    .attr('class', function(d, i) { if (i == 2) { return 'flashing'; } } )
+		    .attr("width", squareSize)
+		    .attr("height", squareSize);
+    
+	    legend.append("svg:text")	    	
+		    .attr("dx", 25)
+		    .attr("dy", 13)
+		    .attr("fill", "black")
+		    .attr("text-anchor", "start")
+		    .text(String);
 	    
-	    	
+	    //flashColour();	    	
 	};
 	
 	function getLegendColour(i) {
-		if (i == 0) { 
-			return 'rgb(51,51,51)'; 
-		} else {
-			return 'rgb(202,35,3)';
-		} 
+		switch (i) {
+			case 0:  
+				return 'rgb(111,187,16)';
+				break;
+			case 1: 
+				return 'rgb(202,35,3)';
+				break;
+			default:
+				return 'black';
+				
+		}
 	}
 	
 	function flashColour() {
