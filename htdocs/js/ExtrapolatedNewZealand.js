@@ -613,7 +613,6 @@ function NewZealand()
 		
 		
 		this.setWorkers("agriculture",agworkerspercow*this.totaldairycattle)
-		this._firechanged()
 	}
 	
 	//Mining source 1 : http://www.minerals.co.nz/pdf/Natural_Resource_NZ_web.pdf

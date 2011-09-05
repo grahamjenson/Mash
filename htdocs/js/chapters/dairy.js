@@ -41,7 +41,7 @@ function createDairySlider() {
 		max: 1,
 		step: .01,
 		slide: function( event, ui ) {
-			$('#current-tourists').html(thousands(Math.round(x(ui.value))));
+			$('#current-cows').html(thousands(Math.round(x(ui.value))));
 			try {
 				nz.setCows(x(ui.value));
 			} catch (e) {

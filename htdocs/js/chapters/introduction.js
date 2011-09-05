@@ -7,7 +7,7 @@ function introduction() {
 		It\'s based on Sir Paul Callaghan\'s \
 		<a href=\'http://www.youtube.com/watch?v=OhCAyIllnXY\'>StrategyNZ keynote</a>\
 		and the visualisation is highly interactive, so please play around with New Zealand Virtual Economy and enjoy."';
-	var subtitle1 = 'New Zealand\'s Current GDP Per Capita ($USD)';
+	var subtitle1 = 'New Zealand\'s Current GDP Per Capita ($NZD)';
 	var subtitle2 = 'Total NZ Workforce/Per Industry:';
 	
 	$('#main-container').html("<p><b>" + title + "</b></p><p>" + text + "</p>\
