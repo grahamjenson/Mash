@@ -1,0 +1,82 @@
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<meta name="keywords" content="Data Visualisation, Data Visualization, Mix and Mash, Mix n Mash, mixandmash" />
+		<title>100 Companies</title>
+		
+		<link type="text/css" href="css/smoothness/jquery-ui-1.8.15.custom.css" rel="stylesheet" />
+		<link type="text/css" href="css/style.css" type="text/css" rel="stylesheet" />
+		
+		<!-- Various Libraries to help with the visualisations -->
+		<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.8.15.custom.min.js"></script>		
+		<script type="text/javascript" src="js/d3/d3.min.js"></script>
+		<script type="text/javascript" src="js/d3/d3.layout.js"></script>
+		<script type="text/javascript" src="js/d3/src/core/sum.js"></script>		
+		<script type="text/javascript" src="js/raphael.min.js"></script>
+		<script type="text/javascript" src="js/modernizer.min.js"></script>
+		
+		<!-- Google Analytics -->
+        <!--  <script type="text/javascript" src="js/google-analytics.js"></script> -->
+        
+        <!-- Various Charts -->
+        <script type="text/javascript" src="js/charts/bar-chart.js"></script>
+        <script type="text/javascript" src="js/charts/bubble-chart.js"></script>
+        <script type="text/javascript" src="js/charts/nz-geography.js"></script>
+        
+        <!--  The Juicy Logic Layer -->
+        <script type="text/javascript" src="js/ExtrapolatedNewZealand.js"></script>
+        
+        <script type="text/javascript" src="js/commons.js"></script>
+        <script type="text/javascript" src="js/chapters/dairy.js"></script>        
+    
+    </head>
+    <body>
+        <div id="content">
+            <div class='vis-container'> 
+                <div class="title">
+                    <div id='current-chapter'></div>
+                </div> 
+                              
+                <div id='gdp-container'> 
+                    <p><b>OECD Prosperity: GDP/Per Capita (Circle Area)</b><br />
+                    Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>                
+                    <div id="bubble-chart" class="chart-wrapper"></div>                    
+                </div>   
+                
+                <div id='main-container'>
+                    <p><b>So we're good at Dairy, why not do more of that?</b></p>
+                    <p style='padding-bottom: 20px'>
+                        (Under Development) Bacon ipsum dolor sit amet cow meatloaf bacon turducken, meatball \
+                        flank spare ribs hamburger beef jerky pancetta ball tip. Hamburger ham hock \
+                        t-bone drumstick pastrami beef.
+                    </p>
+	                <div id='cow-slider'></div>
+	                <div id='cow-slider-legend'></div>
+	                <p style='text-align:center; padding-top:10px;'><b>Regional Cow Densisty: (Cows per land<sup>2</sup>)</b><br /></p>
+	                <div class='clear'></div>
+	               </div>
+                </div>   
+                <div id='nz-map' class='state-container'></div>
+	            <div id='nz-map-legend' class='state-container'></div>
+	            <div id='industry-stacked-chart-title' class='state-container'>
+	               <p style='text-align:center;'><b>Workers per Industry / Dairy Workers per Industry</b><br /></p>
+	            </div>
+	            <div id='industry-stacked-chart' class='state-container'></div>                      
+                <div id='bottom-container'></div> 
+                <div class='clear'></div>                               
+            </div>
+            <div id='navigation'>
+                    <a href='#' id='nav-backward'></a>
+                    <a href='#' id='nav-foreward'></a>
+                    <div class='clear'></div>       
+            </div>
+            <div id='footer'>
+                <p>Infographic Produced By: <a href='http://maori.geek.nz/'>Graham Jenson</a> &amp; <a href='http://www.hashbang.co.nz/'>Alex Gibson</a>. References &amp; Datasources can be found <a href='/references'>here</a>.</p>
+                <p>Licensed under a Creative Commons Attribution 3.0 Unported License.</p>
+            </div>
+                
+        </div>
+    
+    </body>
+</html>

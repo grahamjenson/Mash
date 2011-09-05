@@ -82,8 +82,9 @@ function cleanup() {
 }
 
 function createOECDBubbleChart() {
-	var minCountryFilter = ['Slovak Republic', 'Sweden', 'Switzerland', 'Belgium', 'Czech Republic', 'Germany', 
-	                     'Denmark', 'Ireland', 'Austria', 'Finland', 'Poland', 'Netherlands', 'Portugal', 'France', 'Canada'];
+	var minCountryFilter = ['Slovak Republic', 'Sweden', 'Switzerland', 'Belgium', 'Czech Republic', 'Germany', 'Turkey',
+	                     'Denmark', 'Ireland', 'Austria', 'Finland', 'Poland', 'Netherlands', 'Portugal', 'France', 
+	                     'Canada', 'Hungary'];
 	
 	var maxCountryFilter = ['Switzerland', 'Germany', 'Ireland', 'Poland', 
 		                     'Netherlands', 'Portugal'];
