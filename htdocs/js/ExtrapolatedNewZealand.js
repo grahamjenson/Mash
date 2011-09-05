@@ -70,6 +70,7 @@ function NewZealand()
 	var noOfIndustries = 21;
 	this.workingPopulation = 2333960;
 	var touristsperworker = 26.900990312163618;
+	this.humandensity = 16.4 //cite wiki
 	
 	//Using NZSIC06, similar to ANZSIC06, but breaks apart agriculture and foresty two larger industries in NZ
 	this.NZSIC =
@@ -582,7 +583,8 @@ function NewZealand()
 	
 	for(var loc in this.Region)
 	{
-			this.totalland += this.Region[loc].land
+			this.Region[loc].potentialfarmland = this.Region[loc].land * .8	//source http://motu-www.motu.org.nz/wpapers/09_17.pdf
+			this.totalland += this.Region[loc].potentialfarmland
 			this.totaldairycattle += this.dairycattlebyregion[loc]
 	}	
 	
@@ -622,7 +624,6 @@ function NewZealand()
 	this.currentoilandgas = 3000000000; //source 1
 	this.currentcoal = 	300000000; //source 1
 	this.currentmetal = 	673103550; //source 2
-	this.nonmetals = 	451138726;  //source 2
 
 	
 	this.totalmetals = 			139295000000 // source 1
@@ -632,8 +633,36 @@ function NewZealand()
 	
 	this.yearlymininggdpvalue = {}
 	
-	this.mininggrowth = 0
+	this.oilgrowth = 0.0
+	this.coalgrowth = 0.0
+	this.metalsgrowth = 0.0
 	
+	this.setMiningGrowth = function(oilgrowth, coalgrowth, metalsgrowth)
+	{
+		return 0
+		this.oilgrowth = oilgrowth
+		this.coalgrowth = coalgrowth
+		this.metalsgrowth = metalsgrowth
+	
+		this.mininggrowth = v
+		
+		this.yearlymining = [];
+		this.yearlymininggdpvalue.push(this.miningtogdp);
+		var remaining = this.totalmininggdp - this.miningtogdp;
+		var year = 2011
+		while(remaining > 0)
+		{
+			var current = this.yearlymininggdpvalue[this.yearlymininggdpvalue.length - 1] * (1.0+this.mininggrowth)
+			current = Math.min(remaining , current)
+			remaining -= current
+			this.yearlymininggdpvalue.push(current)
+			
+		}
+		
+		this._firechanged()
+	}
+
+	this.setMiningGrowth(0,0,0)
 	
 	//aerage length of stay source http://www.tourismresearch.govt.nz/Data--Analysis/Analytical-Tools/International-Visitor-Value/
 	this.touristsInCountryToday = function()
