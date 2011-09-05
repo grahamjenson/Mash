@@ -48,6 +48,9 @@ function NewZealand()
 	//returns nothing
 	this.setWorkers = function(industry,workers){throw "Not implemented YET"}
 	
+	
+	this.setMiningGrowth = function(v){throw "Not implemented YET"}
+	
 	//
 	this.setCows = function(cows){throw "Not implemented YET"}
 	
@@ -307,6 +310,73 @@ function NewZealand()
 	this.NZSIC.agriculture.work = 40;
 	this.NZSIC.fishing.work = 40;
 
+	//Some utility functions
+	this.gdp = function()
+	{
+		var gdp = 0;
+		for(var x in this.NZSIC)
+		{
+			gdp += this.NZSIC[x].gdppc * this.workersByIndustry[x]
+		}
+	
+		return gdp
+
+	}
+
+	this.gdppc = function()
+	{
+	
+		return this.gdp()/population
+	}
+	
+	this.avgwork = function()
+	{
+		var totwork = 0;
+		var totpeople = 0;
+		for(var x in this.NZSIC)
+		{
+			totwork += this.NZSIC[x].work * this.workersByIndustry[x]
+		}
+		return totwork/this.workingPopulation
+	}
+
+	this.avgwage = function()
+	{
+		var totwage = 0;
+		for(var x in this.NZSIC)
+		{
+			totwage += this.NZSIC[x].wage * this.workersByIndustry[x]
+		}
+		return totwage/this.workingPopulation
+	}
+
+
+
+	//The problem with these guesses is that they will not corrospond to the information from other countries,
+	//So to make them more accurate we need to scale the numbers
+
+	//Scaling Hours worked per week, to OECD numbers from http://stats.oecd.org/
+	var OECDWorkPerWeek = 37.4
+	var avgw = this.avgwork()
+	for(var x in this.NZSIC) {this.NZSIC[x].work =  this.NZSIC[x].work * OECDWorkPerWeek/avgw }
+
+
+	//Scaling GDPPC
+	var gdppcInUSD2000 = 23746; // 2009 GDP Per head, US $, constant prices, constant PPPs, OECD base year , source: http://stats.oecd.org/
+	var USDtoNZD2000 = 2.20; // mean over 2000, source http://www.oanda.com/currency/average
+	var gdppcT = USDtoNZD2000 * gdppcInUSD2000
+	var gdpT = gdppcT * population
+	var scale = gdpT/this.gdp()
+
+	for(var x in this.NZSIC) {this.NZSIC[x].gdppc =  this.NZSIC[x].gdppc * scale }
+
+	//Scaling Wage
+	var averageWage = 43524 //source NZStats weeklyincome*52
+	var scale = averageWage/this.avgwage()
+	for(var x in this.NZSIC) {this.NZSIC[x].wage =  this.NZSIC[x].wage * scale }
+
+
+
 
 	//tourism section, from the 2010 tourism satalite
 	var tourismworkers = 92900
@@ -543,79 +613,34 @@ function NewZealand()
 		this.setWorkers("agriculture",agworkerspercow*this.totaldairycattle)
 	}
 	
-	//Mining
+	//Mining source 1 : http://www.minerals.co.nz/pdf/Natural_Resource_NZ_web.pdf
+	//source 2 = http://www.nzpam.govt.nz/cms/xls-library/minerals-facts-figures/2009%20Mining%20Production%20Stats.xls
+
+	this.miningvalue = 	4500000000; // source 1
+	
+	this.currentoilandgas = 3000000000; //source 1
+	this.currentcoal = 	300000000; //source 1
+	this.currentmetal = 	673103550; //source 2
+	this.nonmetals = 	451138726;  //source 2
+
+	
+	this.totalmetals = 			139295000000 // source 1
+	this.totalcoal = 			967999000000 // source 1
+	this.totaloilandgas = 			114400000000 // source 1 (highest taranaki basin estimate)
 	
 	
-	//Some utility functions
-	this.gdp = function()
-	{
-		var gdp = 0;
-		for(var x in this.NZSIC)
-		{
-			gdp += this.NZSIC[x].gdppc * this.workersByIndustry[x]
-		}
+	this.yearlymininggdpvalue = {}
 	
-		return gdp
-
-	}
-
-	this.gdppc = function()
-	{
+	this.mininggrowth = 0
 	
-		return this.gdp()/population
-	}
 	
-	this.avgwork = function()
-	{
-		var totwork = 0;
-		var totpeople = 0;
-		for(var x in this.NZSIC)
-		{
-			totwork += this.NZSIC[x].work * this.workersByIndustry[x]
-		}
-		return totwork/this.workingPopulation
-	}
-
-	this.avgwage = function()
-	{
-		var totwage = 0;
-		for(var x in this.NZSIC)
-		{
-			totwage += this.NZSIC[x].wage * this.workersByIndustry[x]
-		}
-		return totwage/this.workingPopulation
-	}
-
-
 	//aerage length of stay source http://www.tourismresearch.govt.nz/Data--Analysis/Analytical-Tools/International-Visitor-Value/
 	this.touristsInCountryToday = function()
 	{
 		return this.tourists * 20.3922905527/365;
 	}
 	
-	//The problem with these guesses is that they will not corrospond to the information from other countries,
-	//So to make them more accurate we need to scale the numbers
-
-	//Scaling Hours worked per week, to OECD numbers from http://stats.oecd.org/
-	var OECDWorkPerWeek = 37.4
-	var avgw = this.avgwork()
-	for(var x in this.NZSIC) {this.NZSIC[x].work =  this.NZSIC[x].work * OECDWorkPerWeek/avgw }
-
-
-	//Scaling GDPPC
-	var gdppcInUSD2000 = 23746; // 2009 GDP Per head, US $, constant prices, constant PPPs, OECD base year , source: http://stats.oecd.org/
-	var USDtoNZD2000 = 2.20; // mean over 2000, source http://www.oanda.com/currency/average
-	var gdppcT = USDtoNZD2000 * gdppcInUSD2000
-	var gdpT = gdppcT * population
-	var scale = gdpT/this.gdp()
-
-	for(var x in this.NZSIC) {this.NZSIC[x].gdppc =  this.NZSIC[x].gdppc * scale }
-
-	//Scaling Wage
-	var averageWage = 43524 //source NZStats weeklyincome*52
-	var scale = averageWage/this.avgwage()
-	for(var x in this.NZSIC) {this.NZSIC[x].wage =  this.NZSIC[x].wage * scale }
-
+	
 
 	this._listeners = []
 	this.addListener = function(listner)
