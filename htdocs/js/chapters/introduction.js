@@ -1,5 +1,4 @@
-function introduction() {
-	
+$(document).ready( function() {
 	var title = 'Welcome to 100 Companies.';
 	var text = 'This infographic has two main goals, the first is to help \
 		dispell some myths surrounding the ways in which New Zealand become prosperous, \
@@ -22,7 +21,7 @@ function introduction() {
 	
 	createCounter();
 	createIndustryChart();
-}
+});
 
 function createIndustryChart() {
 	var width = 600;

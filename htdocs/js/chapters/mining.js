@@ -1,4 +1,4 @@
-function mining() {
+$(document).ready( function() {
 	var title = 'Under Construction.';
 	var text = '';
 	var subtitle1 = '';
@@ -10,4 +10,4 @@ function mining() {
 	            <div class='clear'></div>\
 	         </div>");
 
-}
+});

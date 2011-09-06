@@ -1,4 +1,4 @@
-function manufactoring() {
+$(document).ready( function() {
 	var title = 'Under Construction.';
 	var text = '';
 	var subtitle1 = '';
@@ -10,4 +10,4 @@ function manufactoring() {
 	            <div class='clear'></div>\
 	         </div>");
 
-}
+});

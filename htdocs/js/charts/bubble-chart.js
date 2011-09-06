@@ -7,11 +7,11 @@ function BubbleChart(container) {
 	var paddingwidth = 50;
 	var paddinghieght = 20;
 	var maxcirclesize = 60;
-	var mincirclesize = 20;
+	var mincirclesize = 35;
 	var colour = d3.scale.category20();
 	var transitionSpeed = 1000;
-	var yticks = 7;
-	var xticks = 7;
+	var yticks = 8;
+	var xticks = 6;
 	var x, y, z, w, h;
 	
 	this.CreateBubbleChart = function(dataInput, width, hieght) {
@@ -25,9 +25,9 @@ function BubbleChart(container) {
 		var zData = $.map(data, function(o){ return o.gdppc; });
 		
 		
-		x = d3.scale.linear().domain([20000, 120000]).rangeRound([paddingwidth + (maxcirclesize / 1.5), w - (maxcirclesize / 2)]);
+		x = d3.scale.linear().domain([40000, 120000]).rangeRound([paddingwidth + (maxcirclesize / 2), w - (maxcirclesize / 2)]);
 	    y = d3.scale.linear().domain([50, 32]).rangeRound([(maxcirclesize / 2), h - (maxcirclesize / 2)]);
-		z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([mincirclesize, maxcirclesize]);
+		z = d3.scale.log().domain([d3.max(zData), d3.min(zData) ]).range([maxcirclesize, mincirclesize]);
 		
 		chart = d3.select("#" + container)
 			.append("svg:svg")
@@ -169,7 +169,7 @@ function BubbleChart(container) {
 	function shrink() {
 		var zData = $.map(data, function(o){ return o.gdppc; });		
 		
-		x = d3.scale.linear().domain([20000, 120000]).rangeRound([paddingwidth + (maxcirclesize / 1.5), w - (maxcirclesize / 2)]);
+		x = d3.scale.linear().domain([40000, 120000]).rangeRound([paddingwidth + (maxcirclesize / 1.5), w - (maxcirclesize / 2)]);
 	    y = d3.scale.linear().domain([50, 32]).rangeRound([(maxcirclesize / 2), h - (maxcirclesize / 2)]);
 		z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([mincirclesize, maxcirclesize]);
 		

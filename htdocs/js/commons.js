@@ -15,75 +15,36 @@ var STATES = [
     {hash: '#outro', title: 'To The Future', nz: nz, action: function(){ outro(); }}
 ];
 
-$(document).ready( function() {
+$(document).ready( function() {	
+	$("body").css("display", "none");
+    $("body").fadeIn(1000);
 	createOECDBubbleChart();
-	navigate(getCurrentState(), null);	
-	$('#nav-foreward').click(function(e) { currentState++; navigate(currentState, e); });
-	$('#nav-backward').click(function(e) { currentState--; navigate(currentState, e); });
-	
-	setInterval(function(e){
-	    if (window.location.hash != STATES[currentState].hash) {
-	    	navigate(getCurrentState(), e);	
-	    }
-	}, 100);
+	fadeOutBinding();
 });
 
-function getCurrentState() {
-	if (window.location.hash == '') {
-		return 0;
-	} else {
-		for (i in STATES) {
-			if (STATES[i].hash == window.location.hash) {
-				currentState = i;
-			}
-		}
-		return parseInt(currentState);
-	}
+function fadeOutBinding() {
+	$("#nav-foreward").click(function(event){
+        event.preventDefault();
+        linkLocation = this.href;
+        $("body").fadeOut(500, redirectPage);
+    });
+	
+	$("#nav-backward").click(function(event){
+        event.preventDefault();
+        linkLocation = this.href;
+        $("body").fadeOut(500, redirectPage);
+    });
 }
 
-
-function navigate(nextState, e) {
-	// Setup the title and navigation chapter text when we move states
-	if (e) {
-		e.preventDefault();
-	}
-	
-	currentState = nextState;
-	$('#current-chapter').html(STATES[currentState].title);
-	if ((currentState + 1) >= STATES.length) {
-		$('#nav-foreward').html('');
-	} else {
-		$('#nav-foreward').html('Next Chapter: ' + STATES[currentState + 1].title + ' &#187');
-		$('#nav-foreward').attr('href', STATES[currentState + 1].hash);
-	}
-	if (currentState <= 0) {
-		$('#nav-backward').html('');
-	} else {
-		$('#nav-backward').html('&#171 Previous Chapter: ' + STATES[currentState - 1].title);
-		$('#nav-backward').attr('href', STATES[currentState - 1].hash);
-	}
-	
-	//nz = STATES[currentState].nz;
-	cleanup();
-	STATES[currentState].action();
-	window.location.hash = STATES[currentState].hash;
+function redirectPage() {
+    window.location = linkLocation;
 }
 
-function cleanup() {
-	// Empty the main and bottom container
-	$('#main-container').empty();
-	$('#bottom-container').empty();
-	$('.state-container').remove();
-	
-	// Cleanup the OECD Chart to contain the next states NZ object
-	oecdStats.pop();
-	oecdStats.push({name: "New Zealand", gdppc : nz.gdppc(), work : nz.avgwork(), wage : nz.avgwage()});	
-	OECDBubbleChart.refresh(oecdStats);
-}
 
 function createOECDBubbleChart() {
-	var minCountryFilter = ['Slovak Republic', 'Sweden', 'Switzerland', 'Belgium', 'Czech Republic', 'Germany', 
-	                     'Denmark', 'Ireland', 'Austria', 'Finland', 'Poland', 'Netherlands', 'Portugal', 'France', 'Canada'];
+	var minCountryFilter = ['Slovak Republic', 'Sweden', 'Switzerland', 'Belgium', 'Czech Republic', 'Germany', 'Turkey',
+	                     'Denmark', 'Ireland', 'Austria', 'Finland', 'Poland', 'Netherlands', 'Portugal', 'France', 
+	                     'Canada', 'Hungary'];
 	
 	var maxCountryFilter = ['Switzerland', 'Germany', 'Ireland', 'Poland', 
 		                     'Netherlands', 'Portugal'];
@@ -135,7 +96,7 @@ function createOECDBubbleChart() {
 function getIndustryWorkersForDisplay(filter) {
 	var filteredList = [];
 	var completeList = [];
-	var totalWorkers = 0;
+	var totalWorkers = nz.workingPopulation;
 	var filteredWorkers = 0;
 	
 	for(x in nz.NZSIC) {
@@ -150,7 +111,6 @@ function getIndustryWorkersForDisplay(filter) {
 		}
 		
 		completeList.push(industry);
-		totalWorkers += Math.round(industry.workers);
 	}
 	var other = {workers: filteredWorkers, name: 'Other'};
 	
