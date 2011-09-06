@@ -1,13 +1,12 @@
 $(document).ready( function() {
 	var title = 'So we\'re good at Dairy, why not do more of that?';
-	var text = '(Under Development) Bacon ipsum dolor sit amet cow meatloaf bacon turducken, meatball \
-		flank spare ribs hamburger beef jerky pancetta ball tip. Hamburger ham hock \
-		t-bone drumstick pastrami beef. \
+	var text = 'Dairy destroys our clean green image as it scaled, it has a low average wage potential and high working hours, \
+		and we dont want to over specialize. Use the slider below to increase the amount of cows in New Zealand to see the effect is has.\
 		<span style="float: right; text-align: right; padding-top: 7px;"><b>Cows in New Zealand: </b><b id="current-cows"></b></span>';
 	var subtitle1 = 'Regional Cow Densisty: (Cows per land<sup>2</sup>)';
 	var subtitle2 = 'Humans vs. Cows: (1 Unit = 1.1 Million)';
 	
-	$('#main-container').html("<p><b>" + title + "</b></p><p style='padding-bottom: 20px'>" + text + "</p>\
+	$('#main-container').html("<p><b>" + title + "</b></p><p style='padding-bottom: 10px'>" + text + "</p>\
 				<div id='cow-slider'></div>\
 				<div id='cow-slider-legend'></div>\
 			    <p style='text-align:center; padding-top:10px;'><b>" + subtitle1 + "</b><br /></p>\
@@ -31,9 +30,9 @@ function drawPaddock() {
 		for (var x = 0; x < width; x++) {
 			var z = (width * y) + x;
 			if (y == 0 && x < 4) {
-				table += "<td><img style=\"text-align:center;\" src=\"../../img/farmer\" alt\"Cow\" width=\"40\" heigth=\"40\" /></td>";
+				table += "<td><img style=\"text-align:center;\" src=\"../../img/farmer.gif\" alt\"Cow\" width=\"40\" heigth=\"40\" /></td>";
 			} else {
-				table += "<td id=\"cow-td-" + (z - 4) + "\"><img src=\"../../img/cow\" alt\"Cow\" width=\"40\" heigth=\"40\" /></td>";				
+				table += "<td id=\"cow-td-" + (z - 4) + "\"><img src=\"../../img/cow.gif\" alt\"Cow\" width=\"40\" heigth=\"40\" /></td>";				
 			}		
 		}
 		table += "</tr>";
