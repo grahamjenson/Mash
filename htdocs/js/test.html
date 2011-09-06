@@ -1,0 +1,122 @@
+<html>
+<script src="ExtrapolatedNewZealand.js"></script>
+
+<body>
+<!-- Industry change per 1000,  -->
+<script type="text/javascript">
+
+var rnd = function(num)
+{
+	return  Math.round(num*10)/10
+}
+
+var f = function()
+{ 
+var n = new NewZealand();
+var industries = []
+
+for(var i in n.NZSIC)
+{
+	industries.push(i)
+
+}
+
+
+document.write("<table>")
+
+for(var x in industries)
+{
+	var i = industries[x]
+
+	document.write("<tr>--</tr>")
+	document.write("<tr><td >" + n.NZSIC[i].name + " total </td>" + "<td width=20%>gpdpc</td> <td width=20%>work</td> <td width=20%> wage </td>" )
+	for (var d = 0; d <= 10; d++)
+	{
+		var n1 = new NewZealand();
+		var delta = d * 200000;
+		n1.setWorkers(i ,delta)
+		document.write("<tr><td>" + delta + " </td>" + "<td>" + rnd(n1.gdppc()) +"</td> <td>"+ rnd(n1.avgwork()) +" </td> <td> "+ rnd(n1.avgwage()) +" </td>" )	
+	}
+	
+	
+}
+document.write("</table>")
+}
+
+
+var g = function()
+{ 
+
+	document.write("<table>")
+
+	document.write("<tr>--</tr>")
+	document.write("<tr><td > Number of tourists </td> <td width=20%>tourism workers</td> <td width=15%>gpdpc</td> <td width=15%>work</td> <td width=15%> wage </td> <td width=15%> ACC </td>" )
+	for (var d = 0; d <= 60; d++)
+	{
+		var delta = d * 200000;
+		var n1 = new NewZealand()
+		n1.setTourists(delta);
+		document.write("<tr><td>" + rnd(n1.tourists) + " </td><td>" + rnd(n1.totaltourismworkers()) + "</td><td>" + rnd(n1.gdppc()) +"</td> <td>"+ rnd(n1.avgwork()) +" </td> <td> "+ rnd(n1.avgwage()) +" </td> <td> " + n1.totaltourismworkers()+ " </td> ")	
+	}
+	
+	
+	
+	document.write("</table>")
+}
+
+var c = function()
+{ 
+
+	document.write("<table>")
+
+	document.write("<tr>--</tr>")
+	document.write("<tr><td > Number of cows </td> <td width=20%>ag workers</td> <td width=15%>gpdpc</td> <td width=15%>work</td> <td width=15%> wage </td> <td width=15%> dairy cattle in waikato </td><td width=15%> dairy land % waikato </td>" )
+	var n1 = new NewZealand()
+		
+		document.write("<tr><td>" + rnd(n1.totaldairycattle) + " </td><td>" + rnd(n1.workersByIndustry.agriculture) + "</td><td>" + rnd(n1.gdppc()) +"</td> <td>"+ rnd(n1.avgwork()) +" </td> <td> "+ rnd(n1.avgwage()) +" </td> <td> " + rnd(n1.dairycattlebyregion.taranaki )+ " </td> <td> " + rnd(n1.dairylandusagebyregion.taranaki/ n1.Region.taranaki.land)+ " </td> ")	
+	
+	for (var d = 0; d <= 60; d++)
+	{
+		var delta = d * 600000;
+		var n1 = new NewZealand()
+		n1.setCows(delta);
+		document.write("<tr><td>" + rnd(n1.totaldairycattle) + " </td><td>" + rnd(n1.workersByIndustry.agriculture) + "</td><td>" + rnd(n1.gdppc()) +"</td> <td>"+ rnd(n1.avgwork()) +" </td> <td> "+ rnd(n1.avgwage()) +" </td> <td> " + rnd(n1.dairycattlebyregion.taranaki)+ " </td> <td> " + rnd(n1.dairylandusagebyregion.taranaki/ n1.Region.taranaki.potentialfarmland)+ " </td> ")	
+	}
+	
+	
+	
+	document.write("</table>")
+}
+
+
+var m = function()
+{ 
+
+	document.write("<table>")
+
+	document.write("<tr>--</tr>")
+	document.write("<tr><td > year </td> <td width=20%>oil</td><td width=20%>coal</td><td width=20%>metal</td>" )
+	var n1 = new NewZealand()
+	n1.setMiningGrowth(.013,.013,.013)
+	for (var year in n1.yearlyminingvalue)
+	{
+		var oil = n1.yearlyminingvalue[year].oil
+		var coal = n1.yearlyminingvalue[year].coal
+		var metal = n1.yearlyminingvalue[year].metal
+		document.write("<tr><td>" + year + " </td><td>" + rnd(oil) + " </td><td>" + rnd(coal) + "</td>" + " </td><td>" + rnd(metal) + "</td>")	
+	}
+	
+	
+	
+	document.write("</table>")
+}
+
+m()
+c()
+g()
+f()
+
+</script>
+</body>
+
+</html>

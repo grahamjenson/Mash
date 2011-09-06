@@ -17,6 +17,22 @@ function Round(Number, DecimalPlaces) {
 //This is what New Zealand was in 2009
 function NewZealand()
 {
+	//UTILITY METHODS
+	this._listeners = []
+	this.addListener = function(listner)
+	{
+		this._listeners.push(listner)
+	}
+	
+	this._firechanged = function()
+	{
+		for(var l in this._listeners)
+		{
+			this._listeners[l]();
+		}
+	}
+	
+	
 
 	//API methods for ALEX that will never change
 	
@@ -49,7 +65,7 @@ function NewZealand()
 	this.setWorkers = function(industry,workers){throw "Not implemented YET"}
 	
 	
-	this.setMiningGrowth = function(v){throw "Not implemented YET"}
+	this.setMiningGrowth = function(oilgrowth, coalgrowth, metalsgrowth){throw "Not implemented YET"}
 	
 	//
 	this.setCows = function(cows){throw "Not implemented YET"}
@@ -61,6 +77,7 @@ function NewZealand()
 	this.tourists = 2499102 //source tourism satelitte
 	
 	this.dairycattlebyregion = {}
+	this.dairycattledensity = -1
 	this.dairylandusagebyregion = {}
 	
 	//END OF API
@@ -522,7 +539,11 @@ function NewZealand()
 	
 
 	
-
+	//aerage length of stay source http://www.tourismresearch.govt.nz/Data--Analysis/Analytical-Tools/International-Visitor-Value/
+	this.touristsInCountryToday = function()
+	{
+		return this.tourists * 20.3922905527/365;
+	}
 
 
 	
@@ -589,7 +610,7 @@ function NewZealand()
 	}	
 	
 	var dairycattleperkm  = this.totaldairycattle/totaldairylandusage
-	var agworkerspercow = this.workersByIndustry.agriculture / this.totaldairycattle
+	var agworkerspercow = this.workersByIndustry.agriculture / this.totaldairycattle //THIS IS FLAT Wrong, the amount of dairy workers != ag workers.
 	
 	for(var loc in this.Region)
 	{
@@ -611,6 +632,7 @@ function NewZealand()
 			this.dairylandusagebyregion[loc] = this.dairycattlebyregion[loc] / dairycattleperkm
 		}
 		
+		this.dairycattledensity = this.totaldairycattle / this.totalland
 		
 		this.setWorkers("agriculture",agworkerspercow*this.totaldairycattle)
 	}
@@ -618,19 +640,19 @@ function NewZealand()
 	//Mining source 1 : http://www.minerals.co.nz/pdf/Natural_Resource_NZ_web.pdf
 	//source 2 = http://www.nzpam.govt.nz/cms/xls-library/minerals-facts-figures/2009%20Mining%20Production%20Stats.xls
 
-	this.miningvalue = 	4500000000; // source 1
 	
+	//Note these measurtes are not GDP, but total value
 	this.currentoilandgas = 3000000000; //source 1
 	this.currentcoal = 	300000000; //source 1
 	this.currentmetal = 	673103550; //source 2
 
 	
 	this.totalmetals = 			139295000000 // source 1
-	this.totalcoal = 			967999000000 // source 1
+	this.totalcoal = 			100000000000 // source 1
 	this.totaloilandgas = 			114400000000 // source 1 (highest taranaki basin estimate)
 	
 	
-	this.yearlymininggdpvalue = {}
+	this.yearlyminingvalue = {}
 	
 	this.oilgrowth = 0.0
 	this.coalgrowth = 0.0
@@ -638,25 +660,39 @@ function NewZealand()
 	
 	this.setMiningGrowth = function(oilgrowth, coalgrowth, metalsgrowth)
 	{
-		return 0
 		this.oilgrowth = oilgrowth
 		this.coalgrowth = coalgrowth
 		this.metalsgrowth = metalsgrowth
 	
-		this.mininggrowth = v
 		
-		this.yearlymining = {};
-		var year = 2011
+		var year = 2009
+		this.yearlyminingvalue = {}
 		
-		this.yearlymininggdpvalue.push(this.miningtogdp);
-		var remaining = this.totalmininggdp - this.miningtogdp;
+		this.yearlyminingvalue[year] = {oil : this.currentoilandgas , coal : this.currentcoal, metal : this.currentmetal}
 		
-		while(remaining > 0)
+		var remainingoil = this.totaloilandgas - this.currentoilandgas;
+		var remainingcoal = this.totalcoal - this.currentcoal;
+		var remainingmetal = this.totalmetals - this.currentmetal
+		
+		while(remainingoil > 0 || remainingcoal > 0 || remainingmetal > 0)
 		{
-			var current = this.yearlymininggdpvalue[this.yearlymininggdpvalue.length - 1] * (1.0+this.mininggrowth)
-			current = Math.min(remaining , current)
-			remaining -= current
-			this.yearlymininggdpvalue.push(current)
+			year++;
+			
+			var currentoil = this.yearlyminingvalue[year-1].oil * (1.0+this.oilgrowth)
+			var currentcoal = this.yearlyminingvalue[year-1].coal * (1.0+this.coalgrowth)
+			var currentmetal = this.yearlyminingvalue[year-1].metal * (1.0+this.metalsgrowth)
+			
+			currentoil = Math.min(remainingoil , currentoil)
+			remainingoil -= currentoil
+			
+			currentcoal = Math.min(remainingcoal , currentcoal)
+			remainingcoal -= currentcoal
+			
+			currentmetal = Math.min(remainingmetal , currentmetal)
+			remainingmetal -= currentmetal
+			
+			
+			this.yearlyminingvalue[year] = {oil : currentoil , coal : currentcoal, metal : currentmetal}
 			
 		}
 		
@@ -665,29 +701,174 @@ function NewZealand()
 
 	this.setMiningGrowth(0,0,0)
 	
-	//aerage length of stay source http://www.tourismresearch.govt.nz/Data--Analysis/Analytical-Tools/International-Visitor-Value/
-	this.touristsInCountryToday = function()
-	{
-		return this.tourists * 20.3922905527/365;
+
+	
+	
+	//source: http://wdmzpub01.stats.govt.nz/wds/TableViewer/
+	this.NZHSC = {
+		1 : { name : "Animals; live" , export : 179880231 },
+		2 : { name : "Meat and edible meat offal" , export : 5141734411 },
+		3 : { name : "Fish and crustaceans, molluscs and other aquatic invertebrates" , export : 1262083774 },
+		4 : { name : "Dairy produce; birds' eggs; natural honey; edible products of animal origin, not elsewhere specified or included" , export : 8115922507 },
+		5 : { name : "Animal originated products; not elsewhere specified or included" , export : 346524766 },
+		6 : { name : "Trees and other plants, live; bulbs, roots and the like; cut flowers and ornamental foliage" , export : 79409848 },
+		7 : { name : "Vegetables and certain roots and tubers; edible" , export : 406121539 },
+		8 : { name : "Fruit and nuts, edible; peel of citrus fruit or melons" , export : 1600766346 },
+		9 : { name : "Coffee, tea, mate and spices" , export : 10912948 },
+		10 : { name : "Cereals" , export : 7727172 },
+		11 : { name : "Products of the milling industry; malt, starches, inulin, wheat gluten" , export : 16422986 },
+		12 : { name : "Oil seeds and oleaginous fruits; miscellaneous grains, seeds and fruit, industrial or medicinal plants; straw and fodder" , export : 151857793 },
+		13 : { name : "Lac; gums, resins and other vegetable saps and extracts" , export : 7632343 },
+		14 : { name : "Vegetable plaiting materials; vegetable products not elsewhere specified or included" , export : 5461147 },
+		15 : { name : "Animal or vegetable fats and oils and their cleavage products; prepared animal fats; animal or vegetable waxes" , export : 156614168 },
+		16 : { name : "Meat, fish or crustaceans, molluscs or other aquatic invertebrates; preparations thereof" , export : 257748684 },
+		17 : { name : "Sugars and sugar confectionery" , export : 145741822 },
+		18 : { name : "Cocoa and cocoa preparations" , export : 85907003 },
+		19 : { name : "Preparations of cereals, flour, starch or milk; pastrycooks' products" , export : 959970016 },
+		20 : { name : "Preparations of vegetables, fruit, nuts or other parts of plants" , export : 247834776 },
+		21 : { name : "Miscellaneous edible preparations" , export : 649763894 },
+		22 : { name : "Beverages, spirits and vinegar" , export : 1197558344 },
+		23 : { name : "Food industries, residues and wastes thereof; prepared animal fodder" , export : 303419561 },
+		24 : { name : "Tobacco and manufactured tobacco substitutes" , export : 24964766 },
+		25 : { name : "Salt; sulphur; earths, stone; plastering materials, lime and cement" , export : 44631771 },
+		26 : { name : "Ores, slag and ash" , export : 38830326 },
+		27 : { name : "Mineral fuels, mineral oils and products of their distillation; bituminous substances; mineral waxes" , export : 1893020579 },
+		28 : { name : "Inorganic chemicals; organic and inorganic compounds of precious metals; of rare earth metals, of radio-active elements and of isotopes" , export : 22476642 },
+		29 : { name : "Organic chemicals" , export : 199205591 },
+		30 : { name : "Pharmaceutical products" , export : 276355052 },
+		31 : { name : "Fertilizers" , export : 37177889 },
+		32 : { name : "Tanning or dyeing extracts; tannins and their derivatives; dyes, pigments and other colouring matter; paints, varnishes; putty, other mastics; inks" , export : 95773978 },
+		33 : { name : "Essential oils and resinoids; perfumery, cosmetic or toilet preparations" , export : 72291388 },
+		34 : { name : "Soap, organic surface-active agents; washing, lubricating, polishing or scouring preparations; artificial or prepared waxes, candles and similar articles, modelling pastes, dental waxes and dental preparations with a basis of plaster" , export : 94497317 },
+		35 : { name : "Albuminoidal substances; modified starches; glues; enzymes" , export : 1077254745 },
+		36 : { name : "Explosives; pyrotechnic products; matches; pyrophoric alloys; certain combustible preparations" , export : 6700883 },
+		37 : { name : "Photographic or cinematographic goods" , export : 15428701 },
+		38 : { name : "Chemical products n.e.s." , export : 148869080 },
+		39 : { name : "Plastics and articles thereof" , export : 433918100 },
+		40 : { name : "Rubber and articles thereof" , export : 64086692 },
+		41 : { name : "Raw hides and skins (other than furskins) and leather" , export : 375331218 },
+		42 : { name : "Articles of leather; saddlery and harness; travel goods, handbags and similar containers; articles of animal gut (other than silk-worm gut)" , export : 18374656 },
+		43 : { name : "Furskins and artificial fur; manufactures thereof" , export : 22010073 },
+		44 : { name : "Wood and articles of wood; wood charcoal" , export : 2318942107 },
+		45 : { name : "Cork and articles of cork" , export : 2152049 },
+		46 : { name : "Manufactures of straw, esparto or other plaiting materials; basketware and wickerwork" , export : 209415 },
+		47 : { name : "Pulp of wood or other fibrous cellulosic material; recovered (waste and scrap) paper or paperboard" , export : 610106945 },
+		48 : { name : "Paper and paperboard; articles of paper pulp, of paper or paperboard" , export : 534874028 },
+		49 : { name : "Printed books, newspapers, pictures and other products of the printing industry; manuscripts, typescripts and plans" , export : 66565881 },
+		50 : { name : "Silk" , export : 1301120 },
+		51 : { name : "Wool, fine or coarse animal hair; horsehair yarn and woven fabric" , export : 637897603 },
+		52 : { name : "Cotton" , export : 8438083 },
+		53 : { name : "Vegetable textile fibres; paper yarn and woven fabrics of paper yarn" , export : 2076657 },
+		54 : { name : "Man-made filaments" , export : 4815302 },
+		55 : { name : "Man-made staple fibres" , export : 12891855 },
+		56 : { name : "Wadding, felt and nonwovens, special yarns; twine, cordage, ropes and cables and articles thereof" , export : 43850027 },
+		57 : { name : "Carpets and other textile floor coverings" , export : 107236772 },
+		58 : { name : "Fabrics; special woven fabrics, tufted textile fabrics, lace, tapestries, trimmings, embroidery" , export : 5317634 },
+		59 : { name : "Textile fabrics; impregnated, coated, covered or laminated; textile articles of a kind suitable for industrial use" , export : 12500906 },
+		60 : { name : "Fabrics; knitted or crocheted" , export : 26184737 },
+		61 : { name : "Apparel and clothing accessories; knitted or crocheted" , export : 108430084 },
+		62 : { name : "Apparel and clothing accessories; not knitted or crocheted" , export : 117574266 },
+		63 : { name : "Textiles, made up articles; sets; worn clothing and worn textile articles; rags" , export : 38519886 },
+		64 : { name : "Footwear; gaiters and the like; parts of such articles" , export : 58510601 },
+		65 : { name : "Headgear and parts thereof" , export : 14454709 },
+		66 : { name : "Umbrellas, sun umbrellas, walking-sticks, seat sticks, whips, riding crops; and parts thereof" , export : 865123 },
+		67 : { name : "Feathers and down, prepared; and articles made of feather or of down; artificial flowers; articles of human hair" , export : 1666032 },
+		68 : { name : "Stone, plaster, cement, asbestos, mica or similar materials; articles thereof" , export : 32436125 },
+		69 : { name : "Ceramic products" , export : 9917391 },
+		70 : { name : "Glass and glassware" , export : 25204924 },
+		71 : { name : "Natural, cultured pearls; precious, semi-precious stones; precious metals, metals clad with precious metal, and articles thereof; imitation jewellery; coin" , export : 799703686 },
+		72 : { name : "Iron and steel" , export : 576430218 },
+		73 : { name : "Iron or steel articles" , export : 269818481 },
+		74 : { name : "Copper and articles thereof" , export : 111721938 },
+		75 : { name : "Nickel and articles thereof" , export : 132261 },
+		76 : { name : "Aluminium and articles thereof" , export : 882826681 },
+		78 : { name : "Lead and articles thereof" , export : 31478944 },
+		79 : { name : "Zinc and articles thereof" , export : 1804086 },
+		80 : { name : "Tin; articles thereof" , export : 11565858 },
+		81 : { name : "Metals; n.e.s., cermets and articles thereof" , export : 1160517 },
+		82 : { name : "Tools, implements, cutlery, spoons and forks, of base metal; parts thereof, of base metal" , export : 50128283 },
+		83 : { name : "Metal; miscellaneous products of base metal" , export : 58843546 },
+		84 : { name : "Nuclear reactors, boilers, machinery and mechanical appliances; parts thereof" , export : 1658286493 },
+		85 : { name : "Electrical machinery and equipment and parts thereof; sound recorders and reproducers; television image and sound recorders and reproducers, parts and accessories of such articles" , export : 982276757 },
+		86 : { name : "Railway, tramway locomotives, rolling-stock and parts thereof; railway or tramway track fixtures and fittings and parts thereof; mechanical (including electro-mechanical) traffic signalling equipment of all kinds" , export : 21134253 },
+		87 : { name : "Vehicles; other than railway or tramway rolling stock, and parts and accessories thereof" , export : 289880593 },
+		88 : { name : "Aircraft, spacecraft and parts thereof" , export : 316781205 },
+		89 : { name : "Ships, boats and floating structures" , export : 312573186 },
+		90 : { name : "Optical, photographic, cinematographic, measuring, checking, medical or surgical instruments and apparatus; parts and accessories" , export : 689189343 },
+		91 : { name : "Clocks and watches and parts thereof" , export : 6958386 },
+		92 : { name : "Musical instruments; parts and accessories of such articles" , export : 1959536 },
+		93 : { name : "Arms and ammunition; parts and accessories thereof" , export : 3448524 },
+		94 : { name : "Furniture; bedding, mattresses, mattress supports, cushions and similar stuffed furnishings; lamps and lighting fittings, n.e.s.; illuminated signs, illuminated name-plates and the like; prefabricated buildings" , export : 183606028 },
+		95 : { name : "Toys, games and sports requisites; parts and accessories thereof" , export : 46453751 },
+		96 : { name : "Miscellaneous manufactured articles" , export : 9993812 },
+		97 : { name : "Works of art; collectors' pieces and antiques" , export : 31083808 },
+		98 : { name : "New Zealand miscellaneous provisions" , export : 370300500 },
+		99 : { name : "Non-merchandise trade" , export : 851493768 },
+		
+	
+	//source: http://www.stats.govt.nz/browse_for_stats/industry_sectors/imports_and_exports/nzs-international-trade-in-services.aspx
+
+		100 : { name : "Transportation" , export : 2274000000 },
+		101 : { name : "Business Travel" , export : 523000000 },
+		102 : { name : "Education Travel" , export : 395000000 },
+		103 : { name : "Health Travel" , export : 12000000 },
+		104 : { name : "Other Travel" , export : 2959000000 },
+		105 : { name : "Communication" , export : 346000000 },
+		106 : { name : "Construction" , export : 5000000 },
+		107 : { name : "Insurance" , export : 28000000 },
+		108 : { name : "Financial" , export : 66000000 },
+		109 : { name : "Computer and Information" , export : 128000000 },
+		110 : { name : "Royalties and licence fees" , export : 99000000 },
+		111 : { name : "Merchanting and other trade-related services" , export : 61000000 },
+		112 : { name : "Legal, accounting, management consulting and public relations" , export : 148000000 },
+		113 : { name : "Advertising, market research and public opinion polling" , export : 42000000 },
+		114 : { name : "Research and Development" , export : 52000000 },
+		115 : { name : "Agricultural, mining and on-site processing services" , export : 2000000 },
+		116 : { name : "Other business services" , export : 114000000 },
+		117 : { name : "Personal, cultural and recreational" , export : 70000000 },
+		118 : { name : "Government services" , export : 114000000 }
+		
 	}
 	
+	//Guesses on industries
+	
+	this.NZSIC.agriculture.exports = [1,2,4,5,6,7,8,9,10,11,12,13,14,15,41,51,52,115] 
+	this.NZSIC.manufacturing.exports = [11,16,17,18,19,20,21,22,23,24,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,45,46,48,49,50,51,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,69,70,72,73,74,75,76,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,106]
+	
+	this.NZSIC.fishing.exports = [3,16,71]
+	this.NZSIC.forestry.exports = [6,44,45,46,47,48,49]
+	this.NZSIC.mining.exports = [25,26,27,31,68,69,70,72,73,74,75,76,78,79,80,81,82,83,115]
+	this.NZSIC.arts_rec.exports = [97,98,117,110,104,]
+	this.NZSIC.no_class.exports = [99,116,104,115,101,113]
+	
+	//Service industries
+	this.NZSIC.acc_food.exports =[111]
+	this.NZSIC.prof_sci_tech.exports = [103,105,109,114]
+	this.NZSIC.construction.exports = [106]
+	this.NZSIC.whole.exports = [111]
+	this.NZSIC.retail.exports = [111]
+	this.NZSIC.tran_post_ware.exports = [100]
+	this.NZSIC.inform_tele.exports = [105,109]
+	this.NZSIC.fin_ins.exports = [107,108,112]
+	this.NZSIC.rent_hir_real.exports = []
+	this.NZSIC.pub_admin_saftey.exports =	[118]
+	this.NZSIC.edu_train.exports = [102]
+	this.NZSIC.health_social.exports = [103]	
+	this.NZSIC.admin_sup.exports = [118]
+	this.NZSIC.ele_gas_wat_was.exports = []
 	
 
-	this._listeners = []
-	this.addListener = function(listner)
+	this.totalExports = function(industry)
 	{
-		this._listeners.push(listner)
-	}
-	
-	this._firechanged = function()
-	{
-		for(var l in this._listeners)
+		var total = 0
+		for( var e in this.NZSIC[industry].exports)
 		{
-			this._listeners[l]();
+			total += this.NZHSC[this.NZSIC[industry].exports[e]].export 
 		}
+		
+		return total
+	
 	}
-	
-	
 	
 	
 	//API INPUT
