@@ -5,7 +5,7 @@ $(document).ready( function() {
 		t-bone drumstick pastrami beef. \
 		<span style="float: right; text-align: right; padding-top: 7px;"><b>Cows in New Zealand: </b><b id="current-cows"></b></span>';
 	var subtitle1 = 'Regional Cow Densisty: (Cows per land<sup>2</sup>)';
-	var subtitle2 = 'Workers per Industry / Dairy Workers per Industry';
+	var subtitle2 = 'Humans vs. Cows: (1 Unit = 1.1 Million)';
 	
 	$('#main-container').html("<p><b>" + title + "</b></p><p style='padding-bottom: 20px'>" + text + "</p>\
 				<div id='cow-slider'></div>\
@@ -15,12 +15,33 @@ $(document).ready( function() {
 	         </div>");
 	$("<div id='nz-map' class='state-container'></div>\
 	         <div id='nz-map-legend' class='state-container'></div>\
-			 <div id='industry-stacked-chart-title' class='state-container'><p style='text-align:center;'><b>" + subtitle2 + "</b><br /></p><div>\
-			 <div id='industry-stacked-chart' class='state-container'></div>").insertAfter('#main-container');
+			 <div id='cow-densitiy-title' class='state-container'><p style='text-align:center;'><b>" + subtitle2 + "</b><br /></p><div>\
+			 <div id='cow-densitiy-chart' class='state-container'></div>").insertAfter('#main-container');
 	createDairySlider();
 	createDairyMap();
-	//createTourismStackedBarChart();
+	drawPaddock();
 });
+
+function drawPaddock() {
+	var width = 15;
+	var height = 5;
+	var table = "<table>";
+	for (var y = 0; y < height; y++) {
+		table += "<tr>";
+		for (var x = 0; x < width; x++) {
+			var z = (width * y) + x;
+			if (y == 0 && x < 4) {
+				table += "<td><img style=\"text-align:center;\" src=\"../../img/farmer\" alt\"Cow\" width=\"40\" heigth=\"40\" /></td>";
+			} else {
+				table += "<td id=\"cow-td-" + (z - 4) + "\"><img src=\"../../img/cow\" alt\"Cow\" width=\"40\" heigth=\"40\" /></td>";				
+			}		
+		}
+		table += "</tr>";
+	}
+	table += "</table>";
+	$('#cow-densitiy-chart').html(table);
+	transitionCows(nz.totaldairycattle);
+}
 
 function createDairyMap() {
 	var nzGeography = new NZGeograhpy('nz-map');
@@ -30,6 +51,17 @@ function createDairyMap() {
 	nz.addListener(function() {			
 		nzGeography.refreshDairy(nz);
 	});
+}
+
+function transitionCows(value) {
+	var cows = Math.round(value/1100000);
+	for (var i = 0; i < 71; i++) {
+		if (i < cows) {
+			$('#cow-td-' + i).show();
+		} else {
+			$('#cow-td-' + i).hide();
+		}
+	}
 }
 
 function createDairySlider() {
@@ -44,12 +76,13 @@ function createDairySlider() {
 			$('#current-cows').html(thousands(Math.round(x(ui.value))));
 			try {
 				nz.setCows(x(ui.value));
+				transitionCows(x(ui.value));
 			} catch (e) {
 				
 			}
 		}
 	});
-	$('#cow-slider').slider({ value: x.invert(nz.totaldairycattle) });
+	$('#cow-slider').slider({ value: x.invert(nz.totaldairycattle) });	
 	$('#current-cows').html(thousands(Math.round(nz.totaldairycattle)));
 	var chart = d3.select("#cow-slider-legend")
 	    .append("svg:svg")

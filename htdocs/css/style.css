@@ -193,6 +193,11 @@ svg {
     margin: auto;   
 }
 
+#cow-densitiy-title {
+    width: 600px;
+    float: left;  
+}
+
 /* Apple Counter */
 #counter-wrapper {
 	padding-top: 10px;

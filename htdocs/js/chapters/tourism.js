@@ -39,8 +39,8 @@ function createTourismMap() {
 }
 
 function createTourismSlider() {
-	var x = d3.scale.log().domain([0.01, 1]).range([50000, 9000000]).nice();
-	var xrule = d3.scale.linear().domain([0.01, 1]).range([25, 443]);
+	var x = d3.scale.pow().domain([0.01, 1]).range([2499102, 9000000]).nice();
+	var xrule = d3.scale.linear().domain([0.01, 1]).range([30, 443]);
 
 	$('#tourist-slider').slider({
 		min: .01,
@@ -62,7 +62,7 @@ function createTourismSlider() {
 		.attr("width", 468)
 	    .attr("height", 25);
 	
-	var data = [x.invert(50000), x.invert(6000000), x.invert(7000000), x.invert(8000000),  x.invert(9000000)];
+	var data = [x.invert(2500000), x.invert(5000000), x.invert(7000000),  x.invert(9000000)];
 	
 	var rules = chart.selectAll("g.rule")
 	    .data(data)
