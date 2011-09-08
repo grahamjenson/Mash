@@ -4,7 +4,8 @@ var growth, oilExp, coalExp, metalExp, oilCounter, coalCounter, metalCounter;
 $(document).ready( function() {
 	var title = 'Lets dig up our billions worth of untapped resources.';
 	var text = 'However, to improve New Zealand GDP over the long run we are aiming for 40bn a year, \
-	and 60bn profit from mineral wealth is one off, and sacrifices our countries core values:';
+	and 60bn profit from mineral wealth is one off, and sacrifices our countries core values. \
+	Use the sliders to increase the Annual Mining Growth:';
 	var subtitle1 = 'New Zealand Mining: Annual Turnover ($NZD) vs. Time to Depletion (Year)';
 	var subtitle2 = '';
 	
