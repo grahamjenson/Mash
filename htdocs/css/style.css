@@ -204,16 +204,58 @@ svg {
 
 /* Mining */
 .mining-slider {
-	    margin: 5px 5px 0 5px;
-    width: 325px;	
+	margin: 5px 18px 0 10px;
+    width: 312px;	
+    float: left;
 }
 
 .mining-table {
-    text-align: right;	
+    text-align: left;	
 }
 
 .mining-p {
     padding-top: 7px;
+}
+
+#mining-chart-title {
+    text-align: center;
+    margin: auto;	
+}
+
+#coal-colour {
+    width: 15px;
+    height: 15px;
+    float: left;
+    background: #FFAA00;
+    margin-right: 5px; 	
+}
+
+#oil-colour {
+    width: 15px;
+    height: 15px;
+    float: left;
+    background: #00C12B;
+    margin-right: 5px;    
+}
+
+#metal-colour {
+    width: 15px;
+    height: 15px;
+    float: left;
+    background: #8805A8;   
+    margin-right: 5px;  
+}
+
+.mining-counter {
+    width: 250px;
+    float: right;
+    margin-right: 5px; 	
+}
+
+.counter-text {
+	padding-top: 13px;
+    width: 200px;
+    float: left;	
 }
 
 /* Apple Counter */
