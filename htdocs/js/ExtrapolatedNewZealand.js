@@ -835,7 +835,7 @@ function NewZealand()
 	this.NZSIC.agriculture.exports = [1,2,4,5,6,7,8,9,10,11,12,13,14,15,41,51,52,115] 
 	this.NZSIC.manufacturing.exports = [11,16,17,18,19,20,21,22,23,24,28,29,30,31,32,33,34,35,36,37,38,39,40,42,43,45,46,48,49,50,51,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,69,70,72,73,74,75,76,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,106]
 	
-	this.NZSIC.fishing.exports = [3,16,71]
+	this.NZSIC.fishing.exports = [1,3,16,71]
 	this.NZSIC.forestry.exports = [6,44,45,46,47,48,49]
 	this.NZSIC.mining.exports = [25,26,27,31,68,69,70,72,73,74,75,76,78,79,80,81,82,83,115]
 	this.NZSIC.arts_rec.exports = [97,98,117,110,104,]
@@ -843,7 +843,7 @@ function NewZealand()
 	
 	//Service industries
 	this.NZSIC.acc_food.exports =[111]
-	this.NZSIC.prof_sci_tech.exports = [103,105,109,114]
+	this.NZSIC.prof_sci_tech.exports = [103,105,109,110,114]
 	this.NZSIC.construction.exports = [106]
 	this.NZSIC.whole.exports = [111]
 	this.NZSIC.retail.exports = [111]

@@ -22,7 +22,7 @@ function BarChart(container) {
 	    var workers = $.map(data, function(d) { return d.workers; });
 	    
 	    y = d3.scale.ordinal().domain(d3.range(data.length)).rangeBands([paddingTop, h - paddingBottom], .2);		
-		x = d3.scale.linear().domain([(d3.min(workers)*.3), d3.max(workers)*1.05]).range([0, (w - paddingRight - paddingLeft)]);
+		x = d3.scale.linear().domain([0, d3.max(workers)*1.05]).range([0, (w - paddingRight - paddingLeft)]);
 		
 		// The graph container
 		chart = d3.select("#" + container)
@@ -42,11 +42,11 @@ function BarChart(container) {
 		    .attr("class", "workers")
 		    .attr("height", y.rangeBand());
 		
-/*		bars.append("svg:rect")
+		bars.append("svg:rect")
 		    .style("fill", function(d, i) { return 'black'; })
-		    .attr("width", function(d, i) { return x(d.tourism_dist*d.workers); })
+		    .attr("width", function(d, i) { return x(d.tourism_dist*nz.totaltourismworkers());})
 		    .attr("class", "tourismWorkers")
-		    .attr("height", y.rangeBand());*/
+		    .attr("height", y.rangeBand());
 
 		bars.append("svg:text")
 		    .attr("x", 0)
@@ -139,10 +139,10 @@ function BarChart(container) {
 			.duration(transitionSpeed)
 	    	.attr("width", function(d, i) { return x(d.workers); });
 		
-/*		chart.selectAll(".tourismWorkers")
+		chart.selectAll(".tourismWorkers")
 			.transition()
 			.duration(transitionSpeed)
-			.attr("width", function(d, i) { return x(d.tourism_dist*d.workers); });*/
+			.attr("width", function(d, i) { return x(d.tourism_dist*nz.totaltourismworkers()); });
 				
 	}
 
