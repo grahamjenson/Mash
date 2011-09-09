@@ -658,6 +658,14 @@ function NewZealand()
 	this.coalgrowth = 0.0
 	this.metalsgrowth = 0.0
 	
+	var jitter = {}
+	var tmpyear = 2008
+	while(tmpyear < 2500)
+	{
+		jitter[tmpyear] = Math.random() - .5
+		tmpyear++;
+	}
+
 	this.setMiningGrowth = function(oilgrowth, coalgrowth, metalsgrowth)
 	{
 		this.oilgrowth = oilgrowth
@@ -674,7 +682,7 @@ function NewZealand()
 		var remainingcoal = this.totalcoal - this.currentcoal;
 		var remainingmetal = this.totalmetals - this.currentmetal
 		
-		while(remainingoil > 0 || remainingcoal > 0 || remainingmetal > 0)
+		while(remainingoil  > 0 || remainingcoal > 0 || remainingmetal > 0)
 		{
 			year++;
 			
@@ -682,12 +690,15 @@ function NewZealand()
 			var currentcoal = this.yearlyminingvalue[year-1].coal * (1.0+this.coalgrowth)
 			var currentmetal = this.yearlyminingvalue[year-1].metal * (1.0+this.metalsgrowth)
 			
-			currentoil = Math.min(remainingoil , currentoil)
+			currentoil += jitter[year] * currentoil*.05 //jitter for aesthetic purposes only
+			currentoil = Math.min(remainingoil, currentoil)			
 			remainingoil -= currentoil
 			
+			currentcoal += jitter[year] * currentcoal*.05
 			currentcoal = Math.min(remainingcoal , currentcoal)
 			remainingcoal -= currentcoal
 			
+			currentmetal += jitter[year] * currentmetal*.05
 			currentmetal = Math.min(remainingmetal , currentmetal)
 			remainingmetal -= currentmetal
 			
@@ -695,7 +706,9 @@ function NewZealand()
 			this.yearlyminingvalue[year] = {oil : currentoil , coal : currentcoal, metal : currentmetal}
 			
 		}
-		
+		year++
+		this.yearlyminingvalue[year] = {oil : 0 , coal : 0, metal : 0}
+
 		this._firechanged()
 	}
 
@@ -808,24 +821,24 @@ function NewZealand()
 	
 	//source: http://www.stats.govt.nz/browse_for_stats/industry_sectors/imports_and_exports/nzs-international-trade-in-services.aspx
 
-		100 : { name : "Transportation" , export : 2274000000 },
-		101 : { name : "Business Travel" , export : 523000000 },
-		102 : { name : "Education Travel" , export : 395000000 },
-		103 : { name : "Health Travel" , export : 12000000 },
-		104 : { name : "Other Travel" , export : 2959000000 },
-		105 : { name : "Communication" , export : 346000000 },
-		106 : { name : "Construction" , export : 5000000 },
-		107 : { name : "Insurance" , export : 28000000 },
-		108 : { name : "Financial" , export : 66000000 },
-		109 : { name : "Computer and Information" , export : 128000000 },
+		100 : { name : "Transportation Services" , export : 2274000000 },
+		101 : { name : "Business Travel Services" , export : 523000000 },
+		102 : { name : "Education Travel Services" , export : 395000000 },
+		103 : { name : "Health Travel Services" , export : 12000000 },
+		104 : { name : "Other Travel Services" , export : 2959000000 },
+		105 : { name : "Communication Services" , export : 346000000 },
+		106 : { name : "Construction Services" , export : 5000000 },
+		107 : { name : "Insurance Services" , export : 28000000 },
+		108 : { name : "Financial Services" , export : 66000000 },
+		109 : { name : "Computer and Information Services" , export : 128000000 },
 		110 : { name : "Royalties and licence fees" , export : 99000000 },
 		111 : { name : "Merchanting and other trade-related services" , export : 61000000 },
-		112 : { name : "Legal, accounting, management consulting and public relations" , export : 148000000 },
-		113 : { name : "Advertising, market research and public opinion polling" , export : 42000000 },
+		112 : { name : "Legal, accounting, management consulting and public relations Services" , export : 148000000 },
+		113 : { name : "Advertising, market research and public opinion polling Services" , export : 42000000 },
 		114 : { name : "Research and Development" , export : 52000000 },
 		115 : { name : "Agricultural, mining and on-site processing services" , export : 2000000 },
 		116 : { name : "Other business services" , export : 114000000 },
-		117 : { name : "Personal, cultural and recreational" , export : 70000000 },
+		117 : { name : "Personal, cultural and recreational Services" , export : 70000000 },
 		118 : { name : "Government services" , export : 114000000 }
 		
 	}
