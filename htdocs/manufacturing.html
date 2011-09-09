@@ -21,8 +21,9 @@
         <!--  <script type="text/javascript" src="js/google-analytics.js"></script> -->
         
         <!-- Various Charts -->
-        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> -->
         <script type="text/javascript" src="js/charts/bubble-chart.js"></script>
+        <script type="text/javascript" src="js/charts/export-graph.js"></script>
         
         <!--  The Juicy Logic Layer -->
         <script type="text/javascript" src="js/ExtrapolatedNewZealand.js"></script>
@@ -46,7 +47,10 @@
                 </div>   
                 
                 <div id='main-container'></div>                     
-                <div id='bottom-container' style="width: 910px; height: 500px;"></div> 
+                <div id='bottom-container' style="width: 910px; height: 2500px; float:left">
+                    <div id='export-graph' style="width: 910px; height: 2500px; float: left"></div>    
+                    <div class='clear'></div>
+                </div> 
                 <div class='clear'></div>                               
             </div>
             <div id='navigation'>
