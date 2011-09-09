@@ -1,3 +1,4 @@
+<!DOCTYPE HTML>
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -5,7 +6,7 @@
 		<title>100 Companies - Made in New Zealand</title>
 		
 		<link type="text/css" href="css/smoothness/jquery-ui-1.8.15.custom.css" rel="stylesheet" />
-		<link type="text/css" href="css/style.css" type="text/css" rel="stylesheet" />
+		<link type="text/css" href="css/style.css" rel="stylesheet" />
 		
 		<!-- Various Libraries to help with the visualisations -->
 		<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
@@ -20,11 +21,8 @@
         <!--  <script type="text/javascript" src="js/google-analytics.js"></script> -->
         
         <!-- Various Charts -->
-        <script type="text/javascript" src="js/charts/bar-chart.js"></script>
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
         <script type="text/javascript" src="js/charts/bubble-chart.js"></script>
-        <script type="text/javascript" src="js/charts/nz-geography.js"></script>
-        <script type="text/javascript" src="js/charts/pie-chart.js"></script>
-        <script type="text/javascript" src="js/charts/flipcounter.min.js"></script>
         
         <!--  The Juicy Logic Layer -->
         <script type="text/javascript" src="js/ExtrapolatedNewZealand.js"></script>
@@ -42,18 +40,18 @@
                 </div> 
                               
                 <div id='gdp-container'> 
-                    <p><b>OECD Prosperity: GDP/Per Capita (Circle Area)</b><br />
-                    Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>                
+                    <p><b>New Zealand Exports Treemap</b><br />
+                    Left Click to go into an Industry, Right Click to go back</p>                
                     <div id="bubble-chart" class="chart-wrapper"></div>                    
                 </div>   
                 
                 <div id='main-container'></div>                     
-                <div id='bottom-container'></div> 
+                <div id='bottom-container' style="width: 910px; height: 500px;"></div> 
                 <div class='clear'></div>                               
             </div>
             <div id='navigation'>
-                    <a href='/mining' id='nav-backward'>&#171 Previous Chapter: Should we mine more?</a>
-                    <a href='/research' id='nav-foreward'>Next Chapter: R&#x26;D ROI FTW &#187</a>
+                    <a href='/mining' id='nav-backward'>&#171; Previous Chapter: Should we mine more?</a>
+                    <a href='/research' id='nav-foreward'>Next Chapter: R&#x26;D ROI FTW &#187;</a>
                     <div class='clear'></div>       
             </div>
             <div id='footer'>

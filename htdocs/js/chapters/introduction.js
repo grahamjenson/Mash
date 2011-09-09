@@ -1,8 +1,8 @@
 $(document).ready( function() {
 	var title = 'Welcome to 100 Companies.';
 	var text = 'This infographic has two main goals, the first is to help \
-		dispell some myths surrounding the ways in which New Zealand become prosperous, \
-		and the second is to help us ask the question "Where should we invest our future in?". <br /><br />\
+		dispell some myths surrounding the ways in which New Zealand can become prosperous, \
+		and the second is to help us ask the question "What should we invest our future in?". <br /><br />\
 		It\'s based on Sir Paul Callaghan\'s \
 		<a href=\'http://www.youtube.com/watch?v=OhCAyIllnXY\'>StrategyNZ keynote</a>\
 		and the visualisation is highly interactive, so please play around with New Zealand Virtual Economy and enjoy."';

@@ -142,7 +142,7 @@ function NZGeograhpy(container) {
 	};
 	
 	this.createTourismLegend = function(container, width, height) {
-		var paddingTop = 5;
+		var paddingTop = 0;
 		var squareSize = 20;
 		
 		var data = ['Tourism: Miminum Capacity', 'Tourism: Maximum Capacity', 'Tourism: Overcapacity'];
