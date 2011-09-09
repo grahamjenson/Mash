@@ -27,7 +27,7 @@ function LineChart(container) {
 		var min = d3.min([d3.min(coal), d3.min(oil), d3.min(metal)]);
 		var max = d3.max([d3.max(coal), d3.max(oil), d3.max(metal)]);
 		
-		x = d3.scale.linear().domain([0, data.length]).rangeRound([paddingLeft, w]);
+		x = d3.scale.linear().domain([0, data.length - 1]).rangeRound([paddingLeft, w - 2]);
 	    y = d3.scale.linear().domain([max, min]).rangeRound([0 + 15, h - paddingTop]);
 	     
 	    chart = d3.select("#" + this.container)
@@ -90,7 +90,7 @@ function LineChart(container) {
 		var min = d3.min([d3.min(coal), d3.min(oil), d3.min(metal)]);
 		var max = d3.max([d3.max(coal), d3.max(oil), d3.max(metal)]);
 		
-		x = d3.scale.linear().domain([0, data.length]).rangeRound([paddingLeft, w]);
+		x = d3.scale.linear().domain([0, data.length - 1]).rangeRound([paddingLeft, w - 2]);
 	    y = d3.scale.linear().domain([max, min]).rangeRound([0 + 15, h - paddingTop]);
 		
 		points = d3.range(0, data.length).map(function(i) { return [x(i), y(data[i].coal)]; });
@@ -297,7 +297,7 @@ function LineChart(container) {
 		    .attr("y", h - 5)
 		    .attr("text-anchor", "middle")
 		    .attr("style", "fill: black")
-		    .text(function (d, i) { return data[d].year; });	
+		    .text(function (d, i) {	return data[d].year; });	
 
 	}
 	

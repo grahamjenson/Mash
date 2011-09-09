@@ -142,6 +142,10 @@ svg {
 	float:left;
 }
 
+/* Manufacturing */
+.manufaturing-cell {
+    cursor: pointer;	
+}
 /* Navigation */
 #navigation {
 	margin: 10px 0 10px 0;
