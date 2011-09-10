@@ -159,13 +159,13 @@ function getMiningGrowth(oil, coal, metal) {
 }
 
 function createMiningCounters() {
-	oilCounter = new flipCounter('oil-counter', {value:2011, inc:1, pace:50, auto:true});
+	oilCounter = new flipCounter('oil-counter', {value:2011, inc:10, pace:50, auto:true});
 	oilCounter.incrementTo(oilExp);
 	
-	coalCounter = new flipCounter('coal-counter', {value:2011, inc:10, pace:50, auto:true});
-	coalCounter.incrementTo(2339);
+	coalCounter = new flipCounter('coal-counter', {value:2254, inc:10, pace:50, auto:true});
+	coalCounter.incrementTo(coalExp);
 	
-	metalCounter = new flipCounter('metal-counter', {value:2011, inc:5, pace:50, auto:true});
+	metalCounter = new flipCounter('metal-counter', {value:2011, inc:10, pace:50, auto:true});
 	metalCounter.incrementTo(metalExp);
 }
 
