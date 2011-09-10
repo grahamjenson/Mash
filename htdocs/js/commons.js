@@ -7,7 +7,7 @@ var thousands = d3.format(",");
 
 $(document).ready( function() {	
 
-	if ($.browser.msie || !Modernizr.svg || !Modernizr.canvas || !Modernizr.localstorage) {
+	if (!Modernizr.svg || !Modernizr.canvas || !Modernizr.localstorage) {
 		// Don't have HTML5 support, redirect
 		window.location = "/error.html";
 	} 
