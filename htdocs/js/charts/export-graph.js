@@ -18,6 +18,9 @@ function ExportGraph(container) {
 	var paddingLeft = 10;
 	var paddingRight = 10;
 	
+	var partitionedIndustries;
+	var partitionedExports;
+	
 	var duration = 1000;
 	var color = d3.scale.category20c();
 	var line = d3.svg.line().interpolate('basis');
@@ -42,8 +45,8 @@ function ExportGraph(container) {
 		var partition = d3.layout.partition()		    
 		    .value(function(d) { return d.value; });
 		
-		var partitionedIndustries = partition(industries);
-		var partitionedExports = partition(exports);
+		partitionedIndustries = partition(industries);
+		partitionedExports = partition(exports);
 		
 		var industryCell = vis.selectAll(".industry-cell")
 	      	.data(partitionedIndustries)
@@ -64,11 +67,10 @@ function ExportGraph(container) {
 	      .attr("x", function(d) { return industriesX(d.dy + .5) / 2; })
 	      .attr("y", function(d) { return industriesY(d.dx) / 2; })
 	      .attr("width", function(d) { return industriesX(d.dy + .5); })
+	      .attr("class", 'industry-text')
 	      .attr("dy", ".35em")
 	      .attr("text-anchor", "middle")
-	      .text(function(d) { return d.children ? null : (d.dx > .04 ? d.data.name.slice(0, 30) + '...' : ''); });
-
-		
+	      .text(function(d) { return d.children ? null : (exportY(d.dx) > 12 ? d.data.name.slice(0, 30) + '...' : ''); });	
 		
 		
 		var exportCell = vis.selectAll(".export-cell")
@@ -91,8 +93,9 @@ function ExportGraph(container) {
 	      .attr("y", function(d) { return exportY(d.dx) / 2; })
 	      .attr("width", function(d) { return exportX(d.dy + .5); })
 	      .attr("dy", ".35em")
+	      .attr("class", 'export-text')
 	      .attr("text-anchor", "middle")
-	      .text(function(d) { return d.children ? null : (d.dx > .026 ? d.data.name.slice(0, 30) + '...' : ''); });
+	      .text(function(d) { return d.children ? null : (exportY(d.dx) > 12 ? d.data.name.slice(0, 30) + '...' : ''); });
 		
 		for (exportPartitionIndex in partitionedExports) {
 			var partitionedExport = partitionedExports[exportPartitionIndex];
@@ -124,12 +127,101 @@ function ExportGraph(container) {
 						    .style("stroke", 'black')
 						    .style("stroke-width", 1)
 						    .style("stroke-opacity", weight)
-						    .attr('class', 'path industry-' + industryKey + ' export-' + exportKey)
+						    .attr('class', 'path industry-' + industryKey + ' export-' + exportKey + ' unique-' + industryKey + exportKey)
 						    .attr("d", line);
 					}					
 				}		
 			}
 		}
+	};
+	
+	this.resize = function(height) {
+		h = height;
+		
+		industriesY = d3.scale.linear().range([0, (h - paddingRight) ]);
+		industriesX = d3.scale.linear().range([0, (w - paddingBottom) / 5]);
+	    
+		exportY = d3.scale.linear().range([0, (h - paddingRight) ]);
+		exportX = d3.scale.linear().range([((w - paddingBottom) / 5)*2, ((w - paddingBottom) / 5)]);
+		
+		d3.select("#" + container)
+			.transition()
+			.duration(duration)
+		    .attr("width", w)
+		    .attr("height", h);
+		
+		vis.transition()
+			.duration(duration)
+			.attr("width", w)
+			.attr("height", h);
+		
+		var industriesCells = vis.selectAll(".industry-cell")
+			.transition()
+			.duration(duration)
+			.attr("transform", function(d) { return "translate(" + industriesX((d.children ? d.y : (d.y - .5))) + "," + industriesY(d.x) + ")"; });
+	    
+		vis.selectAll(".industry-text")
+			.transition()
+			.duration(duration)
+			.attr("x", function(d) { return exportX(d.dy + .5) / 2; })
+			.attr("y", function(d) { return exportY(d.dx) / 2; })
+			.text(function(d) { return d.children ? null : (exportY(d.dx) > 12 ? d.data.name.slice(0, 30) + '...' : ''); });
+		
+		vis.selectAll(".industry-rectangles")
+			.transition()
+			.duration(duration)
+			.attr("height", function(d) { return industriesY(d.dx); });
+		
+		var exportCells = vis.selectAll(".export-cell")
+			.transition()
+			.duration(duration)
+			.attr("transform", function(d) { return "translate(" + exportX((d.children ? d.y : (d.y - .5))) + "," + exportY(d.x) + ")"; });
+		
+		vis.selectAll(".export-text")
+			.transition()
+			.duration(duration)
+			.attr("x", function(d) { return exportX(d.dy + .5) / 2; })
+			.attr("y", function(d) { return exportY(d.dx) / 2; })
+			.text(function(d) { return d.children ? null : (exportY(d.dx) > 12 ? d.data.name.slice(0, 30) + '...' : ''); });
+		
+		vis.selectAll(".export-rectangles")
+			.transition()
+			.duration(duration)
+			.attr("height", function(d) { return exportY(d.dx); });
+		
+		for (exportPartitionIndex in partitionedExports) {
+			var partitionedExport = partitionedExports[exportPartitionIndex];
+			
+			
+			for (linkIndex in partitionedExport.data.links) {
+				var weight = (partitionedExport.value / partitionedExport.data.links.length) / partitionedExport.value;
+				var exportKey = partitionedExport.data.key;
+				var industryKey = partitionedExport.data.links[linkIndex].key;
+				
+				var endPointX = ((w - paddingBottom) / 5)*2;
+				var endPointY = exportY(partitionedExport.x) + (exportY(partitionedExport.dx) / 2);
+				var startPointX, startPointY;
+				
+				
+				
+				for (industryPartitionIndex in partitionedIndustries) {
+					var partitionedIndustry = partitionedIndustries[industryPartitionIndex];
+					if (partitionedIndustry.data.key == industryKey) {
+						startPointX = ((w - paddingBottom) / 5);
+						startPointY = industriesY(partitionedIndustry.x) + (industriesY(partitionedIndustry.dx) / 2);
+							
+						var points = [[startPointX, startPointY], [startPointX*1.1, startPointY], [endPointX*.9, endPointY], [endPointX, endPointY]];
+					    vis.selectAll(".unique-" + industryKey + exportKey)
+						    .data([points])
+						    .transition()
+							.duration(duration)
+						    .attr("d", line);
+					}					
+				}		
+			}
+		}	
+		
+		
 	};
 	
 	function click(d) {
@@ -150,7 +242,7 @@ function ExportGraph(container) {
 			classes = classes.concat(industriesExportClasses[d.data.key][x].class + ' ');
 		}
 			
-		return 'rectangles industry-' + d.data.key + ' ' + classes;
+		return 'rectangles industry-rectangles industry-' + d.data.key + ' ' + classes;
 	}
 	
 	function addExportClasses(d, i) {		
@@ -159,7 +251,7 @@ function ExportGraph(container) {
 			classes = classes.concat(exportIndustryClasses[d.data.key][x].class + ' ');
 		}
 			
-		return 'rectangles export-' + d.data.key + ' ' + classes;
+		return 'rectangles export-rectangles export-' + d.data.key + ' ' + classes;
 	}
 	
 	
@@ -182,7 +274,7 @@ function ExportGraph(container) {
 			  
 			    vis.selectAll(".rectangles")
 			      .transition()
-			      .style("opacity", .2);
+			      .style("opacity", .1);
 			    
 			    vis.selectAll(".path")
 			      .transition()
@@ -192,7 +284,7 @@ function ExportGraph(container) {
 			      .transition()
 			      .duration(500)
 			      .style("opacity", 1)
-			      .style("stroke-opacity", .7);
+			      .style("stroke-opacity", 1);
 		  }   	    
 	  };
 	}
@@ -216,7 +308,7 @@ function ExportGraph(container) {
 			  
 			    vis.selectAll(".rectangles")
 			      .transition()
-			      .style("opacity", .2);
+			      .style("opacity", .1);
 			    
 			    vis.selectAll(".path")
 			      .transition()
@@ -226,7 +318,7 @@ function ExportGraph(container) {
 			      .transition()
 			      .duration(500)
 			      .style("opacity", 1)
-			      .style("stroke-opacity", .7);
+			      .style("stroke-opacity", 1);
 		  }   	    
 	  };
 	}

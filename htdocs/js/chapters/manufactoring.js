@@ -5,19 +5,45 @@ var industriesExportClasses = [];
 var exportIndustryClasses = [];
 
 $(document).ready( function() {
-	var title = 'Under Construction.';
+	var title = 'So what do we produce in New Zealand, and who\'s buying it?';
 	var text = '';
-	var subtitle1 = '';
-	var subtitle2 = '';
+	var subtitle1 = 'Exporting Industry / Export Category / Exporting Destination';
+	$('#main-container').css('width', '98%');
+	$('#main-container').html(
+			"<p><b>" + title + "</b></p>\
+			<p style='padding-bottom: 10px'>" + text + "</p>\
+			<div>\
+				<p style='text-align:center; padding-top:10px;'><b>" + subtitle1 + "</b>\
+				<span style='float: right'><input id='resize-export-graph' type='button' value='Maximize' style='width: 70px'/></span></p>\
+			</div>\
+			<div class='clear'></div>");
 	
-	//$('#main-container').empty();
-	$('#gdp-container').empty();
+	$('#gdp-container').remove();
 	
 	
 	var industries = getIndustryExportsObject();
 	var exportCategories = getExportCategories();
 	var exportGraph = new ExportGraph('export-graph');
-	exportGraph.createExportGraph(industries, exportCategories, 900, 475);
+	exportGraph.createExportGraph(industries, exportCategories, 920, 475);
+	
+	$('#resize-export-graph').click(function() {
+		if (this.value == 'Maximize') {
+			exportGraph.resize(3000);
+			$('#export-graph').animate({
+				height: '+=2540'
+			}, 1300);	
+			
+			this.value = 'Minimize';
+		} else {
+			exportGraph.resize(475);
+			$('#export-graph').animate({
+				height: '-=2540'
+			}, 1000, function() {
+				
+			});	
+			this.value = 'Maximize';
+		}
+	});
 });
 
 function drawIndustriesTreeMap() {
@@ -89,7 +115,7 @@ function getExportCategories() {
 		var exportCategory = nz.NZHSC[x];
 		var obj = [];
 		obj['name'] = exportCategory.name;
-		obj['value'] = exportCategory.export;
+		obj['value'] = exportCategory.exports;
 		obj['links'] = nz.NZHSC[x].links;
 		obj['key'] = x;
 		exportList.push(obj);
@@ -110,7 +136,7 @@ function getTotalIndustryExports(exports, parent) {
 		if (nz.NZHSC[exports[x]].links == null) {
 			nz.NZHSC[exports[x]].links = [];
 		}
-		total += nz.NZHSC[exports[x]].export;
+		total += nz.NZHSC[exports[x]].exports;
 		nz.NZHSC[exports[x]].links.push({name: parent, key: parent});
 		var obj = [];
 		obj['name'] = nz.NZHSC[exports[x]].name;

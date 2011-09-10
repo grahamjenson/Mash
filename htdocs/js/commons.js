@@ -4,18 +4,14 @@ var OECDBubbleChart = new BubbleChart('bubble-chart');
 var oecdStats = [];
 var thousands = d3.format(",");
 
-var currentState = 0;
-var STATES = [
-    {hash: '#intro', title: 'Introduction', nz: nz, action: function(){ introduction(); }},
-    {hash: '#tourism', title: 'We Need More Tourists!', nz: nz, action: function(){ tourism(); }},
-    {hash: '#dairy', title: 'Let\'s make more Milk', nz: nz, action: function(){ dairy(); }},
-    {hash: '#mining', title: 'Should we mine more?', nz: nz, action: function(){ mining(); }},
-    {hash: '#manufactoring', title: 'Made in New Zealand', nz: nz, action: function(){ manufactoring(); }},
-    {hash: '#research', title: 'R&#x26;D ROI FTW', nz: nz, action: function(){ research(); }},
-    {hash: '#outro', title: 'To The Future', nz: nz, action: function(){ outro(); }}
-];
 
 $(document).ready( function() {	
+
+	if ($.browser.msie || !Modernizr.svg || !Modernizr.canvas || !Modernizr.localstorage) {
+		// Don't have HTML5 support, redirect
+		window.location = "/error.html";
+	} 
+	
 	$("body").css("display", "none");
     $("body").fadeIn(1000);
 	createOECDBubbleChart();
