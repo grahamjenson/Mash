@@ -78,6 +78,7 @@ function ExportGraph(container) {
 		    .enter().append("svg:g")
 		    .attr("class", "export-cell manufaturing-cell")
 		    .attr("transform", function(d) { return "translate(" + exportX((d.children ? d.y : (d.y - .5))) + "," + exportY(d.x) + ")"; })
+		    .attr("href", function(d) { return d.data.name; })
 		    .on("click", fadeExport());
 		
 		exportCell.append("svg:rect")
@@ -96,6 +97,7 @@ function ExportGraph(container) {
 	      .attr("class", 'export-text')
 	      .attr("text-anchor", "middle")
 	      .text(function(d) { return d.children ? null : (exportY(d.dx) > 12 ? d.data.name.slice(0, 30) + '...' : ''); });
+		
 		
 		for (exportPartitionIndex in partitionedExports) {
 			var partitionedExport = partitionedExports[exportPartitionIndex];

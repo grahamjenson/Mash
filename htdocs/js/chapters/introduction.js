@@ -42,7 +42,7 @@ function createIndustryChart() {
 	completePieData = $.map(industries.completeList, function(d) { return d.workers / industries.totalWorkers; });
 	
 	var pieChart = new PieChart('industry-chart');
-	pieChart.CreatePieChart(filteredPieData, industries.filteredList, width, height);	
+	pieChart.CreatePieChart(industries.filteredList, width, height);	
 	
 	// Create the resizing event on click, use whole dataset for large graph
 	$('#industry-chart').toggle( function() {	
@@ -53,7 +53,7 @@ function createIndustryChart() {
 		$('#industry-chart').css('width', '920px');
 		setTimeout(function() {
 			var pieChart = new PieChart('industry-chart');
-			pieChart.CreatePieChart(completePieData, industries.completeList, 920, 520);				
+			pieChart.CreatePieChart(industries.completeList, 920, 520);				
 		}, 400);		
 	}, function() {
 		$('#gdp-container').show('slow');
@@ -64,7 +64,7 @@ function createIndustryChart() {
 		$('#industry-chart').css('width', '600px');
 		setTimeout(function() {
 			var pieChart = new PieChart('industry-chart');
-			pieChart.CreatePieChart(filteredPieData, industries.filteredList, width, height);
+			pieChart.CreatePieChart(industries.filteredList, width, height);
 			
 		}, 300);	
 	});
