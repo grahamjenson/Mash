@@ -660,7 +660,7 @@ function NewZealand()
 	
 	var jitter = {}
 	var tmpyear = 2008
-	while(tmpyear < 2500)
+	while(tmpyear < 2750)
 	{
 		jitter[tmpyear] = Math.random() - .5
 		tmpyear++;
