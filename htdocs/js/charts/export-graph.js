@@ -20,6 +20,7 @@ function ExportGraph(container) {
 	
 	var partitionedIndustries;
 	var partitionedExports;
+	var tooltip;
 	
 	var duration = 1000;
 	var color = d3.scale.category20c();
@@ -42,6 +43,16 @@ function ExportGraph(container) {
 		    .attr("width", w)
 		    .attr("height", h);
 		
+		tooltip = d3.select("body")
+			.append("div")
+			.style("position", "absolute")
+			.style("z-index", "10")
+			.style("visibility", "hidden")
+			.style('background', 'white')
+			.style('padding', '2px')
+			.style('border', 'thin solid black')
+			.text("a simple tooltip");
+		
 		var partition = d3.layout.partition()		    
 		    .value(function(d) { return d.value; });
 		
@@ -61,7 +72,10 @@ function ExportGraph(container) {
 	      	.attr("fill", function(d, i) { return color(i); })
 	      	.attr("class", addIndustryClasses)
 	      	.style("stroke", 'white')
-		    .style("stroke-opacity", 1);
+		    .style("stroke-opacity", 1)
+		    .on("mouseover", showToolTip)
+			.on("mousemove", moveToolTip)
+			.on("mouseout", hideToolTip);
 		
 		industryCell.append("svg:text")
 	      .attr("x", function(d) { return industriesX(d.dy + .5) / 2; })
@@ -87,7 +101,10 @@ function ExportGraph(container) {
 	      	.attr("fill", function(d, i) { return color(i); })
 	      	.style("stroke", 'white')
 	      	.attr("class", addExportClasses)
-		    .style("stroke-opacity", 1);
+		    .style("stroke-opacity", 1)
+		    .on("mouseover", showToolTip)
+			.on("mousemove", moveToolTip)
+			.on("mouseout", hideToolTip);
 		
 		exportCell.append("svg:text")
 	      .attr("x", function(d) { return exportX(d.dy + .5) / 2; })
@@ -323,6 +340,24 @@ function ExportGraph(container) {
 			      .style("stroke-opacity", 1);
 		  }   	    
 	  };
+	}
+	
+	function showToolTip(g, i) {
+		if (exportY(g.dx) > 12) {
+			tooltip.text(g.data.name);
+			return tooltip.style("visibility", "visible");
+		}			
+		else {
+			tooltip.text(g.data.name);
+			return tooltip.style("visibility", "visible");
+		}
+	}
+	
+	function moveToolTip(g, i) {		
+		return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+	}
+	function hideToolTip(g, i) { 
+		return tooltip.style("visibility", "hidden");
 	}
 	
 }
