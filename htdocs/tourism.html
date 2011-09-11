@@ -24,8 +24,6 @@
         <script type="text/javascript" src="js/charts/bar-chart.js"></script>
         <script type="text/javascript" src="js/charts/bubble-chart.js"></script>
         <script type="text/javascript" src="js/charts/nz-geography.js"></script>
-        <script type="text/javascript" src="js/charts/pie-chart.js"></script>
-        <script type="text/javascript" src="js/charts/flipcounter.min.js"></script>
         
         <!--  The Juicy Logic Layer -->
         <script type="text/javascript" src="js/ExtrapolatedNewZealand.js"></script>
@@ -42,13 +40,44 @@
                     <div id='current-chapter'>We Need More Tourists!</div>
                 </div> 
                               
-                <div id='gdp-container'> 
+                <div id='gdp-container' class='not-text'> 
                     <p><b>OECD Prosperity: GDP/Per Capita (Circle Area)</b><br />
                     Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>                
                     <div id="bubble-chart" class="chart-wrapper"></div>                    
                 </div>   
                 
-                <div id='main-container'></div>                     
+                <div id='main-container'>
+                    <p><b>Can we make New Zealand Richer by increasing Tourism?</b></p>
+                    <p style='padding-bottom: 10px'>
+                        The problem with increasing tourism is that in general it lowers our average wage,
+                        plus it will not scale enough to increase our GDP whilst maintaining our clean green image.
+                        Use the slider below to increase the amount of annual tourists in New Zealand.
+                        &nbsp;<a id='read-more' href='#'>Read more</a>
+                        <span style="float: right; text-align: right; padding-top: 7px;" class='not-text'>
+                            <b>Annual Tourists: </b>
+                            <b id="current-tourists"></b>
+                        </span>    
+                    </p>
+	                <div class='clear'></div>
+	                <div id='tourist-slider' class='not-text'></div>
+	                <div id='tourist-slider-legend' class='not-text'></div>
+	                <p style='text-align:center; padding-top:5px;' class='not-text'>
+	                   <b>Regional Tourism Levels: (Tourists/Avail. Accommodation)</b>
+	                </p>
+	                <div class='clear not-text'></div>
+	                <div class='more-text'>
+                        <p>
+                            Place Holder for more text.
+                            &nbsp;<a id='read-less' href='#'>Hide text</a>                        
+                        </p>
+                    </div>
+                </div>  
+                <div id='nz-map' class='state-container not-text'></div>
+                <div id='nz-map-legend' class='state-container not-text'></div>
+                <div id='industry-stacked-chart-title' class='state-container not-text'>
+                    <p style='text-align:center;'><b>Workers per Industry / Tourist Workers per Industry</b><br /></p>
+                </div>
+                <div id='industry-stacked-chart' class='state-container not-text'></div>                   
                 <div id='bottom-container'></div> 
                 <div class='clear'></div>                               
             </div>

@@ -14,16 +14,13 @@
 		<script type="text/javascript" src="js/d3/d3.min.js"></script>
 		<script type="text/javascript" src="js/d3/d3.layout.js"></script>
 		<script type="text/javascript" src="js/d3/src/core/sum.js"></script>		
-		<script type="text/javascript" src="js/raphael.min.js"></script>
 		<script type="text/javascript" src="js/modernizer.min.js"></script>
 		
 		<!-- Google Analytics -->
         <!--  <script type="text/javascript" src="js/google-analytics.js"></script> -->
         
         <!-- Various Charts -->
-        <script type="text/javascript" src="js/charts/bar-chart.js"></script>
         <script type="text/javascript" src="js/charts/bubble-chart.js"></script>
-        <script type="text/javascript" src="js/charts/nz-geography.js"></script>
         <script type="text/javascript" src="js/charts/pie-chart.js"></script>
         <script type="text/javascript" src="js/charts/flipcounter.min.js"></script>
         
@@ -41,15 +38,38 @@
                 <div class="title">
                     <div id='current-chapter'>Introduction</div>
                 </div> 
-                              
-                <div id='gdp-container'> 
+                                              
+                <div id='gdp-container' class='not-text'> 
                     <p><b>OECD Prosperity: GDP/Per Capita (Circle Area)</b><br />
                     Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>                
                     <div id="bubble-chart" class="chart-wrapper"></div>                    
                 </div>   
                 
-                <div id='main-container'></div>                     
-                <div id='bottom-container'></div> 
+                <div id='main-container'>   
+                    <p><b>Welcome to 100 Companies.</b></p>
+                    <p style='text-align:justify ; padding-top:10px;'> 
+                        This infographic has two main goals, the first is to help
+				        dispell some myths surrounding the ways in which New Zealand can become prosperous,
+				        and the second is to help us ask the question "What should we invest our future in?". 
+				        <br /><br />
+				        It's based on Sir Paul Callaghan's
+				        <a href='http://www.youtube.com/watch?v=OhCAyIllnXY'>StrategyNZ keynote</a>
+				        and the visualisation is highly interactive, so please play around with New Zealand Virtual Economy and enjoy. 
+				        &nbsp;<a id='read-more' href='#'>Read more</a>
+				    </p>
+				    <div class='more-text'>
+				        <p>Place Holder for more text.</p>
+				    </div>
+				    <p style='text-align:center; padding-top:10px;' class='not-text'><b>New Zealand's Current GDP Per Capita ($NZD)</b><br /></p>
+				    <div id='counter-wrapper' class='not-text'>
+			            <div id='flip-counter' class='flip-counter'></div>
+			            <div class='clear'></div>
+			        </div>    
+			    </div>             
+                <div id='bottom-container' class='not-text'>
+                    <div id='industry-title'><p><b>Total NZ Workforce/Per Industry:</b><br /></p></div>
+                    <div id='industry-chart' class='chart-wrapper'></div>
+                </div> 
                 <div class='clear'></div>                               
             </div>
             <div id='navigation'>

@@ -5,7 +5,7 @@ html {
 
 body {
 	font-family: verdana, helvetica, arial, sans-serif;
-	font-size: 10px;
+	font-size: .6em;
 	background: transparent url('../img/body_bg.jpg') no-repeat center top;
 	min-height: 100%;
 	margin: 0;
@@ -20,8 +20,12 @@ b {
 }
 
 table {
-    font-size: 1.2em;
-    border-spacing: 1px;
+    font-size: 1.15em;
+    border-spacing: 0;
+}
+
+table text {
+    font-size: .9em;	
 }
 
 .title div {
@@ -225,6 +229,7 @@ svg {
 
 .mining-p {
     padding-top: 7px;
+    width: 30%;
 }
 
 #mining-chart-title {
@@ -268,6 +273,10 @@ svg {
     float: left;	
 }
 
+.more-text {
+    display: none;	
+}
+
 /* Apple Counter */
 #counter-wrapper {
 	padding-top: 10px;
@@ -308,7 +317,7 @@ svg {
 
 #footer p {
     color: white;	
-    font-size: .95em;
+    font-size: 1em;
 }
 
 #footer a {

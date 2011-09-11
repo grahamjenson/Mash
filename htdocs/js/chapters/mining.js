@@ -2,66 +2,10 @@ var lineChart;
 var growth, oilExp, coalExp, metalExp, oilCounter, coalCounter, metalCounter;
 
 $(document).ready( function() {
-	var title = 'Lets dig up our billions worth of untapped resources.';
-	var text = 'However, to improve New Zealand GDP over the long run we are aiming for 40bn a year, \
-	and 60bn profit from mineral wealth is one off, and sacrifices our countries core values. \
-	Use the sliders to increase the Annual Mining Growth:';
-	var subtitle1 = 'New Zealand Mining: Annual Turnover ($NZD) vs. Time to Depletion (Year)';
-	var subtitle2 = '';
-	
-	$('#main-container').html("<p><b>" + title + "</b></p><p>" + text + "</p>\
-			<table class='mining-table'>\
-				<tr>\
-					<td width='30%' class='mining-p'>Oil Growth <div id='oil-colour'></div></td>\
-					<td><div id='oil-slider' class='mining-slider'></div></td>\
-				</tr>\
-				<tr>\
-					<td width='30%'></td>\
-					<td><div class='mining-slider-legend'></div></td>\
-				</tr>\
-				<tr>\
-					<td width='30%' class='mining-p'>Coal Growth <div id='coal-colour'></div></td>\
-					<td><div id='coal-slider' class='mining-slider'></div></td>\
-				</tr>\
-				<tr>\
-					<td width='30%'></td>\
-					<td><div class='mining-slider-legend'></div></td>\
-				</tr>\
-				<tr>\
-					<td width='30%' class='mining-p'>Metal Growth <div id='metal-colour'></div></td>\
-					<td><div id='metal-slider' class='mining-slider'></div></td>\
-				</tr>\
-				<tr>\
-					<td width='30%'></td>\
-					<td><div class='mining-slider-legend'></div></td>\
-				</tr>\
-			</table>");
-	
-	$('#bottom-container').html("<div id=\'mining-chart-title\'><p><b>"+ subtitle1 +"</b></p></div>\
-			<div id=\'mining-chart\'></div>");
-	
+	$('#bubble-chart').remove();
 	createMiningSliders();
 	createMiningChart();
-	$('#bubble-chart').remove();
-	$('#gdp-container').html("\
-			<span>\
-				<div id='oil-counter-text' class='counter-text'><p><b>Estmated Year of Oil Depletion</b></p></div>\
-				<div id='oil-counter' class='flip-counter mining-counter'></div>\
-				<div class='clear'></div>\
-			</span>\
-			<span>\
-				<div id='oil-counter-text' class='counter-text'><p><b>Estmated Year of Coal Depletion</b></p></div>\
-				<div id='coal-counter' class='flip-counter mining-counter'></div>\
-				<div class='clear'></div>\
-			</span>\
-			<span>\
-				<div id='oil-counter-text' class='counter-text'><p><b>Estmated Year of Metal Depletion</b></p></div>\
-				<div id='metal-counter' class='flip-counter mining-counter'></div>\
-				<div class='clear'></div>\
-			</span>\
-			");		
 	createMiningCounters();
-
 });
 
 function createMiningSliders() {
@@ -106,7 +50,7 @@ function createMiningSliders() {
 	var chart = d3.selectAll(".mining-slider-legend")
 	    .append("svg:svg")
 		.attr("width", 340)
-	    .attr("height", 25);
+	    .attr("height", 20);
 	
 	var data = [0, 2, 4, 6, 8, 10];
 	
@@ -130,7 +74,7 @@ function createMiningSliders() {
 function createMiningChart() {
 	lineChart = new LineChart('mining-chart');
 	growth = getMiningGrowth(0, 0, 0);
-	lineChart.CreateLineChart(growth, 900, 250);
+	lineChart.CreateLineChart(growth, 900, 235);
 }
 
 function getMiningGrowth(oil, coal, metal) {

@@ -15,13 +15,11 @@
 		<script type="text/javascript" src="js/d3/d3.layout.js"></script>
 		<script type="text/javascript" src="js/d3/src/core/sum.js"></script>	
 		<script type="text/javascript" src="js/modernizer.min.js"></script>
-		<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 		
 		<!-- Google Analytics -->
         <!--  <script type="text/javascript" src="js/google-analytics.js"></script> -->
         
         <!-- Various Charts -->
-        <!-- <script type="text/javascript" src="https://www.google.com/jsapi"></script> -->
         <script type="text/javascript" src="js/charts/bubble-chart.js"></script>
         <script type="text/javascript" src="js/charts/export-graph.js"></script>
         
@@ -41,12 +39,25 @@
                 </div> 
                               
                 <div id='gdp-container'> 
-                    <p><b>New Zealand Exports Treemap</b><br />
-                    Left Click to go into an Industry, Right Click to go back</p>                
+                    <p>
+                        <b>So what exactly do we produce in New Zealand?</b>
+                    </p>                
                     <div id="bubble-chart" class="chart-wrapper"></div>                    
                 </div>   
                 
-                <div id='main-container'></div>                     
+                <div id='main-container'>
+                    <p><b></b></p>
+		            <p></p>
+		            <div>
+		                <p style='text-align:center; padding-top:10px;'>
+		                  <b>Exporting Industry / Export Category / Exporting Destination</b>
+		                  <span style='float: right'>
+		                      <input id='resize-export-graph' type='button' value='Maximize' style='width: 70px'/>
+		                  </span>
+		                </p>
+		            </div>
+		            <div class='clear'></div>	
+		        </div>	                                
                 <div id='bottom-container'>
                     <div id='export-graph'></div>    
                     <div class='clear'></div>
@@ -55,7 +66,7 @@
             </div>
             <div id='navigation'>
                     <a href='/mining' id='nav-backward'>&#171; Previous Chapter: Should we mine more?</a>
-                    <a href='/research' id='nav-foreward'>Next Chapter: R&#x26;D ROI FTW &#187;</a>
+                    <a href='/companies' id='nav-foreward'>Next Chapter: 100 Companies &#187;</a>
                     <div class='clear'></div>       
             </div>
             <div id='footer'>
