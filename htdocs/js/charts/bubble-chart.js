@@ -12,10 +12,11 @@ function BubbleChart(container) {
 	var transitionSpeed = 1000;
 	var yticks = 8;
 	var xticks = 6;
-	var x, y, z, w, h;
+	var x, y, z, w, h, c;
 	
 	this.CreateBubbleChart = function(dataInput, width, hieght) {
 		data = dataInput;
+		c = data.length;
 		
 		w = width;
 		h = hieght;
@@ -43,7 +44,7 @@ function BubbleChart(container) {
 	    	.attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; });
 		
 	    g.append("svg:circle")
-	        .attr("class", "circles")
+	        .attr("class", function(d, i) { return "circles country-" + i + (d.name == "New Zealand" ? ' nz' : ''); })
 	        .attr('r', 0)
 	        .attr("fill", function(d, i) { if (d.name == "New Zealand") { return 'black'; } else { return colour(i); } })
 	        .style("opacity", function (d) { if (d.name == "New Zealand") { return .85; } else { return .25; } })
@@ -54,7 +55,7 @@ function BubbleChart(container) {
 		    .attr("r",  function(d) { return z(d.gdppc); });		
 
 		g.append("svg:text")
-			.attr("class", "circles-text")
+			.attr("class", function(d, i) { return "circles-text country-" + i; })
 	        .attr("dy", ".35em")
 	        .attr("text-anchor", "middle")
 	        .style("opacity", 0)
@@ -66,6 +67,11 @@ function BubbleChart(container) {
 		
 		addLines(1000);
 		addRules();
+		
+		setTimeout(function() { 
+			g.on("mouseover", fadeOut)
+				.on("mouseout", fadeIn); 
+			}, h > 500 ? 4000 : 3000);
 	};
 	
 	function addLines(speed) {
@@ -149,6 +155,22 @@ function BubbleChart(container) {
 		data = newData;
 		h = height;
 		
+		var g = chart.selectAll("g")
+			.on("mouseover", function() {} )
+			.on("mouseout", function() {});
+		
+		chart.selectAll(".circles")
+	      	.transition()
+	        .style("opacity", .25);
+	    
+	    chart.selectAll(".circles-text")
+	      	.transition()
+	        .style("opacity", 1);
+	    
+	    chart.selectAll(".nz")
+	      	.transition()
+	        .style("opacity", .85);
+		
 		if (width < w) {
 			w = width;			
 			shrink();
@@ -187,6 +209,11 @@ function BubbleChart(container) {
 				.duration(transitionSpeed)
 				.attr("width", w)
 				.attr("height", h + paddinghieght);}, 1000);
+		
+		chart.selectAll(".circles")
+			.transition()
+			.duration(transitionSpeed)
+			.attr("r",  function(d) { return z(d.gdppc); });
 	}
 	
 	function expand() {
@@ -220,30 +247,7 @@ function BubbleChart(container) {
 		
 		g.enter().insert("svg:g")
 	        .attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; })
-	        .attr("class", "new-circles-g circles-g");		
-		
-		var newPoints = chart.selectAll(".new-circles-g");
-		
-		newPoints.append("svg:circle")
-	        .attr("class", "circles")
-	        .attr('r', 0)
-	        .attr("fill", function(d, i) { return colour(i); })
-	        .style("opacity", .25)
-	        .style("stroke", 'grey')
-		    .style("stroke-opacity", 1)
-		    .transition()
-		    .duration(transitionSpeed)
-		    .attr("r",  function(d) { return z(d.gdppc); });
-		
-		newPoints.append("svg:text")
-			.attr("class", "circles-text")
-	        .attr("dy", ".35em")
-	        .attr("text-anchor", "middle")
-	        .style("opacity", 0)
-	        .text(function(d, i) { return d.name; })
-	        .transition()
-		    .duration(transitionSpeed + 500)
-		    .style("opacity", 1);
+	        .attr("class", "new-circles-g circles-g");	
 		
 		g.exit()
 			.transition()
@@ -253,12 +257,48 @@ function BubbleChart(container) {
 		    .remove();
 		
 		
+		
 		chart.selectAll(".circles")
 			.transition()
 			.duration(transitionSpeed)
-			.attr("r",  function(d) { return z(d.gdppc); });		
+			.attr("r",  function(d) { return z(d.gdppc); });
+		
+		var newPoints = chart.selectAll(".new-circles-g");
+		
+		newPoints.append("svg:circle")
+	        .attr("class", function(d, i) { return "circles country-" + (i + c); })
+	        .attr('r', 0)
+	        .attr("fill", function(d, i) { return colour((i + c)); })
+	        .style("opacity", .25)
+	        .style("stroke", 'grey')
+		    .style("stroke-opacity", 1)
+		    .transition()
+		    .duration(transitionSpeed)
+		    .attr("r",  function(d) { return z(d.gdppc); });
+		
+		newPoints.append("svg:text")
+			.attr("class", function(d, i) { return "circles-text country-" + (i + c); })
+	        .attr("dy", ".35em")
+	        .attr("text-anchor", "middle")
+	        .style("opacity", 0)
+	        .text(function(d, i) { return d.name; })
+	        .transition()
+		    .duration(transitionSpeed + 500)
+		    .style("opacity", 1);
+		
+		setTimeout(function() { 
+			newPoints.on("mouseover", fadeOutExtra)
+				.on("mouseout", fadeIn); 
+			}, 3000);
+		
+		setTimeout(function() { 
+			g.on("mouseover", fadeOut)
+				.on("mouseout", fadeIn); 
+			}, 3000);
+
 
 		
+
 			
 	};	
 	
@@ -305,7 +345,55 @@ function BubbleChart(container) {
 		    .transition()
 			.duration(transitionSpeed)
 		    .attr("x2", w);
+	}
 	
-
+	/** Returns an event handler for fading a given chord group. */
+	function fadeOut(g, i) {
+	 
+	    chart.selectAll(".circles")
+	      	.transition()
+	        .style("opacity", .1);
+	    
+	    chart.selectAll(".circles-text")
+	      	.transition()
+	        .style("opacity", .1);
+	    
+	  
+	    chart.selectAll(('.country-' + i))
+	    	.transition()
+	    	.style("opacity", 1);
+	}
+	
+	function fadeOutExtra(g, i) {
+		 
+	    chart.selectAll(".circles")
+	      	.transition()
+	        .style("opacity", .1);
+	    
+	    chart.selectAll(".circles-text")
+	      	.transition()
+	        .style("opacity", .1);
+	    
+	  
+	    chart.selectAll(('.country-' + (i + c)))
+	    	.transition()
+	    	.style("opacity", 1);
+	}
+	
+	/** Returns an event handler for fading a given chord group. */
+	function fadeIn(g, i) {
+	  
+	    chart.selectAll(".circles")
+	      	.transition()
+	        .style("opacity", .25);
+	    
+	    chart.selectAll(".circles-text")
+	      	.transition()
+	        .style("opacity", 1);
+	    
+	    chart.selectAll(".nz")
+	      	.transition()
+	        .style("opacity", .85);
+	 
 	}
 }

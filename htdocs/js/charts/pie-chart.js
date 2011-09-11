@@ -52,7 +52,7 @@ function PieChart(container) {
 		setTimeout(function() { 
 			arcs.on("mouseover", fadeOut)
 				.on("mouseout", fadeIn); 
-			}, hieght * 10);
+			}, h > 500 ? 4000 : 3000);
 
 	};
 	
