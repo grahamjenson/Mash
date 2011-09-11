@@ -216,6 +216,10 @@ svg {
     float: left;  
 }
 
+#cow-densitiy-chart {
+    float: left;	
+}
+
 /* Mining */
 .mining-slider {
 	margin: 5px 18px 0 10px;

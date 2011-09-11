@@ -184,7 +184,7 @@ function ExportGraph(container) {
 			.duration(duration)
 			.attr("x", function(d) { return exportX(d.dy + .5) / 2; })
 			.attr("y", function(d) { return exportY(d.dx) / 2; })
-			.text(function(d) { return d.children ? null : (exportY(d.dx) > 12 ? d.data.name.slice(0, 30) + '...' : ''); });
+			.text(function(d) { return d.children ? null : (exportY(d.dx) > 12 ? d.data.name.slice(0, 28) + '...' : ''); });
 		
 		vis.selectAll(".industry-rectangles")
 			.transition()
@@ -201,7 +201,7 @@ function ExportGraph(container) {
 			.duration(duration)
 			.attr("x", function(d) { return exportX(d.dy + .5) / 2; })
 			.attr("y", function(d) { return exportY(d.dx) / 2; })
-			.text(function(d) { return d.children ? null : (exportY(d.dx) > 12 ? d.data.name.slice(0, 30) + '...' : ''); });
+			.text(function(d) { return d.children ? null : (exportY(d.dx) > 12 ? d.data.name.slice(0, 28) + '...' : ''); });
 		
 		vis.selectAll(".export-rectangles")
 			.transition()
@@ -343,14 +343,8 @@ function ExportGraph(container) {
 	}
 	
 	function showToolTip(g, i) {
-		if (exportY(g.dx) > 12) {
-			tooltip.text(g.data.name);
-			return tooltip.style("visibility", "visible");
-		}			
-		else {
-			tooltip.text(g.data.name);
-			return tooltip.style("visibility", "visible");
-		}
+		tooltip.text(g.data.name);
+		return tooltip.style("visibility", "visible");
 	}
 	
 	function moveToolTip(g, i) {		
