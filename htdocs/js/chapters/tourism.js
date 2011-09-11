@@ -1,28 +1,4 @@
 $(document).ready( function() {
-	
-	var title = 'Can we make New Zealand Richer by increasing Tourism?';
-	
-	var text = 'The problem with increasing toursim is that in general it lowers our average wage, \
-		plus it will not scale enough to increase our GDP whilst maintaining our clean green image.\
-		Use the slider below to increase the amount of annual tourists in New Zealand:\
-		&nbsp;<span style="float: right; text-align: right; padding-top: 7px;"><b>Annual Tourists: </b><b id="current-tourists"></b></span>';
-	
-	var subtitle1 = 'Regional Tourism Levels: (Tourists/Avail. Accomodation)';
-	var subtitle2 = 'Workers per Industry / Tourist Workers per Industry';
-	
-	$('#main-container').html("<p><b>" + title + "</b></p><p style='padding-bottom: 10px'>" + text + "</p>\
-				<div class='clear'></div>\
-				<div id='tourist-slider'></div>\
-			    <div id='tourist-slider-legend'></div>\
-			    <p style='text-align:center; padding-top:5px;'><b>" + subtitle1 + "</b><br /></p>\
-	            <div class='clear'></div>\
-	         </div>");
-	$("<div id='nz-map' class='state-container'></div>\
-	         <div id='nz-map-legend' class='state-container'></div>\
-			 <div id='industry-stacked-chart-title' class='state-container'><p style='text-align:center;'><b>" + subtitle2 + "</b><br /></p><div>\
-			 <div id='industry-stacked-chart' class='state-container'></div>").insertAfter('#main-container');
-	
-	
 	createTourismSlider();
 	createTourismMap();
 	createTourismStackedBarChart();

@@ -24,8 +24,6 @@
         <script type="text/javascript" src="js/charts/bar-chart.js"></script>
         <script type="text/javascript" src="js/charts/bubble-chart.js"></script>
         <script type="text/javascript" src="js/charts/nz-geography.js"></script>
-        <script type="text/javascript" src="js/charts/pie-chart.js"></script>
-        <script type="text/javascript" src="js/charts/flipcounter.min.js"></script>
         
         <!--  The Juicy Logic Layer -->
         <script type="text/javascript" src="js/ExtrapolatedNewZealand.js"></script>
@@ -42,13 +40,45 @@
                     <div id='current-chapter'>Let's make more Milk</div>
                 </div> 
                               
-                <div id='gdp-container'> 
+                <div id='gdp-container' class='not-text'> 
                     <p><b>OECD Prosperity: GDP/Per Capita (Circle Area)</b><br />
                     Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>                
                     <div id="bubble-chart" class="chart-wrapper"></div>                    
                 </div>   
                 
-                <div id='main-container'></div>                     
+                <div id='main-container'>
+                    <p><b>So we're good at Dairy, why not do more of that?</b></p>
+                    <p style='padding-bottom: 10px'>
+                        Intensified Dairy also destroys our clean green image as it scaled, it has a low average wage
+                        potential and high working hours, plus we don''t want to over specialize. Use the slider below 
+                        to increase the amount of cows in New Zealand to see the effect is has.
+                        &nbsp;<a id='read-more' href='#'>Read more</a>
+                        <span style="float: right; text-align: right; padding-top: 7px;" class='not-text'>
+                            <b>No. of Cows: </b>
+                            <b id="current-cows"></b>
+                        </span>
+                    </p>
+	                <div id='cow-slider' class='not-text'></div>
+	                <div id='cow-slider-legend' class='not-text'></div>
+	                <p style='text-align:center; padding-top:10px;' class='not-text'>
+	                   <b>Regional Cow Density: (Cows/Land<sup>2</sup>)</b>
+	                </p>
+	                <div class='clear not-text'></div>
+	                <div class='more-text'>
+                        <p>
+                            Place Holder for more text.
+                            &nbsp;<a id='read-less' href='#'>Hide text</a>                        
+                        </p>
+                    </div>           
+                </div>  
+                
+                <div id='nz-map' class='state-container not-text'></div>
+                <div id='nz-map-legend' class='state-container not-text'></div>
+                <div id='cow-densitiy-title' class='state-container not-text'>
+                    <p style='text-align:center;'><b>Humans vs. Cows: (1 Unit = 1.1 Million)</b><br /></p>
+                </div>
+                <div id='cow-densitiy-chart' class='state-container not-text'></div>
+                                
                 <div id='bottom-container'></div> 
                 <div class='clear'></div>                               
             </div>

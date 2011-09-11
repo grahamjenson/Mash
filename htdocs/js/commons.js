@@ -11,12 +11,26 @@ $(document).ready( function() {
 		// Don't have HTML5 support, redirect
 		window.location = "/error.html";
 	} 
-	
+		
 	$("body").css("display", "none");
     $("body").fadeIn(1000);
 	createOECDBubbleChart();
 	fadeOutBinding();
+	setupReadMoreBinding();
 });
+
+function setupReadMoreBinding() {
+	$('#read-more').click(function () {
+		$('.more-text').show();
+		$('.not-text').hide();
+		$('#read-more').hide();
+	});
+	$('#read-less').click(function () {
+		$('.more-text').hide();
+		$('.not-text').show();
+		$('#read-more').show();
+	});
+}
 
 function fadeOutBinding() {
 	$("#nav-foreward").click(function(event){

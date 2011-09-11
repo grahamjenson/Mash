@@ -1,24 +1,5 @@
 $(document).ready( function() {
-	var title = 'Welcome to 100 Companies.';
-	var text = 'This infographic has two main goals, the first is to help \
-		dispell some myths surrounding the ways in which New Zealand can become prosperous, \
-		and the second is to help us ask the question "What should we invest our future in?". <br /><br />\
-		It\'s based on Sir Paul Callaghan\'s \
-		<a href=\'http://www.youtube.com/watch?v=OhCAyIllnXY\'>StrategyNZ keynote</a>\
-		and the visualisation is highly interactive, so please play around with New Zealand Virtual Economy and enjoy."';
-	var subtitle1 = 'New Zealand\'s Current GDP Per Capita ($NZD)';
-	var subtitle2 = 'Total NZ Workforce/Per Industry:';
-	
-	$('#main-container').html("<p><b>" + title + "</b></p><p>" + text + "</p>\
-		<p style='text-align:center; padding-top:10px;'><b>" + subtitle1 + "</b><br /></p>\
-		<div id='counter-wrapper'>\
-            <div id='flip-counter' class='flip-counter'></div>\
-            <div class='clear'></div>\
-        </div>");
-	
-	$('#bottom-container').html("<div id='industry-title'><p><b>" + subtitle2 + "</b><br /></p></div>\
-                    <div id='industry-chart' class='chart-wrapper'></div> ");
-	
+
 	createCounter();
 	createIndustryChart();
 });

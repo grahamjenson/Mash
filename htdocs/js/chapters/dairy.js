@@ -1,21 +1,5 @@
 $(document).ready( function() {
-	var title = 'So we\'re good at Dairy, why not do more of that?';
-	var text = 'Intensified Dairy also destroys our clean green image as it scaled, it has a low average wage potential and high working hours, \
-		plus we dont want to over specialize. Use the slider below to increase the amount of cows in New Zealand to see the effect is has.\
-		<span style="float: right; text-align: right; padding-top: 7px;"><b>Cows in New Zealand: </b><b id="current-cows"></b></span>';
-	var subtitle1 = 'Regional Cow Densisty: (Cows per land<sup>2</sup>)';
-	var subtitle2 = 'Humans vs. Cows: (1 Unit = 1.1 Million)';
-	
-	$('#main-container').html("<p><b>" + title + "</b></p><p style='padding-bottom: 10px'>" + text + "</p>\
-				<div id='cow-slider'></div>\
-				<div id='cow-slider-legend'></div>\
-			    <p style='text-align:center; padding-top:10px;'><b>" + subtitle1 + "</b><br /></p>\
-	            <div class='clear'></div>\
-	         </div>");
-	$("<div id='nz-map' class='state-container'></div>\
-	         <div id='nz-map-legend' class='state-container'></div>\
-			 <div id='cow-densitiy-title' class='state-container'><p style='text-align:center;'><b>" + subtitle2 + "</b><br /></p><div>\
-			 <div id='cow-densitiy-chart' class='state-container'></div>").insertAfter('#main-container');
+
 	createDairySlider();
 	createDairyMap();
 	drawPaddock();

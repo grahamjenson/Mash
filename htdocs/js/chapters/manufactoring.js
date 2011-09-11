@@ -5,20 +5,8 @@ var industriesExportClasses = [];
 var exportIndustryClasses = [];
 
 $(document).ready( function() {
-	var title = 'So what do we produce in New Zealand, and who\'s buying it?';
-	var text = '';
-	var subtitle1 = 'Exporting Industry / Export Category / Exporting Destination';
 	$('#main-container').css('width', '98%');
-	$('#main-container').html(
-			"<p><b>" + title + "</b></p>\
-			<p style='padding-bottom: 10px'>" + text + "</p>\
-			<div>\
-				<p style='text-align:center; padding-top:10px;'><b>" + subtitle1 + "</b>\
-				<span style='float: right'><input id='resize-export-graph' type='button' value='Maximize' style='width: 70px'/></span></p>\
-			</div>\
-			<div class='clear'></div>");
-	
-	$('#gdp-container').remove();
+	$('#bubble-chart').remove();
 	
 	
 	var industries = getIndustryExportsObject();
