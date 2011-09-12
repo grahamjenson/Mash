@@ -961,6 +961,54 @@ function NewZealand()
 		}
 
 	
+	
+	//FONTERRA & FISHER AND PAYKEL
+	//SO... The way forward is to change the GDPPC of manufactoring (and other top 10 NZSIC) when adding companies.
+	//This will significanlty move our counrty in the right direction.
+	
+	this.aimedrevpworker = 143000 // source: http://www.manufacturingnz.org.nz/resources-and-tools/benchmarking/benchmarking-resources/heres-how-we-can-catch-australia
+	
+	//I cannot find average revenue per New Zealander, so I assuming linear relationship between gdppc and revenue pc
+	
+	this.nzrevpworker = function()
+	{
+		return 143000.0/71000.6 * this.gdppc();
+	}
+	
+	this.nzmanufactoringrevperworker = 240000
+	
+	this.companies =
+	{
+
+		//The first are from the top 10 in the Technology investment network 2009 rankings source: http://www.tinetwork.co.nz/TIN100+Report/TIN100+2009+Rankings.html
+		
+		
+		fandpa : {name : "Fisher&Paykel Appliances", workers : 3300, revenue : 1412000000, nzsic: "manufacturing"},
+		
+		datacom : {name : "Datacom", workers : 3383, revenue : 667000000, nzsic: "inform_tele"},
+		
+		fandphc : {name : "Fisher&Paykel Healthcare", workers : 1250, revenue : 458700000, nzsic: "manufacturing"}, // source : http://www.fphcare.com/userfiles/file/Corporate/Reports/2009/FPH%20Annual%20Report%202009.pdf and pauls talk
+		
+		dougpharm : {name : "Douglas Pharmaceuticals Ltd ", workers : 450, revenue : 150000000, nzsic: "manufacturing"}, //source: http://www.med.govt.nz/upload/71380/035-Douglas-Pharmaceuticals-Ltd.PDF and http://www.nzbio2011.co.nz/uploads/speakers/10fe2339f7ddc712e96a2daedd7245881d11d5eb.pdf
+		
+		
+		
+		
+		
+		//OTHER big New Zealand Companies
+				
+		fletcher: {name : "Flecher Building", workers : 20000,  revenue: 7100000000, nzsic: "construction"}, // source: http://www.fbcareers.com/images/fck/FB%20Induction%20booklet%20final.pdf and wikipedia
+		
+		
+		fonterra : {name : "Fonterra", workers : 15600, revenue : 16726000000 , nzsic: "manufacturing" }, // source: http://www.fphcare.com/userfiles/file/Corporate/Reports/2010/2010_Full_Annual_Report.pdf and wikipeidia
+				
+		telecom : {name : "Telecom New Zealand", workers : 8500, revenue: 5673000000 , nzsic: "inform_tele" }, //source: wikipeidia
+		
+		//Other International companies
+		
+		apple : {name : "Apple Inc.", workers : 49400, revenue: 65230000000 , nzsic: "manufacturing" } // source : wikiepdia
+	} 
+	
 	//API INPUT
 	
 	//This function will alter the tourist worker and work by indtry values and regoin values
@@ -993,6 +1041,12 @@ function NewZealand()
 	
 	this.setWorkers = function(industry,workers)
 	{
+		if(! (industry in this.workersByIndustry))
+		{
+			throw "non existqant industry"
+			return
+		}
+		workers = Math.min(workers,this.workingPopulation)
 		var delta = this.workersByIndustry[industry] - workers
 		this.workersByIndustry[industry] = workers
 		
@@ -1005,9 +1059,10 @@ function NewZealand()
 		while(Round(delta,10) != 0 && bads.length != noOfIndustries)
 		{
 			var changesize = noOfIndustries - bads.length;
-			var chpi = delta / changesize
+			
 			for(var i in this.NZSIC)
 			{
+				var chpi = delta * this.NZSIC[i].defaultWorkerDistribution
 				//if it is not in bads
 				if(bads.indexOf(i) < 0)
 				{
