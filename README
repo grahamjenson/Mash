@@ -4,3 +4,12 @@ Note: To bring the submodules in use
 
 $ git submodule init
 $ git submodule update
+
+
+//TODO
+Rescale for the pie chart
+tooltips for most charts
+readless for index
+legend for black bars
+opacity on lines in exports
+tooltips not working on firefox (event not defined)

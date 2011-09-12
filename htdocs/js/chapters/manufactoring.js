@@ -1,18 +1,19 @@
-//google.load("visualization", "1", {packages:["treemap"]});
-//google.setOnLoadCallback(drawIndustriesTreeMap);
-
-var industriesExportClasses = [];
 var exportIndustryClasses = [];
+var exportCategoryClasses = [];
+var exportCountryClasses = [];
 
 $(document).ready( function() {
 	$('#main-container').css('width', '98%');
 	$('#bubble-chart').remove();
 	
-	
+	// THis is hacked and needs to be done in a specific order to obtain links.
 	var industries = getIndustryExportsObject();
-	var exportCategories = getExportCategories();
+	var countries = getExportCountries();
+	var categories = getExportCategories();
+	
+	
 	var exportGraph = new ExportGraph('export-graph');
-	exportGraph.createExportGraph(industries, exportCategories, 920, 475);
+	exportGraph.createExportGraph(industries, categories, countries, 920, 475);
 	
 	$('#resize-export-graph').click(function() {
 		if (this.value == 'Maximize') {
@@ -34,26 +35,61 @@ $(document).ready( function() {
 	});
 });
 
-function drawIndustriesTreeMap() {
-	var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Industry');
-    data.addColumn('string', 'Parent');
-    data.addColumn('number', 'Market trade volume (size)');
-    data.addColumn('number', 'Colour');
-    
-    var industryArray = getIndustryExportsObject();
-    data.addRows(industryArray);
-    
-    // Create and draw the visualization.
-    var tree = new google.visualization.TreeMap(document.getElementById('bottom-container'));
-    tree.draw(data, {
-    	headerColor: 'black',
-    	headerHeight: '50px',
-      minColor: 'blue',
-      midColor: 'green',
-      maxColor: 'red',
-      headerHeight: 15,
-      fontColor: 'white'});
+function getExportCountries() {
+	
+	var countryList = [];
+	
+	for(var x in nz.ExportCountries) {
+		var exportCountry = nz.ExportCountries[x];
+		var exportCountryTotals = getTotalExportCountries(exportCountry.nzimports, x);
+		
+		var obj = [];
+		obj['name'] = exportCountry.name;
+		obj['key'] = x;
+		obj['value'] = exportCountryTotals.total;
+		countryList.push(obj);
+		
+		var exportClasses = [];
+		for (index in exportCountry.nzimports) {
+			exportKey = index;
+			var exportClass = {'class' : ('export-' + exportKey), key : exportKey};
+			exportClasses.push(exportClass);
+			if (exportCategoryClasses[exportKey] == null) {
+				exportCategoryClasses[exportKey] = [];
+			}
+			exportCategoryClasses[exportKey].push({'class': ('country-' + x), key: x}); 
+		}
+		exportCountryClasses[x] = exportClasses;
+	}
+	
+	
+	
+	var obj = [];
+	obj['name'] = 'Earth';
+	obj['children'] = countryList;	
+	
+	return obj;
+	
+}
+
+function getTotalExportCountries(exports, parent) {
+	var total = 0;
+	var children = [];
+
+	for (x in exports) {
+		if (nz.NZHSC[x].countryLinks == null) {
+			nz.NZHSC[x].countryLinks = [];
+		}
+		total += exports[x];
+		nz.NZHSC[x].countryLinks.push({name: parent, key: parent});
+		var obj = [];
+		obj['name'] = parent;
+		obj['key'] = parent;
+		children.push(obj);
+
+	}
+	
+	return {total: total, children: children};
 }
 
 function getIndustryExportsObject() {
@@ -72,27 +108,27 @@ function getIndustryExportsObject() {
 		obj['name'] = industry.name;
 		obj['key'] = x;
 		obj['value'] = nz.workersByIndustry[x] / nz.workingPopulation;
-		obj['links'] = totalExports.children;
+		
 
 		industryList.push(obj);
-		// if (industry.name == "Transport, Postal and Warehousing")
+
 		var industryExportClasses = [];
 		for (index in industryExports) {
 			exportKey = industryExports[index];
 			var exportClass = {'class' : ('export-' + exportKey), key : exportKey};
 			industryExportClasses.push(exportClass);
-			if (exportIndustryClasses[exportKey] == null) {
-				exportIndustryClasses[exportKey] = [];
+			if (exportCategoryClasses[exportKey] == null) {
+				exportCategoryClasses[exportKey] = [];
 			}
-			exportIndustryClasses[exportKey].push({'class': ('industry-' + x), key: x}); 
+			exportCategoryClasses[exportKey].push({'class': ('industry-' + x), key: x}); 
 		}
-		industriesExportClasses[x] = industryExportClasses;
+		exportIndustryClasses[x] = industryExportClasses;
 		
 	}
 	
 	var obj = [];
 	obj['name'] = 'New Zealand';
-	obj['children'] = industryList.sort(function(a, b) { return ((a.totalExport > b.totalExport) ? -1 : ((a.totalExport < b.totalExport) ? 1 : 0)); });	
+	obj['children'] = industryList;	
 	
 	return obj;
 }
@@ -104,14 +140,15 @@ function getExportCategories() {
 		var obj = [];
 		obj['name'] = exportCategory.name;
 		obj['value'] = exportCategory.exports;
-		obj['links'] = nz.NZHSC[x].links;
+		obj['industryLinks'] = nz.NZHSC[x].industryLinks;
+		obj['countryLinks'] = nz.NZHSC[x].countryLinks;
 		obj['key'] = x;
 		exportList.push(obj);
 	}
 	
 	var obj = [];
 	obj['name'] = 'New Zealand';
-	obj['children'] = exportList.sort(function(a, b) { return ((a.totalExport > b.totalExport) ? -1 : ((a.totalExport < b.totalExport) ? 1 : 0)); });
+	obj['children'] = exportList;
 	return obj;
 }
  
@@ -121,11 +158,11 @@ function getTotalIndustryExports(exports, parent) {
 	var children = [];
 	// nz.NZHSC[exports[x]].name == 'Transportation'
 	for (x in exports) {
-		if (nz.NZHSC[exports[x]].links == null) {
-			nz.NZHSC[exports[x]].links = [];
+		if (nz.NZHSC[exports[x]].industryLinks == null) {
+			nz.NZHSC[exports[x]].industryLinks = [];
 		}
 		total += nz.NZHSC[exports[x]].exports;
-		nz.NZHSC[exports[x]].links.push({name: parent, key: parent});
+		nz.NZHSC[exports[x]].industryLinks.push({name: parent, key: parent});
 		var obj = [];
 		obj['name'] = nz.NZHSC[exports[x]].name;
 		obj['key'] = exports[x];

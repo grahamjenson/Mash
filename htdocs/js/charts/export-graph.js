@@ -9,6 +9,7 @@ function ExportGraph(container) {
 	var vis;
 	var industries = [];
 	var exports = [];
+	var countries = [];
 	var w, h, x, y;
 	var selectedIndustry = '';
 	var selectedExport = '';
@@ -20,15 +21,19 @@ function ExportGraph(container) {
 	
 	var partitionedIndustries;
 	var partitionedExports;
+	var partitionedCountries;
 	var tooltip;
+	var strokeOpacity = '.4';
 	
 	var duration = 1000;
 	var color = d3.scale.category20c();
 	var line = d3.svg.line().interpolate('basis');
 	
-	this.createExportGraph = function(industryCategories, exportCategories, width, hieght) {
+	this.createExportGraph = function(industryCategories, exportCategories, countryCategories, width, hieght) {
 		industries = industryCategories;
 		exports = exportCategories;
+		countries = countryCategories;
+		
 		w = width;
 		h = hieght;
 		
@@ -37,6 +42,9 @@ function ExportGraph(container) {
 	    
 		exportY = d3.scale.linear().range([0, (h - paddingRight) ]);
 		exportX = d3.scale.linear().range([((w - paddingBottom) / 5)*2, ((w - paddingBottom) / 5)]);
+		
+		countryY = d3.scale.linear().range([0, (h - paddingRight) ]);
+		countryX = d3.scale.linear().range([((w - paddingBottom) / 5)*4, ((w - paddingBottom) / 5)]);
 		
 		vis = d3.select("#" + container)
 			.append("svg:svg")
@@ -58,13 +66,14 @@ function ExportGraph(container) {
 		
 		partitionedIndustries = partition(industries);
 		partitionedExports = partition(exports);
+		partitionedCountries = partition(countries);
 		
 		var industryCell = vis.selectAll(".industry-cell")
 	      	.data(partitionedIndustries)
 		    .enter().append("svg:g")
 		    .attr("class", 'industry-cell manufaturing-cell')
 		    .attr("transform", function(d) { return "translate(" + industriesX((d.children ? d.y : (d.y - .5))) + "," + industriesY(d.x) + ")"; })
-		    .on("click", fadeIndustry());
+		    .on("click", fade('industry'));
 		
 		industryCell.append("svg:rect")
 	      	.attr("height", function(d) { return industriesY(d.dx); })
@@ -93,7 +102,7 @@ function ExportGraph(container) {
 		    .attr("class", "export-cell manufaturing-cell")
 		    .attr("transform", function(d) { return "translate(" + exportX((d.children ? d.y : (d.y - .5))) + "," + exportY(d.x) + ")"; })
 		    .attr("href", function(d) { return d.data.name; })
-		    .on("click", fadeExport());
+		    .on("click", fade('export'));
 		
 		exportCell.append("svg:rect")
 	      	.attr("height", function(d) { return exportY(d.dx); })
@@ -115,15 +124,42 @@ function ExportGraph(container) {
 	      .attr("text-anchor", "middle")
 	      .text(function(d) { return d.children ? null : (exportY(d.dx) > 12 ? d.data.name.slice(0, 30) + '...' : ''); });
 		
+		var countryCell = vis.selectAll(".country-cell")
+	      	.data(partitionedCountries)
+		    .enter().append("svg:g")
+		    .attr("class", "country-cell manufaturing-cell")
+		    .attr("transform", function(d) { return "translate(" + countryX((d.children ? d.y : (d.y - .5))) + "," + countryY(d.x) + ")"; })
+		    .attr("href", function(d) { return d.data.name; })
+		    .on("click", fade('country'));
+		
+		countryCell.append("svg:rect")
+	      	.attr("height", function(d) { return countryY(d.dx); })
+	      	.attr("width", function(d) { return countryX(d.dy + .5); })
+	      	.attr("fill", function(d, i) { return color(i); })
+	      	.style("stroke", 'white')
+	      	.attr("class", addCountryClasses)
+		    .style("stroke-opacity", 1)
+		    .on("mouseover", showToolTip)
+			.on("mousemove", moveToolTip)
+			.on("mouseout", hideToolTip);
+		
+		countryCell.append("svg:text")
+	        .attr("x", function(d) { return countryX(d.dy + .5) / 2; })
+	        .attr("y", function(d) { return countryY(d.dx) / 2; })
+	        .attr("width", function(d) { return countryX(d.dy + .5); })
+	        .attr("dy", ".35em")
+	        .attr("class", 'country-text')
+	        .attr("text-anchor", "middle")
+	        .text(function(d) { return d.children ? null : (countryY(d.dx) > 12 ? d.data.name.slice(0, 30) + '...' : ''); });
+		
 		
 		for (exportPartitionIndex in partitionedExports) {
 			var partitionedExport = partitionedExports[exportPartitionIndex];
 			
-			
-			for (linkIndex in partitionedExport.data.links) {
-				var weight = (partitionedExport.value / partitionedExport.data.links.length) / partitionedExport.value;
+			for (linkIndex in partitionedExport.data.industryLinks) {
+				var weight = (partitionedExport.value / partitionedExport.data.industryLinks.length) / partitionedExport.value;
 				var exportKey = partitionedExport.data.key;
-				var industryKey = partitionedExport.data.links[linkIndex].key;
+				var industryKey = partitionedExport.data.industryLinks[linkIndex].key;
 				
 				var endPointX = ((w - paddingBottom) / 5)*2;
 				var endPointY = exportY(partitionedExport.x) + (exportY(partitionedExport.dx) / 2);
@@ -144,9 +180,39 @@ function ExportGraph(container) {
 							.duration(duration)
 						    .style("fill", 'none')
 						    .style("stroke", 'black')
-						    .style("stroke-width", 1)
-						    .style("stroke-opacity", weight)
-						    .attr('class', 'path industry-' + industryKey + ' export-' + exportKey + ' unique-' + industryKey + exportKey)
+						    .style("stroke-width", weight)
+						    .style('stroke-opacity', strokeOpacity)
+						    .attr('class', 'path industry-path industry-' + industryKey + ' export-' + exportKey + ' unique-' + industryKey + exportKey)
+						    .attr("d", line);
+					}					
+				}		
+			}
+			
+			for (linkIndex in partitionedExport.data.countryLinks) {
+				var weight = (partitionedExport.value / partitionedExport.data.industryLinks.length) / partitionedExport.value;
+				var exportKey = partitionedExport.data.key;
+				var industryKey = partitionedExport.data.countryLinks[linkIndex].key;
+				
+				var endPointX = ((w - paddingBottom) / 5)*3;
+				var endPointY = exportY(partitionedExport.x) + (exportY(partitionedExport.dx) / 2);
+				var startPointX, startPointY;
+				
+				for (industryPartitionIndex in partitionedCountries) {
+					var partitionedCountry = partitionedCountries[industryPartitionIndex];
+					if (partitionedCountry.data.key == industryKey) {
+						startPointX = ((w - paddingBottom) / 5)*4;
+						startPointY = industriesY(partitionedCountry.x) + (industriesY(partitionedCountry.dx) / 2);
+							
+						var points = [[startPointX, startPointY], [startPointX*.9, startPointY], [endPointX*1.1, endPointY], [endPointX, endPointY]];
+					    vis.append("svg:path")
+						    .data([points])
+						    .transition()
+							.duration(duration)
+						    .style("fill", 'none')
+						    .style("stroke", 'black')
+						    .style("stroke-width", weight)
+						    .style('stroke-opacity', .1)
+						    .attr('class', 'path country-path country-' + industryKey + ' export-' + exportKey + ' unique-' + industryKey + exportKey)
 						    .attr("d", line);
 					}					
 				}		
@@ -162,6 +228,9 @@ function ExportGraph(container) {
 	    
 		exportY = d3.scale.linear().range([0, (h - paddingRight) ]);
 		exportX = d3.scale.linear().range([((w - paddingBottom) / 5)*2, ((w - paddingBottom) / 5)]);
+		
+		countryY = d3.scale.linear().range([0, (h - paddingRight) ]);
+		countryX = d3.scale.linear().range([((w - paddingBottom) / 5)*4, ((w - paddingBottom) / 5)]);
 		
 		d3.select("#" + container)
 			.transition()
@@ -208,14 +277,31 @@ function ExportGraph(container) {
 			.duration(duration)
 			.attr("height", function(d) { return exportY(d.dx); });
 		
+		var countryCells = vis.selectAll(".country-cell")
+			.transition()
+			.duration(duration)
+			.attr("transform", function(d) { return "translate(" + countryX((d.children ? d.y : (d.y - .5))) + "," + countryY(d.x) + ")"; });
+		
+		vis.selectAll(".country-text")
+			.transition()
+			.duration(duration)
+			.attr("x", function(d) { return countryX(d.dy + .5) / 2; })
+			.attr("y", function(d) { return countryY(d.dx) / 2; })
+			.text(function(d) { return d.children ? null : (countryY(d.dx) > 12 ? d.data.name.slice(0, 28) + '...' : ''); });
+		
+		vis.selectAll(".country-rectangles")
+			.transition()
+			.duration(duration)
+			.attr("height", function(d) { return countryY(d.dx); });
+		
 		for (exportPartitionIndex in partitionedExports) {
 			var partitionedExport = partitionedExports[exportPartitionIndex];
 			
 			
-			for (linkIndex in partitionedExport.data.links) {
-				var weight = (partitionedExport.value / partitionedExport.data.links.length) / partitionedExport.value;
+			for (linkIndex in partitionedExport.data.industryLinks) {
+				var weight = (partitionedExport.value / partitionedExport.data.industryLinks.length) / partitionedExport.value;
 				var exportKey = partitionedExport.data.key;
-				var industryKey = partitionedExport.data.links[linkIndex].key;
+				var industryKey = partitionedExport.data.industryLinks[linkIndex].key;
 				
 				var endPointX = ((w - paddingBottom) / 5)*2;
 				var endPointY = exportY(partitionedExport.x) + (exportY(partitionedExport.dx) / 2);
@@ -231,6 +317,31 @@ function ExportGraph(container) {
 							
 						var points = [[startPointX, startPointY], [startPointX*1.1, startPointY], [endPointX*.9, endPointY], [endPointX, endPointY]];
 					    vis.selectAll(".unique-" + industryKey + exportKey)
+						    .data([points])
+						    .transition()
+							.duration(duration)
+						    .attr("d", line);
+					}					
+				}		
+			}
+			
+			for (linkIndex in partitionedExport.data.countryLinks) {
+				var weight = (partitionedExport.value / partitionedExport.data.industryLinks.length) / partitionedExport.value;
+				var exportKey = partitionedExport.data.key;
+				var industryKey = partitionedExport.data.countryLinks[linkIndex].key;
+				
+				var endPointX = ((w - paddingBottom) / 5)*3;
+				var endPointY = exportY(partitionedExport.x) + (exportY(partitionedExport.dx) / 2);
+				var startPointX, startPointY;
+				
+				for (industryPartitionIndex in partitionedCountries) {
+					var partitionedCountry = partitionedCountries[industryPartitionIndex];
+					if (partitionedCountry.data.key == industryKey) {
+						startPointX = ((w - paddingBottom) / 5)*4;
+						startPointY = industriesY(partitionedCountry.x) + (industriesY(partitionedCountry.dx) / 2);
+							
+						var points = [[startPointX, startPointY], [startPointX*.9, startPointY], [endPointX*1.1, endPointY], [endPointX, endPointY]];
+						vis.selectAll(".unique-" + industryKey + exportKey)
 						    .data([points])
 						    .transition()
 							.duration(duration)
@@ -257,8 +368,8 @@ function ExportGraph(container) {
 	
 	function addIndustryClasses(d, i) {		
 		var classes = '';
-		for (var x in industriesExportClasses[d.data.key]){
-			classes = classes.concat(industriesExportClasses[d.data.key][x].class + ' ');
+		for (var x in exportIndustryClasses[d.data.key]){
+			classes = classes.concat(exportIndustryClasses[d.data.key][x].class + ' ');
 		}
 			
 		return 'rectangles industry-rectangles industry-' + d.data.key + ' ' + classes;
@@ -266,59 +377,37 @@ function ExportGraph(container) {
 	
 	function addExportClasses(d, i) {		
 		var classes = '';
-		for (var x in exportIndustryClasses[d.data.key]){
-			classes = classes.concat(exportIndustryClasses[d.data.key][x].class + ' ');
+		for (var x in exportCategoryClasses[d.data.key]){
+			classes = classes.concat(exportCategoryClasses[d.data.key][x].class + ' ');
 		}
 			
 		return 'rectangles export-rectangles export-' + d.data.key + ' ' + classes;
 	}
 	
-	
-	/** Returns an event handler for fading a given chord group. */
-	function fadeIndustry() {
-	  return function(g, i) {
-		  if (selectedIndustry == g.data.key) {
-			    vis.selectAll(".rectangles")
-			      .transition()
-			      .style("opacity", 1);
-			    
-			    vis.selectAll(".path")
-			      .transition()
-			      .style("stroke-opacity", 1);
-			    
-			    selectedIndustry = '';
-
-		  } else {
-			  selectedIndustry = g.data.key;
-			  
-			    vis.selectAll(".rectangles")
-			      .transition()
-			      .style("opacity", .1);
-			    
-			    vis.selectAll(".path")
-			      .transition()
-			      .style("stroke-opacity", 0);
-			    
-			    vis.selectAll((".industry-" + g.data.key))
-			      .transition()
-			      .duration(500)
-			      .style("opacity", 1)
-			      .style("stroke-opacity", 1);
-		  }   	    
-	  };
+	function addCountryClasses(d, i) {		
+		var classes = '';
+		for (var x in exportCountryClasses[d.data.key]){
+			classes = classes.concat(exportCountryClasses[d.data.key][x].class + ' ');
+		}
+			
+		return 'rectangles country-rectangles country-' + d.data.key + ' ' + classes;
 	}
 	
 	/** Returns an event handler for fading a given chord group. */
-	function fadeExport() {
+	function fade(type) {
 	  return function(g, i) {
 		  if (selectedExport == g.data.key) {
 			    vis.selectAll(".rectangles")
 			      .transition()
 			      .style("opacity", 1);
 			    
-			    vis.selectAll(".path")
+			    vis.selectAll(".industry-path")
 			      .transition()
-			      .style("stroke-opacity", 1);
+			      .style("stroke-opacity", strokeOpacity);
+			    
+			    vis.selectAll(".country-path")
+			      .transition()
+			      .style("stroke-opacity", .1);
 			    
 			    selectedExport = '';
 
@@ -327,17 +416,17 @@ function ExportGraph(container) {
 			  
 			    vis.selectAll(".rectangles")
 			      .transition()
-			      .style("opacity", .1);
+			      .style("opacity", .05);
 			    
 			    vis.selectAll(".path")
 			      .transition()
 			      .style("stroke-opacity", 0);
 			    
-			    vis.selectAll((".export-" + g.data.key))
+			    vis.selectAll(("." + type + "-" + g.data.key))
 			      .transition()
 			      .duration(500)
 			      .style("opacity", 1)
-			      .style("stroke-opacity", 1);
+			      .style("stroke-opacity", '.7');
 		  }   	    
 	  };
 	}
