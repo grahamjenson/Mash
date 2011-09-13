@@ -436,8 +436,10 @@ function ExportGraph(container) {
 		return tooltip.style("visibility", "visible");
 	}
 	
-	function moveToolTip(g, i) {		
-		return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+	function moveToolTip(g, i) {	
+		var event = d3.event;
+		tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+		return;
 	}
 	function hideToolTip(g, i) { 
 		return tooltip.style("visibility", "hidden");
