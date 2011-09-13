@@ -3,7 +3,7 @@ var exportCategoryClasses = [];
 var exportCountryClasses = [];
 
 $(document).ready( function() {
-	$('#main-container').css('width', '98%');
+
 	$('#bubble-chart').remove();
 	
 	// THis is hacked and needs to be done in a specific order to obtain links.
@@ -13,7 +13,7 @@ $(document).ready( function() {
 	
 	
 	var exportGraph = new ExportGraph('export-graph');
-	exportGraph.createExportGraph(industries, categories, countries, 920, 475);
+	exportGraph.createExportGraph(industries, categories, countries, 955, 475);
 	
 	$('#resize-export-graph').click(function() {
 		if (this.value == 'Maximize') {

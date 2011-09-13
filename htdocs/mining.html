@@ -44,74 +44,91 @@
                     <div class='clear'></div>       
             </div>
             <div class='vis-container'> 
-                              
-                <div id='gdp-container' class='not-text' style='margin-bottom: 0;'> 
-                    <p><b></b></p>    
-                    <div>
-		                <div class='counter-text'><p><b>Estimated Year of Oil Depletion</b></p></div>
-		                <div id='oil-counter' class='flip-counter mining-counter'></div>
-		                <div class='clear'></div>
-		            </div>
-		            <div>
-		                <div class='counter-text'><p><b>Estimated Year of Coal Depletion</b></p></div>
-		                <div id='coal-counter' class='flip-counter mining-counter'></div>
-		                <div class='clear'></div>
-		            </div>
-		            <div>
-		                <div class='counter-text'><p><b>Estimated Year of Metal Depletion</b></p></div>
-		                <div id='metal-counter' class='flip-counter mining-counter'></div>
-		                <div class='clear'></div>
-		            </div>           
-                    <div id="bubble-chart" class="chart-wrapper"></div>                    
-                </div>   
                 
                 <div id='main-container'>
-                    <p><b>Lets dig up our billions worth of untapped resources.</b></p>
+                    <h2>The Suggestion</h2>
+                    <p>So why not dig up our billions worth of untapped resources?</p>
+                    <h2>The Problem</h2>
                     <p>
                         To improve New Zealand GDP over the long run we would need to aim for 40bn a year.
                         Profit from mineral wealth is one off, and sacrifices our countries core values.
-                        Use the sliders to increase the Annual Mining Growth.
-                        &nbsp;<a id='read-more' href='#'>Read more</a>
-                    </p>
-		            <table class='mining-table not-text'>
-		                <tr>
-		                    <td class='mining-p'>Oil Growth <div id='oil-colour'></div></td>
-		                    <td><div id='oil-slider' class='mining-slider'></div></td>
-		                </tr>
-		                <tr>
-		                    <td></td>
-		                    <td><div class='mining-slider-legend'></div></td>
-		                </tr>
-		                <tr>
-		                    <td class='mining-p'>Coal Growth <div id='coal-colour'></div></td>
-		                    <td><div id='coal-slider' class='mining-slider'></div></td>
-		                </tr>
-		                <tr>
-		                    <td></td>
-		                    <td><div class='mining-slider-legend'></div></td>
-		                </tr>
-		                <tr>
-		                    <td class='mining-p'>Metal Growth <div id='metal-colour'></div></td>
-		                    <td><div id='metal-slider' class='mining-slider'></div></td>
-		                </tr>
-		                <tr>
-		                    <td></td>
-		                    <td><div class='mining-slider-legend'></div></td>
-		                </tr>
-		            </table>
-		            <div class='more-text'>
-                        <p>
-                            Place Holder for more text.
-                            &nbsp;<a id='read-less' href='#'>Hide text</a>                        
-                        </p>
+                        <br /><br />
+                        <a id='read-more' href='#'>Read more</a>
+                    </p> 
+                    <div class='more-text'>
+                            <p>
+                                Place Holder for more text.
+                                &nbsp;<a id='read-less' href='#'>Hide text</a>                        
+                            </p>
                     </div>
-                </div>             
+                    <div id="bubble-chart" class="chart-wrapper" style='display: none'></div>                     
+                </div>     
+                
+                <div id='side-container' class='gdp-hide'>
+                    <h2>How it Works</h2>
+                    <p>
+                        Use the sliders to increase the Annual Mining Growth.
+                    </p>
+                    <table class='mining-table not-text'>
+                        <tr>
+                            <td class='mining-p'>Oil Growth <div id='oil-colour'></div></td>
+                            <td><div id='oil-slider' class='mining-slider'></div></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><div class='mining-slider-legend'></div></td>
+                        </tr>
+                        <tr>
+                            <td class='mining-p'>Coal Growth <div id='coal-colour'></div></td>
+                            <td><div id='coal-slider' class='mining-slider'></div></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><div class='mining-slider-legend'></div></td>
+                        </tr>
+                        <tr>
+                            <td class='mining-p'>Metal Growth <div id='metal-colour'></div></td>
+                            <td><div id='metal-slider' class='mining-slider'></div></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><div class='mining-slider-legend'></div></td>
+                        </tr>
+                    </table>
+                </div>         
                         
-                <div id='bottom-container' class='not-text'>
+                <div id='bottom-container'>
+                    <h2 style='width: 25%'>The Impact</h2>
                     <div id='mining-chart-title'>
                         <p><b>New Zealand Mining: Annual Turnover ($NZD) vs. Time to Depletion (Year)</b></p>
                     </div>
                     <div id='mining-chart'></div>
+                    <div class='clear'></div>      
+                    
+                    <table id='mining-count-down-table'>
+	                    <tr>
+	                       <td>
+	                           <p><b>Estimated Year of Oil Depletion</b></p>
+	                       </td>
+	                       <td>
+                               <p><b>Estimated Year of Coal Depletion</b></p>
+                           </td>
+                           <td>
+                               <p><b>Estimated Year of Metal Depletion</b></p>
+                           </td>
+	                    </tr>
+	                    <tr>
+	                       <td>
+                               <div id='oil-counter' class='flip-counter mining-counter'></div>
+                           </td> 
+                           <td>
+                               <div id='coal-counter' class='flip-counter mining-counter'></div>
+                           </td>   
+                           <td>
+                               <div id='metal-counter' class='flip-counter mining-counter'></div>
+                           </td>     
+	                    </tr>   	            
+                    </table>
                 </div> 
                 <div class='clear'></div>                               
             </div>

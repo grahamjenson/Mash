@@ -10,17 +10,24 @@
 		
 		<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.8.15.custom.min.js"></script>
+		
+		<script type="text/javascript" src="js/chapters/references.js"></script>     
 
     
     </head>
     <body>
         <div id="content">
-            <div class='vis-container'> 
-                <div class="title">
-                    <div id='current-chapter'>References</div>
-                </div> 
-                <div style='width: 900px; float: left; padding-left: 20px'>
-                    <p><b>Introduction Page</b></p>
+            <div id='navigation'>
+                    <a href='/outro' id='nav-backward'>&#171; Previous Chapter</a>
+                    <div class="title">
+                        <div id='current-chapter'>References</div>
+                    </div> 
+                    <a href='/references' id='nav-foreward'></a>
+                    <div class='clear'></div>     
+            </div>
+            <div class='vis-container'>                 
+                <div id='main-container'>                    
+                    <h2>Introduction Page</h2>
                     <p>
                         GDP Per Industry, source: 
                         <a href='http://www.stats.govt.nz/browse_for_stats/economic_indicators/GDP/GrossDomesticProduct_HOTPDec09qtr.aspx'>
@@ -35,7 +42,7 @@
                         <a href='http://www.oanda.com/currency/average'>
                         Exchange Rate Calculator</a><br/>
                     </p>
-                    <p><b>Tourism Page</b></p>
+                    <h2>Tourism Page</h2>
                     <p>
                         Accommodation Percentages, source: 
                         <a href='http://www.stats.govt.nz/browse_for_stats/industry_sectors/accommodation/Accommodation-Survey_HOTPFeb11/Commentary.aspx'>
@@ -44,15 +51,20 @@
                         <a href='http://www.tourismresearch.govt.nz/Data--Analysis/Analytical-Tools/International-Visitor-Value/'>
                         International Visitor Survey</a><br/>
                     </p>
-                    <p><b>Dairy Page</b></p>
+                    <h2>Dairy Page</h2>
                     <p></p>
-                    <p><b>Mining Page</b></p>
+
+                </div> 
+                
+                <div id='side-container'>
+                                        <h2>Mining Page</h2>
                     <p></p>
-                    <p><b>Exports Page</b></p>
+                    <h2>Exports Page</h2>
                     <p></p>
-                    <p><b>Companies Page</b></p>
+                    <h2>Companies Page</h2>
                     <p></p>
-                </div>                          
+                </div>   
+                <div id="bubble-chart" class="chart-wrapper" style='display: none'></div>                                    
             </div>
            <div id='footer'>
                 <p>Infographic Produced By: <a href='http://maori.geek.nz/'>Graham Jenson</a> &amp; <a href='http://www.hashbang.co.nz/'>Alex Gibson</a>. References &amp; Datasources can be found <a href='/references'>here</a>.</p>

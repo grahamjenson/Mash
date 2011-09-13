@@ -43,47 +43,52 @@
                     <div class='clear'></div>       
             </div>
             <div class='vis-container'> 
-                              
-                <div id='gdp-container' class='not-text'> 
-                    <p><b>OECD Prosperity: GDP/Per Capita (Circle Area)</b><br />
-                    Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>                
-                    <div id="bubble-chart" class="chart-wrapper"></div>                    
-                </div>   
-                
+                            
                 <div id='main-container'>
-                    <p><b>So we're good at Dairy, why not do more of that?</b></p>
-                    <p style='padding-bottom: 10px'>
+                    <h2 style='width : 50%' class='gdp-hide'>The Suggestion</h2>
+                    <p class='gdp-hide'>So we're good at Dairy, why not do more of that?</p>
+                    <h2 style='width : 50%' class='gdp-hide'>The Problem</h2>
+                    <p class='gdp-hide'>
                         Intensified Dairy also destroys our clean green image as it scaled, it has a low average wage
-                        potential and high working hours, plus we don''t want to over specialize. Use the slider below 
-                        to increase the amount of cows in New Zealand to see the effect is has.
-                        &nbsp;<a id='read-more' href='#'>Read more</a>
-                        <span style="float: right; text-align: right; padding-top: 7px;" class='not-text'>
-                            <b>No. of Cows: </b>
-                            <b id="current-cows"></b>
-                        </span>
+                        potential and high working hours, plus we don''t want to over specialize. 
+                        <br /><br />
+                        <a id='read-more' href='#'>Read more</a>                        
                     </p>
-	                <div id='cow-slider' class='not-text'></div>
-	                <div id='cow-slider-legend' class='not-text'></div>
-	                <p style='text-align:center; padding-top:10px;' class='not-text'>
-	                   <b>Regional Cow Density: (Cows/Land<sup>2</sup>)</b>
-	                </p>
-	                <div class='clear not-text'></div>
 	                <div class='more-text'>
                         <p>
                             Place Holder for more text.
                             &nbsp;<a id='read-less' href='#'>Hide text</a>                        
                         </p>
-                    </div>           
+                    </div>   
+                    <h2 style='width : 50%'>The Impact</h2>
+                    <div id='gdp-container-left'>                    
+                        <p><b>OECD Prosperity: GDP/Per Capita (Circle Area)</b><br />
+                        Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>
+                        <div id="bubble-chart" class="chart-wrapper"></div>                    
+                    </div>          
                 </div>  
                 
-                <div id='nz-map' class='state-container not-text'></div>
-                <div id='nz-map-legend' class='state-container not-text'></div>
-                <div id='cow-densitiy-title' class='state-container not-text'>
-                    <p style='text-align:center;'><b>Humans vs. Cows: (1 Unit = 1.1 Million)</b><br /></p>
+                <div id='side-container' class='gdp-hide'>
+                    <h2>How it Works</h2>
+                    <p>
+                        Use the slider below to increase the amount of cows in New Zealand to see the effect is has.
+                    </p>
+                    <p>
+	                    <b>No. of Cows: </b>
+	                    <b id="current-cows"></b>
+	                </p>
+	                <div id='cow-slider'></div>
+                    <div id='cow-slider-legend'></div>
+                    
+                    <h2>Regional Cow Density</h2>
+                    <p style='text-align:center;''>
+                       <b>Regional Cows/Land<sup>2</sup></b>
+                    </p>                    
+                    <div id='nz-map-legend' ></div>
+                    <div id='nz-map'></div>
                 </div>
-                <div id='cow-densitiy-chart' class='state-container not-text'></div>
                                 
-                <div id='bottom-container'></div> 
+                <div id='bottom-container' class='gdp-hide'></div> 
                 <div class='clear'></div>                               
             </div>
 

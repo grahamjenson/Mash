@@ -74,7 +74,7 @@ function createMiningSliders() {
 function createMiningChart() {
 	lineChart = new LineChart('mining-chart');
 	growth = getMiningGrowth(0, 0, 0);
-	lineChart.CreateLineChart(growth, 900, 235);
+	lineChart.CreateLineChart(growth, 960, 235);
 }
 
 function getMiningGrowth(oil, coal, metal) {

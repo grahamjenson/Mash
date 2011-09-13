@@ -41,36 +41,57 @@
                     <a href='/companies' id='nav-foreward'>Next Chapter &#187;</a>
                     <div class='clear'></div>       
             </div>
-            <div class='vis-container'> 
-                              
-                <div id='gdp-container'> 
-                    <p>
-                        <b>So what exactly do we produce in New Zealand?</b>
-                    </p>                
-                    <div id="bubble-chart" class="chart-wrapper"></div>                    
-                </div>   
+            <div class='vis-container'>                               
+                
+                <div id="bubble-chart" class="chart-wrapper" style='display: none'></div>                    
+                
                 
                 <div id='main-container'>
+                    <h2>The Current Situation</h2>
+                    <p>
+                        //TODO Write about what we currently export and how much money it gets us.
+                        <br />
+                        <br />
+                        <a id='read-more' href='#'>Read more</a>
+                    </p>
                     <div class='more-text'>
                         <p>
                             Place Holder for more text.
                             &nbsp;<a id='read-less' href='#'>Hide text</a>        
                         </p>
                     </div>
-		            <div>
-		                <p style='text-align:center; padding-top:10px;'>
-		                  <span style='float: left'>
-		                      <a id='read-more' href='#'>Read more</a>
-		                  </span>
-		                  <b>Exporting Industry / Export Category / Exporting Destination</b>
-		                  <span style='float: right'>
-		                      <input id='resize-export-graph' type='button' value='Maximize' style='width: 70px'/>
-		                  </span>
-		                </p>
-		            </div>
+
 		            <div class='clear'></div>	
-		        </div>	                                
+		        </div>	    
+		        
+		        <div id='side-container'>
+		          <h2>Export Graph</h2>
+		          <p>
+                        //TODO Write about what how to use the graph
+                  </p>
+		          <input id='resize-export-graph' type='button' value='Maximize' style='width: 70px; margin-left: 20px'/>
+		        </div>
+		                                    
                 <div id='bottom-container'>
+                    <table id='export-table'>
+                        <tr>
+                            <td>
+                                <div style='width: 100%;'>
+                                    <h2 style='width: 70%; text-align: center;'>Industry</h2>
+                                </div>                                
+                            </td>
+                            <td>
+                                <div style='width: 100%;'>
+                                    <h2 style='width: 75%; text-align: center; margin-left: 12%;'>Export Category</h2>
+                                </div>    
+                            </td>
+                            <td>
+                                <div style='width: 100%;'>
+                                    <h2 style='width: 75%; text-align: center; margin-left: 25%;'>Country</h2>
+                                </div>        
+                            </td>
+                        </tr>
+                    </table>
                     <div id='export-graph'></div>    
                     <div class='clear'></div>
                 </div> 

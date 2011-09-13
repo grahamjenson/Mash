@@ -42,7 +42,6 @@ h2 {
 .title div {
 	font-weight: bold;
 	font-size: 2.2em;
-	font-stretch: expanded;
 	text-align: center;
 	width: 100%;
 }
@@ -105,7 +104,6 @@ h2 {
 #main-container {	
 	width: 50%;
 	float: left;
-	padding-bottom: 15px;
 }
 
 #main-container p {
@@ -118,6 +116,10 @@ h2 {
 #side-container {
     width: 50%;
     float: left;    
+}
+
+#side-container p {
+    padding: 5px 20px 5px 20px;
 }
 
 /* GDPPC Chart */
@@ -147,9 +149,6 @@ h2 {
     cursor: pointer;
 }
 
-#industry-title {
-	float:left;
-}
 
 /* Manufacturing */
 .manufaturing-cell {
@@ -162,7 +161,6 @@ h2 {
 	padding: 0 0 0 25px;
     float: left;	
 }
-
 
 /* Nz Map*/
 #nz-map {
@@ -184,13 +182,12 @@ h2 {
 }
 /* Dairy */
 #cow-slider {
-    width: 425px;
+    width: 417px;
     margin: auto;   
 }
 
-#cow-densitiy-title {
-    width: 600px;
-    float: left;  
+#cow-slider-legend {
+    padding: 0 0 0 17px;  
 }
 
 #cow-densitiy-chart {
@@ -206,16 +203,21 @@ h2 {
 
 .mining-table {
     text-align: left;	
+    padding-left: 20px;
 }
 
 .mining-p {
     padding-top: 7px;
-    width: 30%;
+    width: 25%;
 }
 
 #mining-chart-title {
     text-align: center;
     margin: auto;	
+}
+
+#mining-chart {
+    padding-left: 20px; 
 }
 
 #coal-colour {
@@ -242,20 +244,42 @@ h2 {
     margin-right: 5px;  
 }
 
-.mining-counter {
-    width: 250px;
-    float: right;
-    margin-right: 5px; 	
+#mining-count-down-table {
+	width: 100%;
+	margin: auto;
 }
 
-.counter-text {
-	padding-top: 13px;
-    width: 200px;
-    float: left;	
+#mining-count-down-table td {
+    padding: 0 15px 0 15px;
+    text-align: center;	
+}
+
+.mining-counter {
+	padding-left: 15%;	
 }
 
 .more-text {
     display: none;	
+}
+
+/* Manufacturing */
+#export-graph {
+    padding-left: 25px;	
+}
+
+#export-table {
+    width: 100%;
+    margin-bottom: 15px;	
+    font-size: 1em;
+}
+
+#export-table td {
+    width: 33%;
+}
+
+#export-table td h2{
+    margin: 0;
+    padding: 5px 0 5px 0;
 }
 
 /* Apple Counter */
