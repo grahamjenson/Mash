@@ -20,15 +20,19 @@ $(document).ready( function() {
 });
 
 function setupReadMoreBinding() {
-	$('#read-more').click(function () {
-		$('.more-text').show();
-		$('.not-text').hide();
-		$('#read-more').hide();
+	
+	$( ".more-text" ).dialog({
+		autoOpen: false,
+		modal: true,
+		buttons: {
+			Ok: function() {
+				$( this ).dialog( "close" );
+			}
+		}
 	});
-	$('#read-less').click(function () {
-		$('.more-text').hide();
-		$('.not-text').show();
-		$('#read-more').show();
+	
+	$('#read-more').click(function () {
+		$( ".more-text" ).dialog( "open" );
 	});
 }
 

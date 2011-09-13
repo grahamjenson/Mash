@@ -47,6 +47,7 @@ function getExportCountries() {
 		obj['name'] = exportCountry.name;
 		obj['key'] = x;
 		obj['value'] = exportCountryTotals.total;
+		obj['imports'] = exportCountry.nzimports;
 		countryList.push(obj);
 		
 		var exportClasses = [];

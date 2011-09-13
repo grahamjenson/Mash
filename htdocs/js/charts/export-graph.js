@@ -189,7 +189,7 @@ function ExportGraph(container) {
 			}
 			
 			for (linkIndex in partitionedExport.data.countryLinks) {
-				var weight = (partitionedExport.value / partitionedExport.data.industryLinks.length) / partitionedExport.value;
+				
 				var exportKey = partitionedExport.data.key;
 				var industryKey = partitionedExport.data.countryLinks[linkIndex].key;
 				
@@ -199,7 +199,9 @@ function ExportGraph(container) {
 				
 				for (industryPartitionIndex in partitionedCountries) {
 					var partitionedCountry = partitionedCountries[industryPartitionIndex];
-					if (partitionedCountry.data.key == industryKey) {
+					
+					if (partitionedCountry.data.key == industryKey && partitionedCountry.data.imports[linkIndex] > 100000) {
+						var weight = (partitionedExport.value / partitionedCountry.data.imports[linkIndex]) / partitionedExport.value;
 						startPointX = ((w - paddingBottom) / 5)*4;
 						startPointY = industriesY(partitionedCountry.x) + (industriesY(partitionedCountry.dx) / 2);
 							
@@ -210,8 +212,8 @@ function ExportGraph(container) {
 							.duration(duration)
 						    .style("fill", 'none')
 						    .style("stroke", 'black')
-						    .style("stroke-width", weight)
-						    .style('stroke-opacity', .1)
+						    .style("stroke-width", 1)
+						    .style('stroke-opacity', .2)
 						    .attr('class', 'path country-path country-' + industryKey + ' export-' + exportKey + ' unique-' + industryKey + exportKey)
 						    .attr("d", line);
 					}					
