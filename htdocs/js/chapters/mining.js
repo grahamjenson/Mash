@@ -10,6 +10,7 @@ $(document).ready( function() {
 
 function createMiningSliders() {
 	
+	var x = d3.scale.linear().domain([0, 10]).range([10, 320]);
 	
 	$('#oil-slider').slider({
 			min: 0,
@@ -45,7 +46,7 @@ function createMiningSliders() {
 		}
 	});
 	
-	var x = d3.scale.linear().domain([0, 10]).range([10, 320]);
+	
 	
 	var chart = d3.selectAll(".mining-slider-legend")
 	    .append("svg:svg")

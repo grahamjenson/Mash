@@ -59,7 +59,7 @@ function ExportGraph(container) {
 			.style('background', 'white')
 			.style('padding', '2px')
 			.style('border', 'thin solid black')
-			.text("a simple tooltip");
+			.text("");
 		
 		var partition = d3.layout.partition()		    
 		    .value(function(d) { return d.value; });

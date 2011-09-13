@@ -5,7 +5,7 @@ $(document).ready( function() {
 });
 
 function createIndustryChart() {
-	var width = 600;
+	var width = 480;
 	var height = 235;
 	
 	var industryFilter = ['Mining', 'Fishing and Aquaculture', 'Forestry and Logging', 'Rental, Hiring and Real Estate Services',

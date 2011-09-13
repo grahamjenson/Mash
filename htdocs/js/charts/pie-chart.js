@@ -9,6 +9,7 @@ function PieChart(container) {
 	var colour = d3.scale.category20();
 	var donut = d3.layout.pie().value(function (d){ return d.workers / nz.workingPopulation; });
 	var transitionSpeed = 1000;
+	var legend;
 
 	this.CreatePieChart = function(inputData, width, hieght) {		
 		data = inputData;
@@ -21,9 +22,9 @@ function PieChart(container) {
 		
 
 		chart = d3.select("#" + container)
-		.append("svg:svg")
-		.attr("width", w)
-		.attr("height", h);
+			.append("svg:svg")
+			.attr("width", w)
+			.attr("height", h);
 
 		var arcs = chart.selectAll("g.arc")
 			.data(pieData)
@@ -37,21 +38,32 @@ function PieChart(container) {
 			.attr("fill", function(d, i) { return colour(i); });
 
 		paths.transition()
-		.ease("bounce")
-		.duration(2000)
-		.attrTween("d", tweenPie);
+			.ease("bounce")
+			.duration(2000)
+			.attrTween("d", tweenPie);
 
 		paths.transition()
-		.ease("elastic")
-		.delay(function(d, i) { return 2000 + i * 50; })
-		.duration(750)
-		.attrTween("d", tweenDonut);
+			.ease("elastic")
+			.delay(function(d, i) { return 2000 + i * 50; })
+			.duration(750)
+			.attrTween("d", tweenDonut);
+		
+		chart.append("svg:text")
+			.attr('class', 'percentage')
+			.attr("transform", "translate(" + r + "," + (r + 5) + ")")
+			.attr("fill", "black")
+		    .attr("text-anchor", "middle")
+		    .attr("font-size", "2em")
+			.text('');
 		
 		createLegend();
 		
 		setTimeout(function() { 
 			arcs.on("mouseover", fadeOut)
 				.on("mouseout", fadeIn); 
+			
+			legend.on("mouseover", fadeOut)
+			.on("mouseout", fadeIn); 
 			}, h > 500 ? 4000 : 3000);
 
 	};
@@ -60,7 +72,7 @@ function PieChart(container) {
 		//x = d3.scale.linear().domain([0, data.]).rangeRound([paddingWidth + 20, w + paddingWidth + 20]);
 	    y = d3.scale.linear().domain([0, data.length]).rangeRound([20, h]);
 	    
-	    var legend = chart.selectAll("g.bar")
+	    legend = chart.selectAll("g.bar")
 		    .data(pieData, function(d) { return d.name; })
 		    .enter().append("svg:g")
 		    .attr("class", "bar")
@@ -116,6 +128,9 @@ function PieChart(container) {
 	    chart.selectAll(('.pie-index-' + i))
 	    	.transition()
 	    	.style("opacity", 1);
+	    
+	    chart.selectAll('.percentage')
+	    	.text(Math.round(g.value * 100) + '%');
 	}
 	
 	/** Returns an event handler for fading a given chord group. */
@@ -132,6 +147,9 @@ function PieChart(container) {
 	    chart.selectAll(".text")
 	      	.transition()
 	        .style("opacity", 1);
+	    
+	    chart.selectAll('.percentage')
+    	.text('');
 	 
 	}
 

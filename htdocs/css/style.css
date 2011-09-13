@@ -282,6 +282,16 @@ h2 {
     padding: 5px 0 5px 0;
 }
 
+/* Companies */
+#company-slider {
+    width: 412px;
+    margin: auto;   
+}
+
+#company-slider-legend {
+    padding: 0 0 0 16px;  
+}
+
 /* Apple Counter */
 #counter-wrapper {
 	padding-top: 10px;

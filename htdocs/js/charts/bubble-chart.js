@@ -13,6 +13,7 @@ function BubbleChart(container) {
 	var yticks = 8;
 	var xticks = 6;
 	var x, y, z, w, h, c;
+	var tooltip;
 	
 	this.CreateBubbleChart = function(dataInput, width, hieght) {
 		data = dataInput;
@@ -36,6 +37,17 @@ function BubbleChart(container) {
 			.attr("height", h + paddinghieght)
 			.attr("id", "d3-" + container)
 			.attr("class", "chart");	
+		
+		tooltip = d3.select("body")
+			.append("div")
+			.attr('class', 'tool-tip-div')
+			.style("position", "absolute")
+			.style("z-index", "10")
+			.style("visibility", "hidden")
+			.style('background', 'white')
+			.style('padding', '2px')
+			.style('border', 'thin solid black')
+			.text("");
 		
 		var g = chart.selectAll("g")
 	        .data(data)
@@ -70,7 +82,8 @@ function BubbleChart(container) {
 		
 		setTimeout(function() { 
 			g.on("mouseover", fadeOut)
-				.on("mouseout", fadeIn); 
+				.on("mouseout", fadeIn)
+				.on("mousemove", moveToolTip); 
 			}, h > 500 ? 4000 : 3000);
 	};
 	
@@ -362,6 +375,11 @@ function BubbleChart(container) {
 	    chart.selectAll(('.country-' + i))
 	    	.transition()
 	    	.style("opacity", 1);
+	    
+	    $('.tool-tip-div').html('<b>' + g.name + '</b><p>Average Weekly Hours: ' + 
+	    		Math.round(g.work) + '<br />GDP Per Capita: $' + 
+	    		thousands(Math.round(g.gdppc)) + '<br />Average Annual Wage: $' + thousands(Math.round(g.wage)) + '</p>');
+		tooltip.style("visibility", "visible");
 	}
 	
 	function fadeOutExtra(g, i) {
@@ -372,12 +390,16 @@ function BubbleChart(container) {
 	    
 	    chart.selectAll(".circles-text")
 	      	.transition()
-	        .style("opacity", .1);
-	    
+	        .style("opacity", .1);	    
 	  
 	    chart.selectAll(('.country-' + (i + c)))
 	    	.transition()
 	    	.style("opacity", 1);
+	    
+	    $('.tool-tip-div').html('<b>' + g.name + '</b><p>Average Weekly Hours: ' + 
+	    		Math.round(g.work) + '<br />GDP Per Capita: $' + 
+	    		thousands(Math.round(g.gdppc)) + '<br />Average Annual Wage: $' + thousands(Math.round(g.wage)) + '</p>');
+		tooltip.style("visibility", "visible");
 	}
 	
 	/** Returns an event handler for fading a given chord group. */
@@ -394,6 +416,14 @@ function BubbleChart(container) {
 	    chart.selectAll(".nz")
 	      	.transition()
 	        .style("opacity", .85);
+	    
+	    tooltip.style("visibility", "hidden");
 	 
+	}
+	
+	function moveToolTip(g, i) {	
+		var event = d3.event;
+		tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+		return;
 	}
 }
