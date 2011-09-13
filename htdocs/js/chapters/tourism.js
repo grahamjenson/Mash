@@ -59,7 +59,7 @@ function createTourismSlider() {
 }
 
 function createTourismStackedBarChart() {
-	var width = 660;
+	var width = 960;
 	var height = 220;
 
 	var industryFilter = ['Mining', 'Fishing and Aquaculture', 'Forestry and Logging', 'Rental, Hiring and Real Estate Services',

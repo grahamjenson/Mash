@@ -35,57 +35,70 @@
     </head>
     <body>
         <div id="content">
+            <div id='navigation'>
+                    <a href='/index' id='nav-backward'>&#171; Previous Chapter</a>
+                    <div class="title">
+                        <div id='current-chapter'>We Need More Tourists!</div>
+                    </div> 
+                    <a href='/dairy' id='nav-foreward'>Next Chapter &#187;</a>
+                    <div class='clear'></div>       
+            </div>
             <div class='vis-container'> 
-                <div class="title">
-                    <div id='current-chapter'>We Need More Tourists!</div>
-                </div> 
-                              
-                <div id='gdp-container' class='not-text'> 
-                    <p><b>OECD Prosperity: GDP/Per Capita (Circle Area)</b><br />
-                    Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>                
-                    <div id="bubble-chart" class="chart-wrapper"></div>                    
-                </div>   
                 
                 <div id='main-container'>
-                    <p><b>Can we make New Zealand Richer by increasing Tourism?</b></p>
-                    <p style='padding-bottom: 10px'>
-                        The problem with increasing tourism is that in general it lowers our average wage,
-                        plus it will not scale enough to increase our GDP whilst maintaining our clean green image.
-                        Use the slider below to increase the amount of annual tourists in New Zealand.
-                        &nbsp;<a id='read-more' href='#'>Read more</a>
-                        <span style="float: right; text-align: right; padding-top: 7px;" class='not-text'>
-                            <b>Annual Tourists: </b>
-                            <b id="current-tourists"></b>
-                        </span>    
+                    <h2 style='width : 50%' class='gdp-hide'>The Suggestion</h2>
+                    <p style='padding-bottom: 5px' class='gdp-hide'>
+                        If we bring more tourist into New Zealand then we should become richer.
                     </p>
-	                <div class='clear'></div>
-	                <div id='tourist-slider' class='not-text'></div>
-	                <div id='tourist-slider-legend' class='not-text'></div>
-	                <p style='text-align:center; padding-top:5px;' class='not-text'>
-	                   <b>Regional Tourism Levels: (Tourists/Avail. Accommodation)</b>
-	                </p>
-	                <div class='clear not-text'></div>
-	                <div class='more-text'>
+                    <h2 style='width : 50%' class='gdp-hide'>The Problem</h2>
+                    <p style='padding-bottom: 5px' class='gdp-hide'>
+                        The problem with increasing tourism is that in general it lowers our average wage,
+                        plus it will not scale enough to increase our GDP whilst maintaining our clean green image.                        
+                        <br /><br />
+                        <a id='read-more' href='#'>Read more</a>
+
+                    </p>
+                    <div class='more-text'>
                         <p>
                             Place Holder for more text.
                             &nbsp;<a id='read-less' href='#'>Hide text</a>                        
                         </p>
                     </div>
-                </div>  
-                <div id='nz-map' class='state-container not-text'></div>
-                <div id='nz-map-legend' class='state-container not-text'></div>
-                <div id='industry-stacked-chart-title' class='state-container not-text'>
-                    <p style='text-align:center;'><b>Workers per Industry / Tourist Workers per Industry</b><br /></p>
-                </div>
-                <div id='industry-stacked-chart' class='state-container not-text'></div>                   
-                <div id='bottom-container'></div> 
-                <div class='clear'></div>                               
+                    <h2 style='width : 50%'>The Impact</h2>
+                    <div id='gdp-container-left'>                    
+	                    <p><b>OECD Prosperity: GDP/Per Capita (Circle Area)</b><br />
+                        Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>
+	                    <div id="bubble-chart" class="chart-wrapper"></div>                    
+	                </div>  
+                </div> 
+                
+                 <div id='side-container' class='gdp-hide'>
+                    <h2>How it Works</h2>
+                    <p>Use the slider below to increase the amount of annual tourists in New Zealand.</p>
+                    <p>
+                        <b>Annual Tourists: </b>
+                        <b id="current-tourists"></b>
+                    </p>     
+                    <div id='tourist-slider' class='not-text'></div>
+                    <div id='tourist-slider-legend' class='not-text'></div>
+                    <h2>Regional Tourism Levels</h2>
+                    <p style='text-align:center;''>
+                       <b>Tourists/Avail. Accommodation</b>
+                    </p>
+                    <div id='nz-map-legend' class='state-container not-text'></div>
+                    <div id='nz-map' class='state-container not-text'></div>
+                 </div>
+
+                <div class='clear'></div>  
+                <div id='bottom-container' class='gdp-hide'>       
+                    <h2 style='width:25%''>New Zealand Industries</h2>  
+                    <p style='text-align:center;'><b>Workers per Industry / Tourist Workers per Industry</b></p>                
+                    <div id='industry-stacked-chart'></div>                   
+        
+                </div>   
+                <div class='clear'></div>                             
             </div>
-            <div id='navigation'>
-                    <a href='/index' id='nav-backward'>&#171; Previous Chapter: Introduction</a>
-                    <a href='/dairy' id='nav-foreward'>Next Chapter: Let's make more Milk &#187;</a>
-                    <div class='clear'></div>       
-            </div>
+
             <div id='footer'>
                 <p>Infographic Produced By: <a href='http://maori.geek.nz/'>Graham Jenson</a> &amp; <a href='http://www.hashbang.co.nz/'>Alex Gibson</a>. References &amp; Datasources can be found <a href='/references'>here</a>.</p>
                 <p>Licensed under a Creative Commons Attribution 3.0 Unported License.</p>

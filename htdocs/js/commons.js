@@ -71,36 +71,27 @@ function createOECDBubbleChart() {
 	}
 	oecdStats.push({name: "New Zealand", gdppc : nz.gdppc(), work : nz.avgwork(), wage : nz.avgwage()});	
 	
-	OECDBubbleChart.CreateBubbleChart(oecdStats, 450, 250);
+	OECDBubbleChart.CreateBubbleChart(oecdStats, 470, 250);
 	nz.addListener(function() {
 		oecdStats.pop();
 		oecdStats.push({name: "New Zealand", gdppc : nz.gdppc(), work : nz.avgwork(), wage : nz.avgwage()});	
 		OECDBubbleChart.refresh(oecdStats);
 	});
-	$('#gdp-container').toggle( function () {
-			$('#bottom-container').hide('slow');
-			$('#main-container').hide('slow');
-			$('#current-chapter').hide();
-			$('.state-container').hide();
-			$('#gdp-container').animate({
-				width: '+=500'
-			}, 1000, function() {
-				OECDBubbleChart.rescale(920, 513, oecdStats.concat(extras));
-			});			
-			
+	$('#bubble-chart').toggle( function () {
+			$('.gdp-hide').hide('slow');
+			$('#main-container').animate({
+				width: '+=50%'
+			}, 100, function() {
+				OECDBubbleChart.rescale(950, 500, oecdStats.concat(extras));
+			});				
 		}, function () { 
-			OECDBubbleChart.rescale(450, 250, oecdStats);
-			setTimeout(function() { $('#gdp-container').animate({
-				width: '-=500'
-			}, 1000, function() {
-				$('#main-container').show('slow');
-				$('#bottom-container').show('slow');
-				$('#current-chapter').show('slow');
-				$('.state-container').show('slow');
-			}); }, 1000);
-						
+			OECDBubbleChart.rescale(470, 250, oecdStats);
+			setTimeout(function() { $('#main-container').animate({
+				width: '-=50%'
+			}, 100, function() {
+				$('.gdp-hide').show('slow');				
+			}); }, 1000);						
 		});
-
 }
 
 function getIndustryWorkersForDisplay(filter) {

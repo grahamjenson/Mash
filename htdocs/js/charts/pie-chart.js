@@ -78,18 +78,7 @@ function PieChart(container) {
 		    .attr("fill", "black")
 		    .attr("text-anchor", "start")
 		    .attr('class', function(d, i) { return 'text pie-index-' + i; })
-		    .text(function(d, i) { 
-		    	var returnString = '';
-		    	var num = d.value * 100;
-		    	num = Math.round(num*Math.pow(10,2))/Math.pow(10,2);
-		    	num = num.toString();
-		    	if (num.indexOf('.') == 1) {
-		    		num = '0' + num;
-		    	} if (num.indexOf('.') == (num.length - 2)) {
-		    		num += '0';
-	    		}
-		    	returnString += (num + '%: ' + d.data.name);
-		    	return returnString; });
+		    .text(function(d, i) {return d.data.name.slice(0, 39); });
 	   
 	}
 	

@@ -28,27 +28,69 @@ table text {
     font-size: .9em;	
 }
 
+h2 {
+    text-align: left;
+    padding: 5px 0px 5px 20px;
+    background-color: black;
+    color: white;
+    width: 50%;
+}
+
+
+/* Navigation */
+
 .title div {
 	font-weight: bold;
 	font-size: 2.2em;
 	font-stretch: expanded;
-	margin-left: 20px;
-	margin-top: 20px;
-}
-
-#content {
-	width: 980px;
-	margin: auto;
+	text-align: center;
+	width: 100%;
 }
 
 .title {
-	float: left;
-	width: 50%;
+    float: left;
+    width: 70%;
 }
 
+#navigation {
+    margin: 10px 0 10px 0;
+    padding: 10px 0 10px 0;
+    width: 100%;
+    background: white;
+}
+
+#navigation a {
+	padding-top: 4px;
+    text-decoration: none;
+    color: blue;
+    background-color: transparent;
+    font-size: 1.5em;
+}
+
+#navigation a:hover {
+    color: steelblue;
+}
+
+#nav-backward {
+    float: left;
+    padding-left: 10px;
+}
+
+#nav-foreward {
+    float: right;
+    padding-right: 10px;
+}
+
+
+#content {
+	width: 1000px;
+	margin: auto;
+}
+
+/* Main Content */
+
 .vis-container {
-	width: 98%;
-	padding: 0 15px 5px 15px;
+	width: 100%;	
 	margin-top: 10px;
 	background: white;
 	min-height: 610px;
@@ -58,92 +100,50 @@ table text {
 	clear: both;
 }
 
-.error {
-	padding-top: 150px;
-}
-
-.error p {
-	text-align: center;
-	color: white;
-	font-size: 2em;
-}
-
-.error a {
-    text-align: center;
-    color: white;
-}
-
-.chart div {
-	font: 10px sans-serif;
-	background-color: steelblue;
-	text-align: right;
-	padding: 3px;
-	margin: 1px;
-	color: white;
-}
-
-.chart rect {
-	stroke: white;
-	fill: steelblue;
-	shape-rendering: crispEdges;
-}
-
-.chart text.bar {
-	font-family: arial, freesans, clean, sans-serif;
-	fill: white;
-	font-size: .8em;
-}
-
-svg {
-	
-}
-
-.chart circle.little {
-	fill: #aaa;
-	stroke: #333;
-	stroke-width: 1.5px;
-}
 
 /* Main Container */
-#main-container {
-	padding: 0px 10px 0px 20px;
-	width: 470px;
+#main-container {	
+	width: 50%;
 	float: left;
+	padding-bottom: 15px;
 }
 
 #main-container p {
 	text-align: justify;
+	padding: 5px 30px 5px 20px;
+}
+
+/* Side Container */
+
+#side-container {
+    width: 50%;
+    float: left;    
 }
 
 /* GDPPC Chart */
 #bubble-chart {
     float: left;
-}
-
-#gdp-container {
-    width: 460px;
-    float: right;
-    margin-top: 10px;
-    margin-bottom: 10px;
     cursor: pointer;
 }
 
-#gdp-container p {
-    text-align: center;
-    padding-left: 40px;
+#gdp-container-left p {
+	text-align: center;
 }
 
 /* Bottom Container */
 #bottom-container {
-	padding: 0 0 0 20px;
     float: left;
+    width: 100%;
+    padding-bottom: 15px;
 }
 
-/* Bottom Container - Industry Pie Chart */
+
+/* Industry Pie Chart */
 #industry-chart {
 	padding-top: 15px;
-    float: right;	
-    width: 650px;
+	padding-left: 25px;
+    float: left;	
+    width: 60%;
     cursor: pointer;
 }
 
@@ -155,41 +155,14 @@ svg {
 .manufaturing-cell {
     cursor: pointer;	
 }
-/* Navigation */
-#navigation {
-	margin: 10px 0 10px 0;
-	padding: 10px 15px 10px 15px;
-	width: 98%;
-	background: white;
-}
 
-#navigation a {
-	text-decoration: none;
-	color: black;
-	background-color: transparent;
-	font-size: 1.5em;
-}
-
-#navigation a:hover {
-	color: steelblue;
-}
-
-#nav-backward {
-	float: left;
-}
-
-#nav-foreward {
-	float: right;
-}
 /* Tourism */
 /* Stacked Bar Chart */
 #industry-stacked-chart {
+	padding: 0 0 0 25px;
     float: left;	
 }
-#industry-stacked-chart-title {
-    width: 600px;
-    float: left;  
-}
+
 
 /* Nz Map*/
 #nz-map {
@@ -202,8 +175,12 @@ svg {
 }
 
 #tourist-slider {
-    width: 425px;
+    width: 420px;
     margin: auto;	
+}
+
+#tourist-slider-legend {
+	padding: 0 0 0 15px;  
 }
 /* Dairy */
 #cow-slider {
@@ -359,3 +336,51 @@ background-origin: initial;
 background-clip: initial;
 background-color: transparent;
 	}
+	
+/* Error Page */
+.error {
+    padding-top: 150px;
+}
+
+.error p {
+    text-align: center;
+    color: white;
+    font-size: 2em;
+}
+
+.error a {
+    text-align: center;
+    color: white;
+}
+
+/* SVG */
+.chart div {
+    font: 10px sans-serif;
+    background-color: steelblue;
+    text-align: right;
+    padding: 3px;
+    margin: 1px;
+    color: white;
+}
+
+.chart rect {
+    stroke: white;
+    fill: steelblue;
+    shape-rendering: crispEdges;
+}
+
+.chart text.bar {
+    font-family: arial, freesans, clean, sans-serif;
+    fill: white;
+    font-size: .8em;
+}
+
+svg {
+    
+}
+
+.chart circle.little {
+    fill: #aaa;
+    stroke: #333;
+    stroke-width: 1.5px;
+}

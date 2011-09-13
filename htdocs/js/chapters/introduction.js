@@ -27,27 +27,28 @@ function createIndustryChart() {
 	
 	// Create the resizing event on click, use whole dataset for large graph
 	$('#industry-chart').toggle( function() {	
-		$('#gdp-container').hide('slow');
-		$('#main-container').hide('slow');
-		$('#current-chapter').hide();
-		$('#industry-chart').empty();
-		$('#industry-chart').css('width', '920px');
-		setTimeout(function() {
-			var pieChart = new PieChart('industry-chart');
-			pieChart.CreatePieChart(industries.completeList, 920, 520);				
-		}, 400);		
-	}, function() {
-		$('#gdp-container').show('slow');
-		$('#main-container').show('slow');
-		$('#current-chapter').show();
+		$('.industry-hide').hide('fast');
+		
 		$('#industry-chart').empty();
 		
-		$('#industry-chart').css('width', '600px');
-		setTimeout(function() {
+		$('#side-container').animate({
+			width: '+=50%'
+		}, 300, function() {
 			var pieChart = new PieChart('industry-chart');
-			pieChart.CreatePieChart(industries.filteredList, width, height);
-			
-		}, 300);	
+			pieChart.CreatePieChart(industries.completeList, 920, 520);		
+		});	
+		
+	}, function() {
+		$('.industry-hide').show('fast');
+
+		$('#industry-chart').empty();		
+
+		$('#side-container').animate({
+			width: '-=50%'
+		}, 300, function() {
+			var pieChart = new PieChart('industry-chart');
+			pieChart.CreatePieChart(industries.filteredList, width, height);	
+		});	
 	});
 }
 
