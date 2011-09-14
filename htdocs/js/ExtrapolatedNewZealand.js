@@ -14,6 +14,17 @@ function Round(Number, DecimalPlaces) {
 }
 
 
+function shuffle(sourceArray) {
+    for (var n = 0; n < sourceArray.length - 1; n++) {
+        var k = n + Math.floor(Math.random() * (sourceArray.length - n));
+
+        var temp = sourceArray[k];
+        sourceArray[k] = sourceArray[n];
+        sourceArray[n] = temp;
+    }
+    return sourceArray
+}
+
 //This is what New Zealand was in 2009
 function NewZealand()
 {
@@ -977,6 +988,9 @@ function NewZealand()
 	
 	this.nzmanufactoringrevperworker = 240000
 	
+
+	
+	
 	this.companies =
 	{
 
@@ -991,10 +1005,21 @@ function NewZealand()
 		
 		dougpharm : {name : "Douglas Pharmaceuticals Ltd ", workers : 450, revenue : 150000000, nzsic: "manufacturing"}, //source: http://www.med.govt.nz/upload/71380/035-Douglas-Pharmaceuticals-Ltd.PDF and http://www.nzbio2011.co.nz/uploads/speakers/10fe2339f7ddc712e96a2daedd7245881d11d5eb.pdf
 		
+		temp : {name : "Temperzone", workers : 510, revenue : 142000000, nzsic: "manufacturing"},
+		
+		rakon : {name : "Rakon", workers : 800, revenue : 174300000, nzsic: "manufacturing"},
+		
+		tait : {name : "Tait Radio Communications", workers : 869, revenue : 190000000, nzsic: "manufacturing"}, //source: http://thescientistnz.blogspot.com/2010/02/tait-electronics.html
+		
+		metven : {name : "Metven", workers : 600, revenue : 137321000, nzsic: "manufacturing"},
+		
+		dc : {name : "Dynamic Controls", workers : 360, revenue : 100000000, nzsic: "manufacturing"},
+		
+		gp : {name : "Glidepath", workers : 220, revenue : 80000000, nzsic: "manufacturing"},
+	}
 		
 		
-		
-		
+	this.othercompanies = {
 		//OTHER big New Zealand Companies
 				
 		fletcher: {name : "Flecher Building", workers : 20000,  revenue: 7100000000, nzsic: "construction"}, // source: http://www.fbcareers.com/images/fck/FB%20Induction%20booklet%20final.pdf and wikipedia
@@ -1004,11 +1029,42 @@ function NewZealand()
 				
 		telecom : {name : "Telecom New Zealand", workers : 8500, revenue: 5673000000 , nzsic: "inform_tele" }, //source: wikipeidia
 		
-		//Other International companies
-		
 		apple : {name : "Apple Inc.", workers : 49400, revenue: 65230000000 , nzsic: "manufacturing" } // source : wikiepdia
 	} 
 	
+	var totalrevpw = 0
+	var num = 0
+	for(var i in this.companies)
+	{
+	 	num += 1
+	 	totalrevpw += this.companies[i].revenue/this.companies[i].workers
+	}
+	
+	this.avgrevpw = totalrevpw/num
+	
+	var randomnames = ["Isdom","Howvivadex","Ventoway","Goodqvolab","Technocone","Latin","Caretone","rank-media","Trippleron","J-electrics","flexlax","Hotlatcane","Groovezoom","Translux","Dansolice","Zimzabam","Codecare","Zontechno","Zimmedia","tristone","Roundron","Quoteelectrics","Techfix","Overflex","Planettaxon","Overlam","Vaiamedia","Haytontom","Zapdrill","Re-dex","Graveron","Physla","Hattrax","Xxx-ron","Sanit","Kinis","Iscore","Onto-ware","drilltrax","Salttom","ozerplex","How-trax","Anway","Jobbase","Gravetechno","Saoplex","Freeelectronics","O-drill","triodex","Zathjoin","Duoruncare","Tamzim","Iceit","Volt-can","Scotmedia","Hightrax","Stimphase","Zamhex","Fasegreen","Zensaolam","Ventocode","Trippletech","Zoomphase","Codeit","fasetechno","Damfax","baseace","Goldencorporation","Hotis","Cityzim","indigocorporation","icebam","Solfax","Dongplex","X-ex","Hotzim","u-tom","Zendax","E-dom","Drillis","unitechi","Treesolodax","Lamplus","Greentaxon","Unacom","Doubledrill","Contatech","Flexzoom","Howron","Fase-high","Uniotzap","Kanmedia","sandom","Zimrandox","Technimex","Stimtrans","Voyaphase","Zamice","Siljob","Tintax","Tresfax"]
+	//source : http://online-generator.com/name-generator/company-name-generator.php
+	
+	this.pseudocompanies = []
+	
+	for(var i = 0 ; i < 100; i++)
+	{
+		var ind = "manufacturing"
+		if(i % 10 == 0) { ind = "inform_tele"}
+		var wor = 500 + i*35
+		jitrev = this.avgrevpw + this.avgrevpw *.05 * Math.random() - .5 
+		this.pseudocompanies[i] = {name : randomnames[i], workers : wor , revenue: jitrev*wor, nzsic: ind}
+	}
+	
+	this.pseudocompanies = shuffle(this.pseudocompanies)
+	
+	this.nzcompanies = {}
+	
+	this.setNCompanies = function(n)
+	{
+			
+	}
+	 
 	//API INPUT
 	
 	//This function will alter the tourist worker and work by indtry values and regoin values
