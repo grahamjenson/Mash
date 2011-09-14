@@ -1,6 +1,6 @@
 $(document).ready( function() {
 	createCompaniesSlider();
-
+	createCompanyChart();
 });
 
 function createCompaniesSlider() {	
@@ -13,7 +13,7 @@ function createCompaniesSlider() {
 		step: 1,
 		slide: function( event, ui ) {
 			$('#current-companies').html(ui.value);
-			
+			nz.setNCompanies(ui.value);
 			
 		}
 	});
@@ -42,4 +42,26 @@ function createCompaniesSlider() {
 	    .attr("dy", ".71em")
 	    .attr("text-anchor", "middle")
 	    .text(function(d) { return thousands(Math.round(d)); });
+}
+
+function createCompanyChart() {
+	var width = 470;
+	var hieght = 250;
+	
+	var companies = [];
+	for (var index in nz.companies) {
+		nz.companies[index].type = 'normal';
+		companies.push(nz.companies[index]);
+	}
+	
+	for (var index in nz.othercompanies) {
+		if (index == 'apple')
+			continue;
+		nz.othercompanies[index].type = 'other';
+		companies.push(nz.othercompanies[index]);
+	}
+	
+	var companyChart = new BubbleLineChart('company-chart');
+	companyChart.CreateBubbleLineChart(companies, width, hieght);
+	
 }

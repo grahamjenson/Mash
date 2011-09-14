@@ -15,13 +15,11 @@ $(document).ready( function() {
 	var exportGraph = new ExportGraph('export-graph');
 	exportGraph.createExportGraph(industries, categories, countries, 955, 475);
 	$('#resize-export-graph').button({ icons: {primary: "ui-icon-arrow-4-diag"} });
-	$('#resize-export-graph').toggle(function() {
-		
+	$('#resize-export-graph').toggle(function() {		
 			exportGraph.resize(3000);
 			$('#export-graph').animate({
 				height: '+=2540'
-			}, 1300);	
-			
+			}, 1300);			
 			$('#resize-export-graph span').html('Minimize');
 		}, function() {
 			exportGraph.resize(475);
