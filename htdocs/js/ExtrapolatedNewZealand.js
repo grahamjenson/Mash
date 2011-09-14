@@ -1189,7 +1189,6 @@ function NewZealand()
 		var newmangdp = manrev / this.revpergdp 
 		var newinfgdp = infrev / this.revpergdp 
 		
-		console.log(newmangdp + " : " + this.workersByIndustry.manufacturing)
 		
 		
 		var basemangdp = this.NZSIC.manufacturing.defaultWorkerDistribution*this.workingPopulation * this.NZSIC.manufacturing.gdppc
@@ -1202,7 +1201,6 @@ function NewZealand()
 		
 		this.NZSIC.inform_tele.gdppc = (newinfgdp + baseinfgdp)/this.workersByIndustry.inform_tele
 		
-		console.log(this.NZSIC.manufacturing.gdppc + " : " + defaultmangdppc)
 		
 		this._firechanged();
 		
