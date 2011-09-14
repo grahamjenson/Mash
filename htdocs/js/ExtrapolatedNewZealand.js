@@ -1036,7 +1036,9 @@ function NewZealand()
 				
 		telecom : {name : "Telecom New Zealand", workers : 8500, revenue: 5673000000 , nzsic: "inform_tele" }, //source: wikipeidia
 		
-		apple : {name : "Apple Inc.", workers : 49400, revenue: 65230000000 , nzsic: "manufacturing" } // source : wikiepdia
+		apple : {name : "Apple Inc.", workers : 49400, revenue: 79400000000 , nzsic: "manufacturing" }, // source : wikiepdia
+		
+		google : {name : "Google", workers : 28768, revenue: 35692000000 , nzsic: "manufacturing" } // source : wikiepdia
 	} 
 	
 	var totalrevpw = 0
@@ -1045,7 +1047,6 @@ function NewZealand()
 	{
 	 	num += 1
 	 	var revpw = this.companies[i].revenue/this.companies[i].workers
-	 	console.log(this.companies[i].name + " : " + revpw)
 	 	totalrevpw += revpw
 	}
 	
@@ -1056,8 +1057,8 @@ function NewZealand()
 	
 	this.allpseudocompanies = []
 	
-	var minsize = 2000
-	var maxsize = 5000
+	var minsize = 4000
+	var maxsize = 10000
 	for(var i = 0 ; i < 100; i++)
 	{
 		var ind = "manufacturing"
@@ -1152,6 +1153,24 @@ function NewZealand()
 	var defaultinfgdppc = this.NZSIC.inform_tele.gdppc
 	var defaultmangdppc = this.NZSIC.manufacturing.gdppc
 	
+	var defaultinfwage = this.NZSIC.inform_tele.wage
+	var defaultmanwage = this.NZSIC.manufacturing.wage
+	
+	var defaultinfwork = this.NZSIC.inform_tele.work
+	var defaultmanwork = this.NZSIC.manufacturing.work
+	
+	var posinfwork = 31.3 //QES
+	var posmanwork = 35.6 //QES
+	
+	
+	//this includes annual sallary growth rate
+	var posinfwage = 90000 * Math.pow(1.025,10) //source :: http://www.ict.org.nz/index.php/nzict-group/mission-statement/
+	var posmanwage = 80000 * Math.pow(1.025,10) //source: http://mtanz.org.nz/filescont/MTANZ%20Survey%20Report%20Pages-web.pdf
+	
+	
+	//var posinfwage = 140000
+	//var posmanwage = 140000
+	
 	this.setNCompanies = function(n)
 	{
 		this.pseudocompanies = {}
@@ -1189,20 +1208,36 @@ function NewZealand()
 		var newmangdp = manrev / this.revpergdp 
 		var newinfgdp = infrev / this.revpergdp 
 		
-		console.log(newmangdp + " : " + this.workersByIndustry.manufacturing)
 		
 		
 		var basemangdp = this.NZSIC.manufacturing.defaultWorkerDistribution*this.workingPopulation * this.NZSIC.manufacturing.gdppc
 		var baseinfgdp = this.NZSIC.inform_tele.defaultWorkerDistribution*this.workingPopulation *  this.NZSIC.inform_tele.gdppc
 		
 		
-		
 		this.NZSIC.manufacturing.gdppc = (newmangdp + basemangdp)/this.workersByIndustry.manufacturing
-		
-		
 		this.NZSIC.inform_tele.gdppc = (newinfgdp + baseinfgdp)/this.workersByIndustry.inform_tele
 		
-		console.log(this.NZSIC.manufacturing.gdppc + " : " + defaultmangdppc)
+		//wage
+		this.NZSIC.inform_tele.wage = defaultinfwage
+		this.NZSIC.manufacturing.wage = defaultmanwage
+		
+		var basemanwage = this.NZSIC.manufacturing.defaultWorkerDistribution*this.workingPopulation * this.NZSIC.manufacturing.wage
+		var baseinfwage = this.NZSIC.inform_tele.defaultWorkerDistribution*this.workingPopulation *  this.NZSIC.inform_tele.wage
+		
+		this.NZSIC.manufacturing.wage = ((posmanwage*manwork) + basemanwage)/this.workersByIndustry.manufacturing
+		this.NZSIC.inform_tele.wage = ((posinfwage*infwork) + baseinfwage)/this.workersByIndustry.inform_tele
+		
+		
+		//work
+		this.NZSIC.inform_tele.work = defaultinfwork
+		this.NZSIC.manufacturing.work = defaultmanwork
+		
+		var basemanwork = this.NZSIC.manufacturing.defaultWorkerDistribution*this.workingPopulation * this.NZSIC.manufacturing.work
+		var baseinfwork = this.NZSIC.inform_tele.defaultWorkerDistribution*this.workingPopulation *  this.NZSIC.inform_tele.work
+		
+		this.NZSIC.manufacturing.work = ((posmanwork*manwork) + basemanwork)/this.workersByIndustry.manufacturing
+		this.NZSIC.inform_tele.work = ((posinfwork*infwork) + baseinfwork)/this.workersByIndustry.inform_tele
+		
 		
 		this._firechanged();
 		
