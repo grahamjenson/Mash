@@ -11,6 +11,9 @@ $(document).ready( function() {
 		// Don't have HTML5 support, redirect
 		window.location = "/error.html";
 	} 
+	
+	$('#breadcrumb').jBreadCrumb({minimumCompressionElements: 10});
+	$('#manual-nav').buttonset();
 		
 	$("body").css("display", "none");
     $("body").fadeIn(1000);
@@ -19,8 +22,7 @@ $(document).ready( function() {
 	setupReadMoreBinding();
 });
 
-function setupReadMoreBinding() {
-	
+function setupReadMoreBinding() {	
 	$( ".more-text" ).dialog({
 		autoOpen: false,
 		modal: true,
@@ -30,7 +32,7 @@ function setupReadMoreBinding() {
 			}
 		}
 	});
-	
+	$('#read-more').button({ icons: {primary: "ui-icon-info"} });
 	$('#read-more').click(function () {
 		$( ".more-text" ).dialog( "open" );
 	});
@@ -81,19 +83,23 @@ function createOECDBubbleChart() {
 		oecdStats.push({name: "New Zealand", gdppc : nz.gdppc(), work : nz.avgwork(), wage : nz.avgwage()});	
 		OECDBubbleChart.refresh(oecdStats);
 	});
-	$('#bubble-chart').toggle( function () {
+	$('#resize-gdp-chart').button({ icons: {primary: "ui-icon-arrow-4-diag"} });
+	$('#resize-gdp-chart').toggle( function () {
 			$('.gdp-hide').hide('slow');
 			$('#main-container').animate({
 				width: '+=50%'
 			}, 100, function() {
 				OECDBubbleChart.rescale(950, 500, oecdStats.concat(extras));
+				$('#resize-gdp-chart span').html('Minimize');
 			});				
 		}, function () { 
 			OECDBubbleChart.rescale(470, 250, oecdStats);
+			$('#resize-gdp-chart span').html('Maximize');
+
 			setTimeout(function() { $('#main-container').animate({
 				width: '-=50%'
 			}, 100, function() {
-				$('.gdp-hide').show('slow');				
+				$('.gdp-hide').show('fast');				
 			}); }, 1000);						
 		});
 }
@@ -102,7 +108,10 @@ function getIndustryWorkersForDisplay(filter) {
 	var filteredList = [];
 	var completeList = [];
 	var totalWorkers = nz.workingPopulation;
+	
+	var filteredIndustries = 0;
 	var filteredWorkers = 0;
+	var filteredGdppc = 0.0;
 	
 	for(x in nz.NZSIC) {
 		var industry = nz.NZSIC[x];
@@ -112,12 +121,14 @@ function getIndustryWorkersForDisplay(filter) {
 		if ($.inArray(nz.NZSIC[x].name, filter) == -1) {			
 			filteredList.push(industry);
 		} else {
-			filteredWorkers += industry.workers;			
+			filteredIndustries++;
+			filteredWorkers += industry.workers;
+			filteredGdppc += industry.gdppc;
 		}
 		
 		completeList.push(industry);
 	}
-	var other = {workers: filteredWorkers, name: 'Other'};
+	var other = {workers: filteredWorkers, name: 'Other', gdppc: (filteredGdppc/filteredIndustries)};
 	
 	return {filteredList: filteredList, completeList: completeList, totalWorkers: totalWorkers, other: other};
 }

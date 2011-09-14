@@ -60,7 +60,7 @@ function createTourismSlider() {
 
 function createTourismStackedBarChart() {
 	var width = 960;
-	var height = 220;
+	var height = 420;
 
 	var industryFilter = ['Mining', 'Fishing and Aquaculture', 'Forestry and Logging', 'Rental, Hiring and Real Estate Services',
 	                      'Financial and Insurance Services', 'Not elsewhere classified', 'Electricity, Gas, Water and Waste Services',
@@ -73,7 +73,7 @@ function createTourismStackedBarChart() {
 	industries.completeList.sort(function(a, b) { return ((a.name < b.name) ? -1 : ((a.name > b.name) ? 1 : 0)); });
 	
 	var stackedBarChart = new BarChart('industry-stacked-chart');
-	stackedBarChart.createBarChart(industries.filteredList, width, height, industries.totalWorkers);	
+	stackedBarChart.createBarChart(industries.completeList, width, height, industries.totalWorkers);	
 	nz.addListener(function() {			
 		industries = getIndustryWorkersForDisplay(industryFilter);
 		stackedBarChart.refresh(industries.filteredList);

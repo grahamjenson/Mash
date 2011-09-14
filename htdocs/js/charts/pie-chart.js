@@ -7,7 +7,7 @@ function PieChart(container) {
 	var data = [];
 	var w, h, r, x, y, arc;
 	var colour = d3.scale.category20();
-	var donut = d3.layout.pie().value(function (d){ return d.workers / nz.workingPopulation; });
+	var donut = d3.layout.pie().value(function (d){ return (d.workers * d.gdppc) / nz.gdp(); });
 	var transitionSpeed = 1000;
 	var legend;
 

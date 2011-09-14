@@ -200,9 +200,12 @@ function ExportGraph(container) {
 				for (industryPartitionIndex in partitionedCountries) {
 					var partitionedCountry = partitionedCountries[industryPartitionIndex];
 					
-					if (partitionedCountry.data.key == industryKey && partitionedCountry.data.imports[linkIndex] > 100000) {
-						var weight = (partitionedExport.value / partitionedCountry.data.imports[linkIndex]) / partitionedExport.value;
-						startPointX = ((w - paddingBottom) / 5)*4;
+					
+					if (partitionedCountry.data.key == industryKey && partitionedCountry.data.imports[linkIndex] > 10000000) {
+						var weightScale = d3.scale.sqrt().domain([0, partitionedCountry.value]).range([1, exportY(partitionedExport.dx)]).clamp(true);
+						var weight = weightScale(partitionedCountry.data.imports[linkIndex]);
+						
+						startPointX = ((w - paddingBottom) / 5) * 4;
 						startPointY = industriesY(partitionedCountry.x) + (industriesY(partitionedCountry.dx) / 2);
 							
 						var points = [[startPointX, startPointY], [startPointX*.9, startPointY], [endPointX*1.1, endPointY], [endPointX, endPointY]];
@@ -212,8 +215,8 @@ function ExportGraph(container) {
 							.duration(duration)
 						    .style("fill", 'none')
 						    .style("stroke", 'black')
-						    .style("stroke-width", 1)
-						    .style('stroke-opacity', .2)
+						    .style("stroke-width", weight)
+						    .style('stroke-opacity', strokeOpacity)
 						    .attr('class', 'path country-path country-' + industryKey + ' export-' + exportKey + ' unique-' + industryKey + exportKey)
 						    .attr("d", line);
 					}					
@@ -403,13 +406,9 @@ function ExportGraph(container) {
 			      .transition()
 			      .style("opacity", 1);
 			    
-			    vis.selectAll(".industry-path")
+			    vis.selectAll(".path")
 			      .transition()
 			      .style("stroke-opacity", strokeOpacity);
-			    
-			    vis.selectAll(".country-path")
-			      .transition()
-			      .style("stroke-opacity", .1);
 			    
 			    selectedExport = '';
 

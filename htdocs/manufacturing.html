@@ -7,6 +7,7 @@
 		
 		<link type="text/css" href="css/smoothness/jquery-ui-1.8.15.custom.css" rel="stylesheet" />
 		<link type="text/css" href="css/style.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/BreadCrumb.css" type="text/css" />
 		
 		<!-- Various Libraries to help with the visualisations -->
 		<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
@@ -15,6 +16,7 @@
 		<script type="text/javascript" src="js/d3/d3.layout.js"></script>
 		<script type="text/javascript" src="js/d3/src/core/sum.js"></script>	
 		<script type="text/javascript" src="js/modernizer.min.js"></script>
+		<script type="text/javascript" src="js/jquery.jBreadCrumb.1.1.js"></script>
 		
 		<!-- Google Analytics -->
         <!--  <script type="text/javascript" src="js/google-analytics.js"></script> -->
@@ -33,13 +35,26 @@
     </head>
     <body>
         <div id="content">
-            <div id='navigation'>
-                    <a href='/mining' id='nav-backward'>&#171; Previous Chapter</a>
-                    <div class="title">
-                        <div id='current-chapter'>Made in New Zealand</div>
-                    </div> 
-                    <a href='/companies' id='nav-foreward'>Next Chapter &#187;</a>
-                    <div class='clear'></div>       
+             <div id='navigation'>
+                <div class="breadCrumbHolder module">
+                    <div id="breadcrumb" class="breadCrumb module">
+                        <ul>
+                            <li><a href="/index">Home</a></li>
+                            <li><a href="/index">Introduction</a></li>
+                            <li><a href="/tourism">Tourism</a></li>
+                            <li><a href="/dairy">Dairy</a></li>
+                            <li><a href="/mining">Mining</a></li>
+                            <li><p>Manufacturing</p></li>
+                            <li><a href="/companies">100 Companies</a></li>
+                            <li><a href="/outro">The Future</a></li>
+                            <li><a href="/references">References</a></li>
+                        </ul>
+                    </div>
+                    <div id='manual-nav'>
+                        <a href="/mining">Backward</a>
+                        <a href="/companies">Forward</a>
+                    </div>
+                </div>
             </div>
             <div class='vis-container'>                               
                 
@@ -68,7 +83,6 @@
 		          <p>
                         //TODO Write about what how to use the graph
                   </p>
-		          <input id='resize-export-graph' type='button' value='Maximize' style='width: 70px; margin-left: 20px'/>
 		        </div>
 		                                    
                 <div id='bottom-container'>
@@ -94,6 +108,9 @@
                     </table>
                     <div id='export-graph'></div>    
                     <div class='clear'></div>
+                    <p>
+                        <a id='resize-export-graph' href='#'>Maximize</a>
+                    </p>
                 </div> 
                 <div class='clear'></div>                               
             </div>
