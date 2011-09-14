@@ -6,6 +6,7 @@
 		<title>100 Companies - Let's make more Milk</title>
 		
 		<link type="text/css" href="css/smoothness/jquery-ui-1.8.15.custom.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/BreadCrumb.css" type="text/css" />
 		<link type="text/css" href="css/style.css" rel="stylesheet" />
 		
 		<!-- Various Libraries to help with the visualisations -->
@@ -16,6 +17,7 @@
 		<script type="text/javascript" src="js/d3/src/core/sum.js"></script>		
 		<script type="text/javascript" src="js/raphael.min.js"></script>
 		<script type="text/javascript" src="js/modernizer.min.js"></script>
+		<script type="text/javascript"  src="js/jquery.jBreadCrumb.1.1.js"></script>
 		
 		<!-- Google Analytics -->
         <!--  <script type="text/javascript" src="js/google-analytics.js"></script> -->
@@ -35,13 +37,22 @@
     <body>
         <div id="content">
             <div id='navigation'>
-                    <a href='/tourism' id='nav-backward'>&#171; Previous Chapter</a>
-                    <div class="title">
-                        <div id='current-chapter'>Let's make more Milk</div>
-                    </div> 
-                    <a href='/mining' id='nav-foreward'>Next Chapter &#187;</a>
-                    <div class='clear'></div>       
-            </div>
+	            <div class="breadCrumbHolder module">
+	                <div id="breadcrumb" class="breadCrumb module">
+	                    <ul>
+	                        <li><a href="/index">Home</a></li>
+	                        <li><a href="/index">Introduction</a></li>
+	                        <li><a href="/tourism">Tourism</a></li>
+	                        <li><p>Dairy</p></li>
+	                        <li><a href="/mining">Mining</a></li>
+	                        <li><a href="/manufacturing">Manufacturing</a></li>
+	                        <li><a href="/companies">100 Companies</a></li>
+	                        <li><a href="/outro">The Future</a></li>
+	                        <li><a href="/references">References</a></li>
+	                    </ul>
+	                </div>
+	            </div>
+	        </div>
             <div class='vis-container'> 
                             
                 <div id='main-container'>
@@ -61,11 +72,16 @@
                         </p>
                     </div>   
                     <h2 style='width : 50%'>The Impact</h2>
-                    <div id='gdp-container-left'>                    
+                    <div id='gdp-container-left'> 
                         <p><b>OECD Prosperity: GDP/Per Capita (Circle Area)</b><br />
-                        Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>
-                        <div id="bubble-chart" class="chart-wrapper"></div>                    
-                    </div>          
+                            Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>      
+                            <div class='clear'></div>         
+                        <div id="bubble-chart" class="chart-wrapper"></div> 
+                        <div class='clear'></div>         
+                        <p style='text-align: left; '> 
+                           <a id='resize-gdp-chart' href='#'>Maximize</a> 
+                        </p>                 
+                    </div>           
                 </div>  
                 
                 <div id='side-container' class='gdp-hide'>
@@ -81,7 +97,7 @@
                     <div id='cow-slider-legend'></div>
                     
                     <h2>Regional Cow Density</h2>
-                    <p style='text-align:center;''>
+                    <p style='text-align:center;'>
                        <b>Regional Cows/Land<sup>2</sup></b>
                     </p>                    
                     <div id='nz-map-legend' ></div>

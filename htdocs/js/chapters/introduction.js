@@ -17,8 +17,9 @@ function createIndustryChart() {
 	
 	// Map percentages to hand to the pie chart, makes easier to do out here with the count of people.
 	// Sort the filtered mutlidemensional array in a decending order.
-	industries.filteredList.sort(function(a, b) { return ((b.workers < a.workers) ? -1 : ((b.workers > a.workers) ? 1 : 0)); });
-	industries.completeList.sort(function(a, b) { return ((b.workers < a.workers) ? -1 : ((b.workers > a.workers) ? 1 : 0)); });
+	industries.filteredList.sort(function(a, b) { return ((b.gdppc < a.gdppc) ? -1 : ((b.gdppc > a.gdppc) ? 1 : 0)); });
+	industries.completeList.sort(function(a, b) { return ((b.gdppc < a.gdppc) ? -1 : ((b.gdppc > a.gdppc) ? 1 : 0)); });
+	
 	filteredPieData = $.map(industries.filteredList, function(d) { return d.workers / industries.totalWorkers; });
 	completePieData = $.map(industries.completeList, function(d) { return d.workers / industries.totalWorkers; });
 	
@@ -26,9 +27,10 @@ function createIndustryChart() {
 	pieChart.CreatePieChart(industries.filteredList, width, height);	
 	
 	// Create the resizing event on click, use whole dataset for large graph
-	$('#industry-chart').toggle( function() {	
+	$('#resize-industry-chart').button();
+	$('#resize-industry-chart').toggle( function() {	
 		$('.industry-hide').hide('fast');
-		
+		$('#resize-industry-chart span').html('Minimize');
 		$('#industry-chart').empty();
 		
 		$('#side-container').animate({
@@ -40,7 +42,7 @@ function createIndustryChart() {
 		
 	}, function() {
 		$('.industry-hide').show('fast');
-
+		$('#resize-industry-chart span').html('Maximize');
 		$('#industry-chart').empty();		
 
 		$('#side-container').animate({
