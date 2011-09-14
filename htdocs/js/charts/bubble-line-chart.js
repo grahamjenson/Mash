@@ -27,7 +27,7 @@ function BubbleLineChart(container) {
 		
 		x = d3.scale.linear().domain([d3.min(xData), d3.max(xData)]).rangeRound([paddingLeft, w - paddingRight]);
 	    y = d3.scale.linear().domain([d3.max(yData), d3.min(yData)]).rangeRound([paddingTop, h - paddingBottom]);
-		
+		c = companies.length;
 		
 		chart = d3.select("#" + container)
 			.append("svg:svg")
@@ -182,11 +182,10 @@ function BubbleLineChart(container) {
 
 	};
 	
-	this.refresh = function(newData) {
-		transitionSpeed = 1;
+	this.refresh = function(newData) {		
 		companies = newData;
 		refreshData();
-		transitionSpeed = 1000;
+		
 	};
 	
 	function shrink() {
@@ -240,62 +239,32 @@ function BubbleLineChart(container) {
 	function refreshData() {	
 		
 		var g = chart.selectAll(".circles-g")
-        	.data(data, function(d) { return d.name; });
+        	.data(companies, function(d) { return d.name; });
 		
-		g.transition()
-			.duration(transitionSpeed)
-	        .attr("transform", function(d) { return "translate(" + x(d.revenue) + "," + y(d.workers) + ")"; });
-		
-		g.enter().insert("svg:g")
+		var newGroups = g.enter().insert("svg:g")
 	        .attr("transform", function(d) { return "translate(" + x(d.revenue) + "," + y(d.workers) + ")"; })
-	        .attr("class", "new-circles-g circles-g");	
+	        .attr("class", "circles-g");	
 		
-		g.exit()
-			.transition()
-		    .duration(transitionSpeed)
-		    .style("opacity", 0)
-		    .attr("transform", function(d) { return "translate(" + x(d.revenue) + "," + y(d.workers) + ")"; })
-		    .remove();
-		
-		
-		
-		chart.selectAll(".circles")
-			.transition()
-			.duration(transitionSpeed)
-			.attr("r",  function(d) { return z(d.workers * nz.nzrevpworker()); });
-		
-		var newPoints = chart.selectAll(".new-circles-g");
-		
-		newPoints.append("svg:circle")
+		newGroups.append("svg:circle")			
 	        .attr("class", function(d, i) { return "circles company-" + (i + c); })
 	        .attr('r', 0)
-	        .attr("fill", function(d, i) { return colour((i + c)); })
-	        .style("opacity", .25)
+	        .attr("fill", 'green')
+	        .style("opacity", '1' )
 	        .style("stroke", 'grey')
 		    .style("stroke-opacity", 1)
 		    .transition()
 		    .duration(transitionSpeed)
-		    .attr("r",  function(d) { return z(d.workers * nz.nzrevpworker()); });
+		    .attr("r",  5);	
 		
-		newPoints.append("svg:text")
-			.attr("class", function(d, i) { return "circles-text company-" + (i + c); })
-	        .attr("dy", ".35em")
-	        .attr("text-anchor", "middle")
-	        .style("opacity", 0)
-	        .text(function(d, i) { return d.name; })
-	        .transition()
-		    .duration(transitionSpeed + 500)
-		    .style("opacity", 1);
-		
-		setTimeout(function() { 
-			newPoints.on("mouseover", fadeOutExtra)
-				.on("mouseout", fadeIn); 
-			}, 3000);
-		
-		setTimeout(function() { 
-			g.on("mouseover", fadeOut)
-				.on("mouseout", fadeIn); 
-			}, 3000);
+		g.exit()
+			.transition()
+		    .duration(transitionSpeed)
+		    .remove();		
+
+		g.on("mouseover", fadeOut)
+			.on("mouseout", fadeIn)
+			.on("mousemove", moveToolTip); 
+			
 	};	
 	
 	function refreshAxis() {

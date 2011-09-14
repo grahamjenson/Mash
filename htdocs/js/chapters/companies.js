@@ -1,9 +1,12 @@
+var companiesData = [];
+var companyChart;
+
 $(document).ready( function() {
-	createCompaniesSlider();
+	createcompaniesDataSlider();
 	createCompanyChart();
 });
 
-function createCompaniesSlider() {	
+function createcompaniesDataSlider() {	
 
 	var xrule = d3.scale.linear().domain([0, 100]).range([29, 439]);
 	
@@ -12,13 +15,13 @@ function createCompaniesSlider() {
 		max: 100,
 		step: 1,
 		slide: function( event, ui ) {
-			$('#current-companies').html(ui.value);
+			$('#current-companiesData').html(ui.value);
 			nz.setNCompanies(ui.value);
-			
+			updateCompanyChart();
 		}
 	});
 	
-	$('#current-companies').html(0);
+	$('#current-companiesData').html('0');
 	
 	var chart = d3.select("#company-slider-legend")
 	    .append("svg:svg")
@@ -48,20 +51,36 @@ function createCompanyChart() {
 	var width = 470;
 	var hieght = 250;
 	
-	var companies = [];
+	
 	for (var index in nz.companies) {
 		nz.companies[index].type = 'normal';
-		companies.push(nz.companies[index]);
+		companiesData.push(nz.companies[index]);
 	}
 	
 	for (var index in nz.othercompanies) {
 		if (index == 'apple')
 			continue;
 		nz.othercompanies[index].type = 'other';
-		companies.push(nz.othercompanies[index]);
+		companiesData.push(nz.othercompanies[index]);
 	}
 	
-	var companyChart = new BubbleLineChart('company-chart');
-	companyChart.CreateBubbleLineChart(companies, width, hieght);
+	companyChart = new BubbleLineChart('company-chart');
+	companyChart.CreateBubbleLineChart(companiesData, width, hieght);
+	
+}
+
+function updateCompanyChart() {
+	var newcompaniesData = [];
+	
+	for (var index in companiesData) {
+		newcompaniesData.push(companiesData[index]);
+	}
+	
+	for (var index in nz.pseudocompanies) {		
+		nz.pseudocompanies[index].type = 'pseudo';
+		newcompaniesData.push(nz.pseudocompanies[index]);
+	}
+	
+	companyChart.refresh(newcompaniesData);
 	
 }
