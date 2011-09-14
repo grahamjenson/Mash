@@ -977,16 +977,23 @@ function NewZealand()
 	//SO... The way forward is to change the GDPPC of manufactoring (and other top 10 NZSIC) when adding companies.
 	//This will significanlty move our counrty in the right direction.
 	
-	this.aimedrevpworker = 143000 // source: http://www.manufacturingnz.org.nz/resources-and-tools/benchmarking/benchmarking-resources/heres-how-we-can-catch-australia
+	this.nzrevpworker = 125000
+	this.aimedrevpworker = 170000 // source: http://www.manufacturingnz.org.nz/resources-and-tools/benchmarking/benchmarking-resources/heres-how-we-can-catch-australia
 	
-	//I cannot find average revenue per New Zealander, so I assuming linear relationship between gdppc and revenue pc
 	
-	this.nzrevpworker = function()
-	{
-		return 143000.0/71000.6 * this.gdppc();
-	}
 	
 	this.nzmanufactoringrevperworker = 240000
+	
+	//I cannot find average revenue per New Zealander, so I assuming linear relationship between gdppc and revenue pc
+	//rev/work*c = gdppc :: c = gdppc/rev/work
+	
+	this.revpergdp = this.nzrevpworker / (this.gdp()/this.workingPopulation);
+	
+	this.revperworker = function()
+	{
+		return (this.gdp()/this.workingPopulation)*this.revpergdp;
+	}
+	
 	
 
 	
@@ -1037,7 +1044,9 @@ function NewZealand()
 	for(var i in this.companies)
 	{
 	 	num += 1
-	 	totalrevpw += this.companies[i].revenue/this.companies[i].workers
+	 	var revpw = this.companies[i].revenue/this.companies[i].workers
+	 	console.log(this.companies[i].name + " : " + revpw)
+	 	totalrevpw += revpw
 	}
 	
 	this.avgrevpw = totalrevpw/num
@@ -1045,26 +1054,24 @@ function NewZealand()
 	var randomnames = ["Isdom","Howvivadex","Ventoway","Goodqvolab","Technocone","Latin","Caretone","rank-media","Trippleron","J-electrics","flexlax","Hotlatcane","Groovezoom","Translux","Dansolice","Zimzabam","Codecare","Zontechno","Zimmedia","tristone","Roundron","Quoteelectrics","Techfix","Overflex","Planettaxon","Overlam","Vaiamedia","Haytontom","Zapdrill","Re-dex","Graveron","Physla","Hattrax","Xxx-ron","Sanit","Kinis","Iscore","Onto-ware","drilltrax","Salttom","ozerplex","How-trax","Anway","Jobbase","Gravetechno","Saoplex","Freeelectronics","O-drill","triodex","Zathjoin","Duoruncare","Tamzim","Iceit","Volt-can","Scotmedia","Hightrax","Stimphase","Zamhex","Fasegreen","Zensaolam","Ventocode","Trippletech","Zoomphase","Codeit","fasetechno","Damfax","baseace","Goldencorporation","Hotis","Cityzim","indigocorporation","icebam","Solfax","Dongplex","X-ex","Hotzim","u-tom","Zendax","E-dom","Drillis","unitechi","Treesolodax","Lamplus","Greentaxon","Unacom","Doubledrill","Contatech","Flexzoom","Howron","Fase-high","Uniotzap","Kanmedia","sandom","Zimrandox","Technimex","Stimtrans","Voyaphase","Zamice","Siljob","Tintax","Tresfax"]
 	//source : http://online-generator.com/name-generator/company-name-generator.php
 	
-	this.pseudocompanies = []
+	this.allpseudocompanies = []
 	
+	var minsize = 2000
+	var maxsize = 5000
 	for(var i = 0 ; i < 100; i++)
 	{
 		var ind = "manufacturing"
 		if(i % 10 == 0) { ind = "inform_tele"}
-		var wor = 500 + i*35
-		jitrev = this.avgrevpw + this.avgrevpw *.05 * Math.random() - .5 
-		this.pseudocompanies[i] = {name : randomnames[i], workers : wor , revenue: jitrev*wor, nzsic: ind}
+		var wor = minsize + i*(maxsize-minsize)/100
+		var jitrev = this.avgrevpw + (this.avgrevpw *.05) * (Math.random() - .5) 
+		this.allpseudocompanies[i] = {name : randomnames[i], workers : wor , revenue: jitrev*wor, nzsic: ind}
 	}
 	
-	this.pseudocompanies = shuffle(this.pseudocompanies)
+	this.allpseudocompanies = shuffle(this.allpseudocompanies)
 	
-	this.nzcompanies = {}
+	this.pseudocompanies = {}
 	
-	this.setNCompanies = function(n)
-	{
-			
-	}
-	 
+
 	//API INPUT
 	
 	//This function will alter the tourist worker and work by indtry values and regoin values
@@ -1090,13 +1097,19 @@ function NewZealand()
 		{
 				this.touristsByRegion[loc] = this.Region[loc].touristsdist * this.tourists;
 		}
-
+		
 		this._firechanged();
 		
 	}
 	
-	this.setWorkers = function(industry,workers)
+	this.setWorkers = function(industry,workers,ibads)
 	{
+		var bads = []
+		if(ibads != null)
+		{
+			bads = ibads
+		}
+		
 		if(! (industry in this.workersByIndustry))
 		{
 			throw "non existqant industry"
@@ -1110,7 +1123,7 @@ function NewZealand()
 		//Changed this, now need to dish out remaining
 		
 		//Things not to change
-		var bads = []
+		
 		bads.push(industry)
 		while(Round(delta,10) != 0 && bads.length != noOfIndustries)
 		{
@@ -1136,7 +1149,66 @@ function NewZealand()
 		this._firechanged()
 	}
 	
+	var defaultinfgdppc = this.NZSIC.inform_tele.gdppc
+	var defaultmangdppc = this.NZSIC.manufacturing.gdppc
+	
+	this.setNCompanies = function(n)
+	{
+		this.pseudocompanies = {}
 		
+		var manwork = 0
+		var infwork = 0
+		var manrev = 0
+		var infrev = 0
+		
+		for(var i = 0; i < n; i ++)
+		{
+			var comp = this.allpseudocompanies[i]	
+			this.pseudocompanies["pseudo_"+i] = comp
+			if(comp.nzsic == "manufacturing")
+			{
+				manwork += comp.workers
+				manrev += comp.revenue
+			}
+			else
+			{
+				infwork += comp.workers
+				infrev += comp.revenue
+			}
+		}
+		
+
+		//workers
+		this.setWorkers("inform_tele",this.NZSIC.inform_tele.defaultWorkerDistribution*this.workingPopulation + infwork,["manufacturing"])
+		this.setWorkers("manufacturing",this.NZSIC.manufacturing.defaultWorkerDistribution*this.workingPopulation + manwork,["inform_tele"])
+		
+		//gdp
+		this.NZSIC.inform_tele.gdppc = defaultinfgdppc
+		this.NZSIC.manufacturing.gdppc = defaultmangdppc
+	
+		var newmangdp = manrev / this.revpergdp 
+		var newinfgdp = infrev / this.revpergdp 
+		
+		console.log(newmangdp + " : " + this.workersByIndustry.manufacturing)
+		
+		
+		var basemangdp = this.NZSIC.manufacturing.defaultWorkerDistribution*this.workingPopulation * this.NZSIC.manufacturing.gdppc
+		var baseinfgdp = this.NZSIC.inform_tele.defaultWorkerDistribution*this.workingPopulation *  this.NZSIC.inform_tele.gdppc
+		
+		
+		
+		this.NZSIC.manufacturing.gdppc = (newmangdp + basemangdp)/this.workersByIndustry.manufacturing
+		
+		
+		this.NZSIC.inform_tele.gdppc = (newinfgdp + baseinfgdp)/this.workersByIndustry.inform_tele
+		
+		console.log(this.NZSIC.manufacturing.gdppc + " : " + defaultmangdppc)
+		
+		this._firechanged();
+		
+	}
+	
+	this.setNCompanies(0)	
 
 }
 
