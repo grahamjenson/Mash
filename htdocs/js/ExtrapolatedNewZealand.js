@@ -1058,7 +1058,7 @@ function NewZealand()
 	this.allpseudocompanies = []
 	
 	var minsize = 4000
-	var maxsize = 15000
+	var maxsize = 10000
 	for(var i = 0 ; i < 100; i++)
 	{
 		var ind = "manufacturing"
@@ -1156,8 +1156,17 @@ function NewZealand()
 	var defaultinfwage = this.NZSIC.inform_tele.wage
 	var defaultmanwage = this.NZSIC.manufacturing.wage
 	
-	var posinfwage = 90000 //source :: http://www.ict.org.nz/index.php/nzict-group/mission-statement/
-	var posmanwage = 80000 //source: http://mtanz.org.nz/filescont/MTANZ%20Survey%20Report%20Pages-web.pdf
+	var defaultinfwork = this.NZSIC.inform_tele.work
+	var defaultmanwork = this.NZSIC.manufacturing.work
+	
+	var posinfwork = 31.3 //QES
+	var posmanwork = 35.6 //QES
+	
+	
+	//this includes annual sallary growth rate
+	var posinfwage = 90000 * Math.pow(1.025,10) //source :: http://www.ict.org.nz/index.php/nzict-group/mission-statement/
+	var posmanwage = 80000 * Math.pow(1.025,10) //source: http://mtanz.org.nz/filescont/MTANZ%20Survey%20Report%20Pages-web.pdf
+	
 	
 	//var posinfwage = 140000
 	//var posmanwage = 140000
@@ -1217,6 +1226,18 @@ function NewZealand()
 		
 		this.NZSIC.manufacturing.wage = ((posmanwage*manwork) + basemanwage)/this.workersByIndustry.manufacturing
 		this.NZSIC.inform_tele.wage = ((posinfwage*infwork) + baseinfwage)/this.workersByIndustry.inform_tele
+		
+		
+		//work
+		this.NZSIC.inform_tele.work = defaultinfwork
+		this.NZSIC.manufacturing.work = defaultmanwork
+		
+		var basemanwork = this.NZSIC.manufacturing.defaultWorkerDistribution*this.workingPopulation * this.NZSIC.manufacturing.work
+		var baseinfwork = this.NZSIC.inform_tele.defaultWorkerDistribution*this.workingPopulation *  this.NZSIC.inform_tele.work
+		
+		this.NZSIC.manufacturing.work = ((posmanwork*manwork) + basemanwork)/this.workersByIndustry.manufacturing
+		this.NZSIC.inform_tele.work = ((posinfwork*infwork) + baseinfwork)/this.workersByIndustry.inform_tele
+		
 		
 		this._firechanged();
 		
