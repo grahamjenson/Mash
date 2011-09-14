@@ -14,24 +14,23 @@ $(document).ready( function() {
 	
 	var exportGraph = new ExportGraph('export-graph');
 	exportGraph.createExportGraph(industries, categories, countries, 955, 475);
-	
-	$('#resize-export-graph').click(function() {
-		if (this.value == 'Maximize') {
+	$('#resize-export-graph').button({ icons: {primary: "ui-icon-arrow-4-diag"} });
+	$('#resize-export-graph').toggle(function() {
+		
 			exportGraph.resize(3000);
 			$('#export-graph').animate({
 				height: '+=2540'
 			}, 1300);	
 			
-			this.value = 'Minimize';
-		} else {
+			$('#resize-export-graph span').html('Minimize');
+		}, function() {
 			exportGraph.resize(475);
 			$('#export-graph').animate({
 				height: '-=2540'
 			}, 1000, function() {
 				
 			});	
-			this.value = 'Maximize';
-		}
+			$('#resize-export-graph span').html('Maximize');
 	});
 });
 

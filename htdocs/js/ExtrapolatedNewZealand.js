@@ -1015,7 +1015,7 @@ function NewZealand()
 		
 		dc : {name : "Dynamic Controls", workers : 360, revenue : 100000000, nzsic: "manufacturing"},
 		
-		gp : {name : "Glidepath", workers : 220, revenue : 80000000, nzsic: "manufacturing"},
+		gp : {name : "Glidepath", workers : 220, revenue : 80000000, nzsic: "manufacturing"}
 	}
 		
 		

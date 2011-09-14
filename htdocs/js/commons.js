@@ -13,6 +13,7 @@ $(document).ready( function() {
 	} 
 	
 	$('#breadcrumb').jBreadCrumb({minimumCompressionElements: 10});
+	$('#manual-nav').buttonset();
 		
 	$("body").css("display", "none");
     $("body").fadeIn(1000);
@@ -21,8 +22,7 @@ $(document).ready( function() {
 	setupReadMoreBinding();
 });
 
-function setupReadMoreBinding() {
-	
+function setupReadMoreBinding() {	
 	$( ".more-text" ).dialog({
 		autoOpen: false,
 		modal: true,
@@ -32,7 +32,7 @@ function setupReadMoreBinding() {
 			}
 		}
 	});
-	$('#read-more').button();
+	$('#read-more').button({ icons: {primary: "ui-icon-info"} });
 	$('#read-more').click(function () {
 		$( ".more-text" ).dialog( "open" );
 	});
@@ -83,7 +83,7 @@ function createOECDBubbleChart() {
 		oecdStats.push({name: "New Zealand", gdppc : nz.gdppc(), work : nz.avgwork(), wage : nz.avgwage()});	
 		OECDBubbleChart.refresh(oecdStats);
 	});
-	$('#resize-gdp-chart').button();
+	$('#resize-gdp-chart').button({ icons: {primary: "ui-icon-arrow-4-diag"} });
 	$('#resize-gdp-chart').toggle( function () {
 			$('.gdp-hide').hide('slow');
 			$('#main-container').animate({

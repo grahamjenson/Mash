@@ -54,7 +54,7 @@
         //Keep it from overflowing in ie6 & 7
         jQuery(_container).find('ul').wrap('<div style="overflow:hidden; position:relative;  width: ' + jQuery(_container).css("width") + ';"><div>');
         //Set an arbitrary width width to avoid float drop on the animation
-        jQuery(_container).find('ul').width(5000);
+        jQuery(_container).find('ul').width(750);
         
         //If the breadcrumb contains nothing, don't do anything
         if (_breadCrumbElements.length > 0) 

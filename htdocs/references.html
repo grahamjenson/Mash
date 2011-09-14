@@ -6,10 +6,12 @@
 		<title>100 Companies</title>
 		
 		<link type="text/css" href="css/smoothness/jquery-ui-1.8.15.custom.css" rel="stylesheet" />
+		<link rel="stylesheet" href="css/BreadCrumb.css" type="text/css" />
 		<link type="text/css" href="css/style.css" rel="stylesheet" />
 		
 		<script type="text/javascript" src="js/jquery-1.6.2.min.js"></script>
 		<script type="text/javascript" src="js/jquery-ui-1.8.15.custom.min.js"></script>
+		<script type="text/javascript" src="js/jquery.jBreadCrumb.1.1.js"></script>
 		
 		<script type="text/javascript" src="js/chapters/references.js"></script>     
 
@@ -18,12 +20,24 @@
     <body>
         <div id="content">
             <div id='navigation'>
-                    <a href='/outro' id='nav-backward'>&#171; Previous Chapter</a>
-                    <div class="title">
-                        <div id='current-chapter'>References</div>
-                    </div> 
-                    <a href='/references' id='nav-foreward'></a>
-                    <div class='clear'></div>     
+                <div class="breadCrumbHolder module">
+                    <div id="breadcrumb" class="breadCrumb module">
+                        <ul>
+                            <li><a href="/index">Home</a></li>
+                            <li><a href="/index">Home</a></li>
+                            <li><a href="/tourism">Tourism</a></li>
+                            <li><a href="/dairy">Dairy</a></li>
+                            <li><a href="/mining">Mining</a></li>
+                            <li><a href="/manufacturing">Manufacturing</a></li>
+                            <li><a href="/companies">100 Companies</a></li>
+                            <li><a href="/outro">The Future</a></li>
+                            <li><p>References</p></li>
+                        </ul>
+                    </div>
+                    <div id='manual-nav'>
+                        <a href="/outro">Backward</a>
+                    </div>
+                </div>
             </div>
             <div class='vis-container'>                 
                 <div id='main-container'>                    

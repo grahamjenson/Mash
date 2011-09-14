@@ -66,6 +66,7 @@ ul li, ol li
 .breadCrumbHolder
 {
     margin:0 0 0 0;
+    
 }
 
 
@@ -99,7 +100,8 @@ ul li, ol li
 
 #navigation p {
 	margin: 0;
-	font-size: 1.7em;
+	font-size: 1.9em;
+	font-weight: bold;
 }
 
 #navigation a:hover {
@@ -116,6 +118,21 @@ ul li, ol li
     float: right;
     padding-right: 10px;
 }
+
+#manual-nav {
+	padding-right: 7px;
+	text-align: right;
+    float: right;
+    width: 20%;	    
+}
+
+#manual-nav a {
+	color: #555;
+}
+
+#manual-nav a:hover {
+    color: black;
+} 
 
 
 #content {

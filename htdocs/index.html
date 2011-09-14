@@ -25,6 +25,7 @@
         <script type="text/javascript" src="js/charts/bubble-chart.js"></script>
         <script type="text/javascript" src="js/charts/pie-chart.js"></script>
         <script type="text/javascript" src="js/charts/flipcounter.min.js"></script>
+        <script type="text/javascript" src="js/charts/bar-chart-plain.js"></script>
         
         
         <!--  The Juicy Logic Layer -->
@@ -53,7 +54,12 @@
 						<li><a href="/references">References</a></li>
 					</ul>
 				</div>
+				<div id='manual-nav'>
+	                 
+	                 <a href="/tourism">Forward</a>
+                </div>
 			</div>
+			
 		</div>
 
 		<div class='vis-container'>
@@ -98,9 +104,10 @@
 		                    <div class='clear'></div>
 		                </div>    
 	                </div>
-	                <h2  style='width : 60%; float:left'>New Zealand Workforce</h2>
+	                <h2  style='width : 60%; float:left'>GDP per Industry</h2>
 	                <div class='clear'></div>            
-	                <p style='text-align: center'><b>Total Workforce/Per Industry</b></p>  
+	                <p style='text-align: center'><b>Total New Zealand GDP/Per Industry</b><br />
+	                   Industry GDP ($NZD) * No. of Workers / Total NZ GDP ($NZD)</p>  
                     <div id='industry-chart' class='chart-wrapper'></div>
                     <div class='clear'></div>         
                     <p style='text-align: left;'> 
@@ -108,7 +115,10 @@
                     </p>     
                 </div>      
                     
-                <div id='bottom-container' class='industry-hide gdp-hide'>                    
+                <div id='bottom-container' class='industry-hide gdp-hide'>     
+                    <h2 style='width : 25%'>New Zealand Industries</h2> 
+                    <p style='text-align:center;'><b>Workers per Industry</b></p>                
+                    <div id='industry-stacked-chart'></div>     
                 </div> 
                 
                 <div class='clear'></div>                               
