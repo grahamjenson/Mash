@@ -175,6 +175,14 @@ function ExportGraph(container) {
 						var startPointX = ((w - paddingBottom) / 5);
 						var startPointY = industriesY(partitionedIndustry.x) + (industriesY(partitionedIndustry.dx) / 2);
 						
+						var extraClasses = '';
+				    	for (var existingLinkIndex in exportCategoryClasses[exportKey]) {
+							var link = exportCategoryClasses[exportKey][existingLinkIndex];
+							if (link.type == 'country') {
+								extraClasses += (' ' + link.class);										
+							} 
+						}
+						
 						var points = [[startPointX, startPointY], [startPointX*1.1, startPointY], [endPointX*.9, endPointY], [endPointX, endPointY]];
 					    vis.append("svg:path")
 						    .data([points])
@@ -184,7 +192,7 @@ function ExportGraph(container) {
 						    .style("stroke", 'black')
 						    .style("stroke-width", weight)
 						    .style('stroke-opacity', strokeOpacity)
-						    .attr('class', 'path industry-path industry-' + industryKey + ' export-' + exportKey + ' unique-' + industryKey + exportKey)
+						    .attr('class', 'path industry-path industry-' + industryKey + ' export-' + exportKey + ' unique-' + industryKey + exportKey + ' ' + extraClasses)
 						    .attr("d", line);
 					}					
 				}		
@@ -209,6 +217,14 @@ function ExportGraph(container) {
 						
 						startPointX = ((w - paddingBottom) / 5) * 4;
 						startPointY = industriesY(partitionedCountry.x) + (industriesY(partitionedCountry.dx) / 2);
+						
+						var extraClasses = '';
+				    	for (var existingLinkIndex in exportCategoryClasses[exportKey]) {
+							var link = exportCategoryClasses[exportKey][existingLinkIndex];
+							if (link.type == 'industry') {
+								extraClasses += (' ' + link.class);										
+							} 
+						}
 							
 						var points = [[startPointX, startPointY], [startPointX*.9, startPointY], [endPointX*1.1, endPointY], [endPointX, endPointY]];
 					    vis.append("svg:path")
@@ -219,7 +235,7 @@ function ExportGraph(container) {
 						    .style("stroke", 'black')
 						    .style("stroke-width", weight)
 						    .style('stroke-opacity', strokeOpacity)
-						    .attr('class', 'path country-path country-' + industryKey + ' export-' + exportKey + ' unique-' + industryKey + exportKey)
+						    .attr('class', 'path country-path country-' + industryKey + ' export-' + exportKey + ' unique-' + industryKey + exportKey + ' ' + extraClasses)
 						    .attr("d", line);
 					}					
 				}		

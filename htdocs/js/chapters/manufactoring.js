@@ -53,7 +53,19 @@ function getExportCountries() {
 			if (exportCategoryClasses[exportKey] == null) {
 				exportCategoryClasses[exportKey] = [];
 			}
-			exportCategoryClasses[exportKey].push({'class': ('country-' + x), key: x}); 
+			
+			for (var existingLinkIndex in exportCategoryClasses[exportKey]) {
+				var link = exportCategoryClasses[exportKey][existingLinkIndex];
+				if (link.type == 'industry') {
+					var exportClass = {'class' : link.class, key : link.key};
+					exportClasses.push(exportClass);
+					
+					var exportClass = {'class' : 'country-' + x, key: x};
+					exportIndustryClasses[link.key].push(exportClass);
+				} 
+			}
+			
+			exportCategoryClasses[exportKey].push({'class': ('country-' + x), key: x, type: 'country'});
 		}
 		exportCountryClasses[x] = exportClasses;
 	}
@@ -116,7 +128,7 @@ function getIndustryExportsObject() {
 			if (exportCategoryClasses[exportKey] == null) {
 				exportCategoryClasses[exportKey] = [];
 			}
-			exportCategoryClasses[exportKey].push({'class': ('industry-' + x), key: x}); 
+			exportCategoryClasses[exportKey].push({'class': ('industry-' + x), key: x, type: 'industry'}); 
 		}
 		exportIndustryClasses[x] = industryExportClasses;
 		
