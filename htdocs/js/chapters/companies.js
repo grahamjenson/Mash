@@ -17,7 +17,6 @@ function createcompaniesDataSlider() {
 		slide: function( event, ui ) {
 			$('#current-companiesData').html(ui.value);
 			nz.setNCompanies(ui.value);
-			updateCompanyChart();
 		}
 	});
 	
@@ -58,7 +57,7 @@ function createCompanyChart() {
 	}
 	
 	for (var index in nz.othercompanies) {
-		if (index == 'apple')
+		if (index == 'apple' || index == 'google')
 			continue;
 		nz.othercompanies[index].type = 'other';
 		companiesData.push(nz.othercompanies[index]);
@@ -66,6 +65,10 @@ function createCompanyChart() {
 	
 	companyChart = new BubbleLineChart('company-chart');
 	companyChart.CreateBubbleLineChart(companiesData, width, hieght);
+	
+	nz.addListener(function() {
+		updateCompanyChart();
+	});
 	
 }
 

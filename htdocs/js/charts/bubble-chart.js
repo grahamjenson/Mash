@@ -269,12 +269,11 @@ function BubbleChart(container) {
 		    .attr("transform", function(d) { return "translate(" + x(d.wage) + "," + y(d.work) + ")"; })
 		    .remove();
 		
-		
-		
-		chart.selectAll(".circles")
+		var circles = chart.selectAll(".circles")
+    		.data(data, function(d) { return d.name; })	
 			.transition()
 			.duration(transitionSpeed)
-			.attr("r",  function(d) { return z(d.gdppc); });
+			.attr("r",  function(d) { console.log('z = ' + z(d.gdppc) + 'gddpc = ' + d.gdppc); return z(d.gdppc); });	
 		
 		var newPoints = chart.selectAll(".new-circles-g");
 		
