@@ -103,7 +103,7 @@ function getIndustryExportsObject() {
 		var obj = [];
 		obj['name'] = industry.name;
 		obj['key'] = x;
-		obj['value'] = nz.workersByIndustry[x] / nz.workingPopulation;
+		obj['value'] = nz.workersByIndustry[x];
 		obj['exports'] = totalExports.children;
 
 		industryList.push(obj);

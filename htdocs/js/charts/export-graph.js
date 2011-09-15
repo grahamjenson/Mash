@@ -54,6 +54,7 @@ function ExportGraph(container) {
 		tooltip = d3.select("body")
 			.append("div")
 			.style("position", "absolute")
+			.attr('class', 'tool-tip-div')
 			.style("z-index", "10")
 			.style("visibility", "hidden")
 			.style('background', 'white')
@@ -82,7 +83,7 @@ function ExportGraph(container) {
 	      	.attr("class", addIndustryClasses)
 	      	.style("stroke", 'white')
 		    .style("stroke-opacity", 1)
-		    .on("mouseover", showToolTip)
+		    .on("mouseover", showIndustryToolTip)
 			.on("mousemove", moveToolTip)
 			.on("mouseout", hideToolTip);
 		
@@ -111,7 +112,7 @@ function ExportGraph(container) {
 	      	.style("stroke", 'white')
 	      	.attr("class", addExportClasses)
 		    .style("stroke-opacity", 1)
-		    .on("mouseover", showToolTip)
+		    .on("mouseover", showExportToolTip)
 			.on("mousemove", moveToolTip)
 			.on("mouseout", hideToolTip);
 		
@@ -139,7 +140,7 @@ function ExportGraph(container) {
 	      	.style("stroke", 'white')
 	      	.attr("class", addCountryClasses)
 		    .style("stroke-opacity", 1)
-		    .on("mouseover", showToolTip)
+		    .on("mouseover", showCountryToolTip)
 			.on("mousemove", moveToolTip)
 			.on("mouseout", hideToolTip);
 		
@@ -433,8 +434,21 @@ function ExportGraph(container) {
 	  };
 	}
 	
-	function showToolTip(g, i) {
-		tooltip.text(g.data.name);
+	function showIndustryToolTip(g, i) {
+		$('.tool-tip-div').html('<b>' + g.data.name + '</b><p>Amount of Workers in Industry: ' +
+				thousands(Math.round(g.data.value)) + '</p>');		
+		return tooltip.style("visibility", "visible");
+	}
+	
+	function showExportToolTip(g, i) {
+		$('.tool-tip-div').html('<b>' + g.data.name + '</b><p>Total Value of Exports: $' + 
+	    		thousands(Math.round(g.value)) + '</p>');		;
+		return tooltip.style("visibility", "visible");
+	}
+	
+	function showCountryToolTip(g, i) {
+		$('.tool-tip-div').html('<b>' + g.data.name + '</b><p>Total Amount Imported: $' + 
+	    		thousands(Math.round(g.value)) + '</p>');
 		return tooltip.style("visibility", "visible");
 	}
 	
