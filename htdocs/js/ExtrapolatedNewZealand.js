@@ -1057,7 +1057,7 @@ function NewZealand()
 	
 	this.allpseudocompanies = []
 	
-	var minsize = 2000
+	var minsize = 1500
 	var maxsize = 20000
 	
 	for(var i = 0 ; i < 100; i++)
