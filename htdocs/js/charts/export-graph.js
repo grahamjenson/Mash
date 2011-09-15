@@ -178,6 +178,7 @@ function ExportGraph(container) {
 						var extraClasses = '';
 				    	for (var existingLinkIndex in exportCategoryClasses[exportKey]) {
 							var link = exportCategoryClasses[exportKey][existingLinkIndex];
+							
 							if (link.type == 'country') {
 								extraClasses += (' ' + link.class);										
 							} 
