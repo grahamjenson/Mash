@@ -59,8 +59,9 @@ function createCompanyChart() {
 	
 	for (var index in nz.othercompanies) {
 		if (index == 'apple' || index == 'google')
-			continue;
-		nz.othercompanies[index].type = 'other';
+			nz.othercompanies[index].type = 'american';
+		else
+			nz.othercompanies[index].type = 'other';
 		companiesData.push(nz.othercompanies[index]);
 	}
 	

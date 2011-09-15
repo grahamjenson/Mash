@@ -56,7 +56,7 @@ function BubbleLineChart(container) {
 	    g.append("svg:circle")
 	        .attr("class", function(d, i) { return "circles company-" + i; })
 	        .attr('r', 0)
-	        .attr("fill", function (d, i) { if (d.type == 'normal') return 'steelblue'; else { return 'orangered'; }})
+	        .attr("fill", function (d, i) { if (d.type == 'normal') return 'steelblue'; else if (d.type == 'other') { return 'orangered'; } else { return 'yellow'; }})
 	        .style("opacity", '1' )
 	        .style("stroke", 'grey')
 		    .style("stroke-opacity", 1)
@@ -73,7 +73,46 @@ function BubbleLineChart(container) {
 				.on("mouseout", fadeIn)
 				.on("mousemove", moveToolTip); 
 			}, h > 500 ? 4000 : 3000);
+		 
+		createLegend();
 	};
+	
+	function createLegend() {
+
+		var circleSize = 5;
+		var width = 250;
+		var height = 60;
+		
+		
+		var data = ['Manufacturing Companies', 'Other Companies', 'Pseudo Companies', 'Top American Companies'];
+		
+		var y = d3.scale.linear().domain([0, data.length]).rangeRound([0, height]);
+		
+		var legendChart = d3.select("#" + container + '-legend')
+			.append("svg:svg")
+			.attr("width", width)
+			.attr("height", height);
+		
+		var legend = legendChart.selectAll("g.barlegends")
+		    .data(data)
+		    .enter().append("svg:g")
+		    .attr("transform", function(d, i) { return "translate(0" + "," + y(i) + ")"; });
+		
+		legend.append("svg:circle")
+		    .style("fill", function (d, i) { if (i == 0) { return 'steelblue'; } else if(i == 1) { return 'orangered'; } else if(i == 2) { return 'green'; } else if(i == 3) { return 'yellow'; }})
+		    .attr("r", circleSize)
+		    .attr("transform", "translate(" + (width - 40) + ",10)")
+		    .style("opacity", '1' )
+	        .style("stroke", 'grey')
+		    .style("stroke-opacity", 1);
+
+	    legend.append("svg:text")	    	
+		    .attr("dx", width - 50)
+		    .attr("dy", 13)
+		    .attr("fill", "black")
+		    .attr("text-anchor", "end")
+		    .text(String);    	
+	}
 	
 	function addLines() {
 		chart.append("svg:line")
@@ -101,7 +140,7 @@ function BubbleLineChart(container) {
 	
 	 function addRules(speed) {
 		var rules = chart.selectAll("g.x-rule")
-		    .data(x.ticks(xticks).filter(function(d, i) { if (i % 3 == 0) return d; else if (i > 20) return d; }))
+		    .data(x.ticks(xticks).filter(function(d, i) { if (i % 3 == 0) return d; else if (i > 26) return d; }))
 		    .enter().append("svg:g")
 		    .attr("class", "x-rule-g")
 		    .attr("transform", function(d, i) { return "translate(" + x(d) + ",0)"; });
