@@ -54,6 +54,7 @@ function ExportGraph(container) {
 		tooltip = d3.select("body")
 			.append("div")
 			.style("position", "absolute")
+			.attr('class', 'tool-tip-div')
 			.style("z-index", "10")
 			.style("visibility", "hidden")
 			.style('background', 'white')
@@ -82,7 +83,7 @@ function ExportGraph(container) {
 	      	.attr("class", addIndustryClasses)
 	      	.style("stroke", 'white')
 		    .style("stroke-opacity", 1)
-		    .on("mouseover", showToolTip)
+		    .on("mouseover", showIndustryToolTip)
 			.on("mousemove", moveToolTip)
 			.on("mouseout", hideToolTip);
 		
@@ -111,7 +112,7 @@ function ExportGraph(container) {
 	      	.style("stroke", 'white')
 	      	.attr("class", addExportClasses)
 		    .style("stroke-opacity", 1)
-		    .on("mouseover", showToolTip)
+		    .on("mouseover", showExportToolTip)
 			.on("mousemove", moveToolTip)
 			.on("mouseout", hideToolTip);
 		
@@ -139,7 +140,7 @@ function ExportGraph(container) {
 	      	.style("stroke", 'white')
 	      	.attr("class", addCountryClasses)
 		    .style("stroke-opacity", 1)
-		    .on("mouseover", showToolTip)
+		    .on("mouseover", showCountryToolTip)
 			.on("mousemove", moveToolTip)
 			.on("mouseout", hideToolTip);
 		
@@ -157,22 +158,23 @@ function ExportGraph(container) {
 			var partitionedExport = partitionedExports[exportPartitionIndex];
 			
 			for (linkIndex in partitionedExport.data.industryLinks) {
-				var weight = (partitionedExport.value / partitionedExport.data.industryLinks.length) / partitionedExport.value;
+				
 				var exportKey = partitionedExport.data.key;
 				var industryKey = partitionedExport.data.industryLinks[linkIndex].key;
 				
 				var endPointX = ((w - paddingBottom) / 5)*2;
 				var endPointY = exportY(partitionedExport.x) + (exportY(partitionedExport.dx) / 2);
-				var startPointX, startPointY;
-				
-				
 				
 				for (industryPartitionIndex in partitionedIndustries) {
 					var partitionedIndustry = partitionedIndustries[industryPartitionIndex];
 					if (partitionedIndustry.data.key == industryKey) {
-						startPointX = ((w - paddingBottom) / 5);
-						startPointY = industriesY(partitionedIndustry.x) + (industriesY(partitionedIndustry.dx) / 2);
-							
+						var maxWeight = exportY(partitionedExport.dx) < 50 ? exportY(partitionedExport.dx) : 50;  
+						var weightScale = d3.scale.sqrt().domain([0, partitionedIndustry.data.exports.length]).range([maxWeight, 1]).clamp(true);
+						var weight = weightScale(1);
+						
+						var startPointX = ((w - paddingBottom) / 5);
+						var startPointY = industriesY(partitionedIndustry.x) + (industriesY(partitionedIndustry.dx) / 2);
+						
 						var points = [[startPointX, startPointY], [startPointX*1.1, startPointY], [endPointX*.9, endPointY], [endPointX, endPointY]];
 					    vis.append("svg:path")
 						    .data([points])
@@ -432,8 +434,21 @@ function ExportGraph(container) {
 	  };
 	}
 	
-	function showToolTip(g, i) {
-		tooltip.text(g.data.name);
+	function showIndustryToolTip(g, i) {
+		$('.tool-tip-div').html('<b>' + g.data.name + '</b><p>Amount of Workers in Industry: ' +
+				thousands(Math.round(g.data.value)) + '</p>');		
+		return tooltip.style("visibility", "visible");
+	}
+	
+	function showExportToolTip(g, i) {
+		$('.tool-tip-div').html('<b>' + g.data.name + '</b><p>Total Value of Exports: $' + 
+	    		thousands(Math.round(g.value)) + '</p>');		;
+		return tooltip.style("visibility", "visible");
+	}
+	
+	function showCountryToolTip(g, i) {
+		$('.tool-tip-div').html('<b>' + g.data.name + '</b><p>Total Amount Imported: $' + 
+	    		thousands(Math.round(g.value)) + '</p>');
 		return tooltip.style("visibility", "visible");
 	}
 	
