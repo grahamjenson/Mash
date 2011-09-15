@@ -25,9 +25,7 @@ $(document).ready( function() {
 			exportGraph.resize(475);
 			$('#export-graph').animate({
 				height: '-=2540'
-			}, 1000, function() {
-				
-			});	
+			}, 1000);	
 			$('#resize-export-graph span').html('Maximize');
 	});
 });

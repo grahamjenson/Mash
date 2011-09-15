@@ -4,6 +4,7 @@ var companyChart;
 $(document).ready( function() {
 	createcompaniesDataSlider();
 	createCompanyChart();
+	createTourismStackedBarChart();
 });
 
 function createcompaniesDataSlider() {	
@@ -17,7 +18,6 @@ function createcompaniesDataSlider() {
 		slide: function( event, ui ) {
 			$('#current-companiesData').html(ui.value);
 			nz.setNCompanies(ui.value);
-			updateCompanyChart();
 		}
 	});
 	
@@ -58,7 +58,7 @@ function createCompanyChart() {
 	}
 	
 	for (var index in nz.othercompanies) {
-		if (index == 'apple')
+		if (index == 'apple' || index == 'google')
 			continue;
 		nz.othercompanies[index].type = 'other';
 		companiesData.push(nz.othercompanies[index]);
@@ -66,6 +66,10 @@ function createCompanyChart() {
 	
 	companyChart = new BubbleLineChart('company-chart');
 	companyChart.CreateBubbleLineChart(companiesData, width, hieght);
+	
+	nz.addListener(function() {
+		updateCompanyChart();
+	});
 	
 }
 
@@ -83,4 +87,26 @@ function updateCompanyChart() {
 	
 	companyChart.refresh(newcompaniesData);
 	
+}
+
+function createTourismStackedBarChart() {
+	var width = 960;
+	var height = 420;
+
+	var industryFilter = ['Mining', 'Fishing and Aquaculture', 'Forestry and Logging', 'Rental, Hiring and Real Estate Services',
+	                      'Financial and Insurance Services', 'Not elsewhere classified', 'Electricity, Gas, Water and Waste Services',
+	                      'Transport, Postal and Warehousing', 'Information Media and Telecommunications',
+	                      'Public Administration and Safety'];
+	var industries = getIndustryWorkersForDisplay(industryFilter);
+	
+	// Sort the filtered mutlidemensional array in a decending order.
+	industries.filteredList.sort(function(a, b) { return ((a.name < b.name) ? -1 : ((a.name > b.name) ? 1 : 0)); });
+	industries.completeList.sort(function(a, b) { return ((a.name < b.name) ? -1 : ((a.name > b.name) ? 1 : 0)); });
+	
+	var stackedBarChart = new BarChart('industry-stacked-chart');
+	stackedBarChart.createBarChart(industries.completeList, width, height, industries.totalWorkers);	
+	nz.addListener(function() {			
+		industries = getIndustryWorkersForDisplay(industryFilter);
+		stackedBarChart.refresh(industries.filteredList);
+	});
 }

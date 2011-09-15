@@ -25,8 +25,8 @@ function BubbleLineChart(container) {
 	
 		
 		
-		x = d3.scale.linear().domain([d3.min(xData), d3.max(xData)]).rangeRound([paddingLeft, w - paddingRight]);
-	    y = d3.scale.linear().domain([d3.max(yData), d3.min(yData)]).rangeRound([paddingTop, h - paddingBottom]);
+		x = d3.scale.log().domain([d3.min(xData), d3.max(xData)]).rangeRound([paddingLeft, w - paddingRight]);
+	    y = d3.scale.log().domain([d3.max(yData), d3.min(yData)]).rangeRound([paddingTop, h - paddingBottom]);
 		c = companies.length;
 		
 		chart = d3.select("#" + container)
@@ -101,10 +101,10 @@ function BubbleLineChart(container) {
 	
 	 function addRules(speed) {
 		var rules = chart.selectAll("g.x-rule")
-		    .data(x.ticks(xticks))
+		    .data(x.ticks(xticks).filter(function(d, i) { if (i % 3 == 0) return d; else if (i > 20) return d; }))
 		    .enter().append("svg:g")
 		    .attr("class", "x-rule-g")
-		    .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
+		    .attr("transform", function(d, i) { return "translate(" + x(d) + ",0)"; });
 		
 		rules.append("svg:line")
 		    .attr("y1", h - paddingBottom)
@@ -117,7 +117,7 @@ function BubbleLineChart(container) {
 		    .attr("dy", ".71em")
 		    .attr("text-anchor", "middle")
 		    .attr("class", "x-rule-text")
-		    .text(function (d) { return '$' + thousands(d); });
+		    .text(function (d) { return d.toExponential(); });
 		
 		rules.append("svg:line")
 		    .attr("y1", 0)
@@ -126,11 +126,11 @@ function BubbleLineChart(container) {
 		    .attr("class", "x-rule")
 		    .attr("stroke-opacity", .2);
 		
-		rules = chart.selectAll("g.y-rule")
-		    .data(y.ticks(yticks))
+		var rules = chart.selectAll("g.y-rule")
+		    .data(y.ticks(yticks).filter(function(d, i) { if (i % 2 == 0) return d; else if (i > 15) return d; }))
 		    .enter().append("svg:g")
 		    .attr("class", "y-rule-g")
-		    .attr("transform", function(d) { return "translate(0, " + y(d) + ")"; });
+		    .attr("transform", function(d, i) { return "translate(0, " + y(d) + ")"; });
 		
 		rules.append("svg:line")
 		    .attr("x1", paddingLeft - 5)
@@ -142,7 +142,7 @@ function BubbleLineChart(container) {
 		    .attr("dy", ".3em")
 		    .attr("x", paddingLeft - 20)
 		    .attr("text-anchor", "middle")
-		    .text(y.tickFormat(10));
+		    .text(function(d, i) { return d;});
 		
 		rules.append("svg:line")
 		    .attr("x1", paddingLeft)
@@ -191,8 +191,8 @@ function BubbleLineChart(container) {
 	function shrink() {
 		var zData = $.map(data, function(o){ return o.gdppc; });		
 		
-		x = d3.scale.linear().domain([40000, 120000]).rangeRound([paddingwidth + (maxcirclesize / 1.5), w - (maxcirclesize / 2)]);
-	    y = d3.scale.linear().domain([50, 32]).rangeRound([(maxcirclesize / 2), h - (maxcirclesize / 2)]);
+		x = d3.scale.log().domain([40000, 120000]).rangeRound([paddingwidth + (maxcirclesize / 1.5), w - (maxcirclesize / 2)]);
+	    y = d3.scale.log().domain([50, 32]).rangeRound([(maxcirclesize / 2), h - (maxcirclesize / 2)]);
 		z = d3.scale.log().domain([d3.min(zData), d3.max(zData)]).range([mincirclesize, maxcirclesize]);
 		
 		refreshData();	
@@ -257,8 +257,6 @@ function BubbleLineChart(container) {
 		    .attr("r",  5);	
 		
 		g.exit()
-			.transition()
-		    .duration(transitionSpeed)
 		    .remove();		
 
 		g.on("mouseover", fadeOut)
@@ -327,18 +325,6 @@ function BubbleLineChart(container) {
 	    		thousands(Math.round(g.workers)) + '<br />Revenue: $' + 
 	    		thousands(Math.round(g.revenue)) + '</p>');
 		tooltip.style("visibility", "visible");
-	}
-	
-	function fadeOutExtra(g, i) {
-		 
-	    chart.selectAll(".circles")
-	      	.transition()
-	        .style("opacity", .1);
-	    
-	  
-	    chart.selectAll(('.company-' + (i + c)))
-	    	.transition()
-	    	.style("opacity", 1);
 	}
 	
 	/** Returns an event handler for fading a given chord group. */
