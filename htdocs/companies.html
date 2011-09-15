@@ -23,7 +23,7 @@
         <!--  <script type="text/javascript" src="js/google-analytics.js"></script> -->
         
         <!-- Various Charts -->
-        <script type="text/javascript" src="js/charts/bar-chart.js"></script>
+        <script type="text/javascript" src="js/charts/bar-chart-plain.js"></script>
         <script type="text/javascript" src="js/charts/bubble-line-chart.js"></script>
         <script type="text/javascript" src="js/charts/bubble-chart.js"></script>
         
@@ -61,11 +61,11 @@
             <div class='vis-container'> 
                 
                 <div id='main-container'>
-                    <h2>The Proposition</h2>
-                    <p>We should build our future economy on Innovation.</p>
+                    <h2 class='gdp-hide'>1. The Proposition</h2>
+                    <p class='gdp-hide'>We should build our future economy on Innovation.</p>
                     
-                    <h2>The Problem</h2>
-                    <p>
+                    <h2 class='gdp-hide'>3. The Problem</h2>
+                    <p class='gdp-hide'>
                         //TODO Write stuff about the problems that are currently stopping us from doing this.
                         <br /><br />
                         <a id='read-more' href='#'>Read more</a>
@@ -77,7 +77,7 @@
                         </p>
                     </div>
                     
-                    <h2 style='width: 50%'>The Impact</h2>
+                    <h2 style='width: 50%'>4. The Impact</h2>
                     <div id='gdp-container-left'> 
                         <p><b>OECD Prosperity: GDP/Per Capita (Circle Area)</b><br />
                             Avg. Working Week (Hours) vs. Avg. Annual Wage ($NZD)</p>      
@@ -91,8 +91,8 @@
 	                <div class='clear'></div>
                 </div>  
                 
-                <div id='side-container'>
-                    <h2>How it Works</h2>
+                <div id='side-container' class='gdp-hide'>
+                    <h2>2. How it Works</h2>
                     <p>
                         //TODO Write stuff how this works
                     </p>
@@ -103,20 +103,23 @@
                     <div id='company-slider'></div>
                     <div id='company-slider-legend'></div>
                 
-                    <h2>Company Performance</h2>
+                    <h2>5. Company Performance</h2>
                     <p style='text-align: center'><b>New Zealand Companies</b><br />
                     Annual Revenue ($NZD) vs. Number of Employees</p> 
                     <div id="company-chart" class="chart-wrapper"></div>     
                 </div>
                 
                                    
-                <div id='bottom-container'>
+                <div id='bottom-container' class='gdp-hide'>
+                    <h2 style='width: 25%'>6. New Zealand Industires</h2>
+                    <p style='text-align:center;'><b>Workers per Industry</b></p>                
+                    <div id='industry-stacked-chart'></div>     
                 </div> 
                 <div class='clear'></div>                               
             </div>            
 
             <div id='footer'>
-                <p>Infographic Produced By: <a href='#' onclick="window.open('http://maori.geek.nz/')">Graham Jenson</a> &amp; <a href='#' onclick="window.open('http://www.hashbang.co.nz/')">Alex Gibson</a>. References &amp; Datasources can be found <a href='/references'>here</a>.</p>
+                <p>Infographic Produced By: <a href='#' onclick="window.open('http://www.hashbang.co.nz/')">Alex Gibson</a> &amp;  <a href='#' onclick="window.open('http://maori.geek.nz/')">Graham Jenson</a>. References &amp; Datasources can be found <a href='/references'>here</a>.</p>
                 <p>Licensed under a Creative Commons Attribution 3.0 Unported License.</p>
             </div>
                 

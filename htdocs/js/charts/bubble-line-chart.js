@@ -327,18 +327,6 @@ function BubbleLineChart(container) {
 		tooltip.style("visibility", "visible");
 	}
 	
-	function fadeOutExtra(g, i) {
-		 
-	    chart.selectAll(".circles")
-	      	.transition()
-	        .style("opacity", .1);
-	    
-	  
-	    chart.selectAll(('.company-' + (i + c)))
-	    	.transition()
-	    	.style("opacity", 1);
-	}
-	
 	/** Returns an event handler for fading a given chord group. */
 	function fadeIn(g, i) {
 	  
