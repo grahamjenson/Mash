@@ -154,6 +154,10 @@ ul li, ol li
 	clear: both;
 }
 
+.more-text b {
+    font-size: 1.1em;	
+}
+
 
 /* Main Container */
 #main-container {	
