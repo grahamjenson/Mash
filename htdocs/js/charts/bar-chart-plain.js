@@ -12,6 +12,7 @@ function BarChart(container) {
 	var paddingRight = 15;
 	var colour = d3.scale.category20();
 	var transitionSpeed = 500;
+	var tooltip;
 	
 	this.createBarChart = function(dataInput, width, hieght, totalWorkforce) {
 		
@@ -30,6 +31,17 @@ function BarChart(container) {
 			.attr("width", w)
 		    .attr("height", h);
 		
+		tooltip = d3.select("body")
+			.append("div")
+			.attr('class', 'tool-tip-div-2')
+			.style("position", "absolute")
+			.style("z-index", "10")
+			.style("visibility", "hidden")
+			.style('background', 'white')
+			.style('padding', '2px')
+			.style('border', 'thin solid black')
+			.text("");
+		
 		var bars = chart.selectAll("g.bar")
 		    .data(data, function(d) { return d.name; })
 		    .enter().append("svg:g")
@@ -39,7 +51,7 @@ function BarChart(container) {
 		bars.append("svg:rect")
 		    .style("fill", function(d, i) { return colour(i); })
 		    .attr("width", function(d, i) { return x(d.workers); })
-		    .attr("class", "workers")
+		    .attr("class", function(d, i) { return 'workers industry-' + i; })
 		    .attr("height", y.rangeBand());
 		
 		bars.append("svg:text")
@@ -47,6 +59,7 @@ function BarChart(container) {
 		    .attr("y", y.rangeBand() / 2)
 		    .attr("dx", -6)
 		    .attr("dy", ".35em")
+		    .attr("class", function(d, i) { return 'workers industry-' + i; })
 		    .attr("text-anchor", "end")
 		    .text(function(d, i) { return d.name; });
 		
@@ -100,6 +113,12 @@ function BarChart(container) {
 		    .attr("x1", paddingLeft)
 		    .attr("x2", w - paddingRight)
 		    .attr("stroke", "black");
+		
+		setTimeout(function() { 
+			bars.on("mouseover", fadeOut)
+				.on("mouseout", fadeIn)
+				.on("mousemove", moveToolTip); 
+			}, h > 500 ? 1000 : 500);
 			
 		
 	};
@@ -139,5 +158,41 @@ function BarChart(container) {
 			.attr("width", function(d, i) { return x(d.tourism_dist*nz.totaltourismworkers()); });
 				
 	}
+	
+	/** Returns an event handler for fading a given chord group. */
+	function fadeOut(g, i) {
+	 
+	    chart.selectAll(".workers")
+	      	.transition()
+	        .style("opacity", .1);
+	   
+	    chart.selectAll(('.industry-' + i))
+	    	.transition()
+	    	.style("opacity", 1);
+	    
+	    $('.tool-tip-div-2').html('<b>' + g.name + '</b><p>Number of Workers: ' + 
+	    		thousands(Math.round(g.workers)) + '<br />Average Annual Wage: $' + 
+	    		thousands(Math.round(g.wage)) + '<br />Average Hours Worked per Week: ' +
+	    		Math.round(g.work) + '<br />Industry GDP Per Capita: $' +
+	    		thousands(Math.round(g.gdppc)) + '</p>');
+		tooltip.style("visibility", "visible");
+	}
+	
+	/** Returns an event handler for fading a given chord group. */
+	function fadeIn(g, i) {
+	  
+	    chart.selectAll(".workers")
+	      	.transition()
+	        .style("opacity", 1);
+	    
+	    tooltip.style("visibility", "hidden");
+	}
+	
+	function moveToolTip(g, i) {	
+		var event = d3.event;
+		tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");
+		return;
+	}
+
 
 }

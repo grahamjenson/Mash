@@ -273,7 +273,7 @@ function BubbleChart(container) {
     		.data(data, function(d) { return d.name; })	
 			.transition()
 			.duration(transitionSpeed)
-			.attr("r",  function(d) { console.log('z = ' + z(d.gdppc) + 'gddpc = ' + d.gdppc); return z(d.gdppc); });	
+			.attr("r",  function(d) { return z(d.gdppc); });	
 		
 		var newPoints = chart.selectAll(".new-circles-g");
 		
