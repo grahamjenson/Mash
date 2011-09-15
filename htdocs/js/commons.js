@@ -26,6 +26,7 @@ function setupReadMoreBinding() {
 	$( ".more-text" ).dialog({
 		autoOpen: false,
 		modal: true,
+		width: 600,
 		buttons: {
 			Ok: function() {
 				$( this ).dialog( "close" );

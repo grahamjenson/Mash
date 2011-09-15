@@ -297,7 +297,7 @@ function LineChart(container) {
 		    .attr("y", h - 5)
 		    .attr("text-anchor", "middle")
 		    .attr("style", "fill: black")
-		    .text(function (d, i) {	return data[d].year; });	
+		    .text(function (d, i) {	if (data[d]) return data[d].year; });	
 
 	}
 	

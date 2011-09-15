@@ -144,8 +144,9 @@ function NZGeograhpy(container) {
 	this.createTourismLegend = function(container, width, height) {
 		var paddingTop = 0;
 		var squareSize = 20;
-		
-		var data = ['Tourism: Miminum Capacity', 'Tourism: Maximum Capacity', 'Tourism: Overcapacity'];
+		var squareHeight = 69;
+
+		var data = ['Tourism: Normal Capacity', 'Tourism: Maximum Capacity', 'Tourism: Capacity Overload'];
 		
 		y = d3.scale.linear().domain([0, data.length]).rangeRound([paddingTop, height]);
 		
@@ -154,17 +155,49 @@ function NZGeograhpy(container) {
 			.attr("width", width)
 			.attr("height", height);
 		
+		var gradient = chart.append("svg:defs")
+		  .append("svg:linearGradient")
+		    .attr("id", "gradient")
+		    .attr("x1", "0%")
+		    .attr("y1", "0%")
+		    .attr("x2", "0%")
+		    .attr("y2", "100%")
+		    .attr("spreadMethod", "pad");
+		
+		gradient.append("svg:stop")
+		    .attr("offset", "0%")
+		    .attr("stop-color", "#008800")
+		    .attr("stop-opacity", 1);
+	
+		gradient.append("svg:stop")
+		    .attr("offset", "50%")
+		    .attr("stop-color", "rgb(202,35,3)")
+		    .attr("stop-opacity", 1);
+		
+		gradient.append("svg:stop")
+		    .attr("offset", "100%")
+		    .attr("stop-color", "black")
+		    .attr("stop-opacity", 1);
+		
 		var legend = chart.selectAll("g.bar")
 		    .data(data)
 		    .enter().append("svg:g")
 		    .attr("class", "bar")
 		    .attr("transform", function(d, i) { return "translate(0" + "," + y(i) + ")"; });
 		
-		legend.append("svg:rect")
-		    .attr("fill", function(d, i) {  return getLegendColour(i); })
-		    .attr('class', function(d, i) { if (i == 2) { return 'flashing'; } } )
+		chart.append("svg:rect")
+			.attr("transform", "translate(0" + "," + y(0) + ")")
+		    .style("fill", "url(#gradient)")
 		    .attr("width", squareSize)
-		    .attr("height", squareSize);
+		    .attr("height", squareHeight);
+		
+		legend.append("svg:line")
+		    .attr("x1", squareSize + 2)
+		    .attr("x2", squareSize + 5)
+		    .attr("y1", 10)
+		    .attr("y2", 10)
+		    .attr("class", "x-rule-line")
+		    .attr("stroke", "black");
     
 	    legend.append("svg:text")	    	
 		    .attr("dx", 25)
@@ -172,15 +205,15 @@ function NZGeograhpy(container) {
 		    .attr("fill", "black")
 		    .attr("text-anchor", "start")
 		    .text(String);
-	    
-	    //flashColour();	    	
+	    	
 	};
 	
 	this.createDairyLegend = function(container, width, height) {
-		var paddingTop = 5;
+		var paddingTop = 0;
 		var squareSize = 20;
+		var squareHeight = 69;
 		
-		var data = ['Dairy: Miminum Capacity', 'Dairy: Maximum Capacity', 'Dairy: Overcapacity'];
+		var data = ['Dairy: Normal Capacity', 'Dairy: Maximum Capacity', 'Dairy: Capacity Overload'];
 		
 		y = d3.scale.linear().domain([0, data.length]).rangeRound([paddingTop, height]);
 		
@@ -189,26 +222,56 @@ function NZGeograhpy(container) {
 			.attr("width", width)
 			.attr("height", height);
 		
+		var gradient = chart.append("svg:defs")
+		  .append("svg:linearGradient")
+		    .attr("id", "gradient")
+		    .attr("x1", "0%")
+		    .attr("y1", "0%")
+		    .attr("x2", "0%")
+		    .attr("y2", "100%")
+		    .attr("spreadMethod", "pad");
+		
+		gradient.append("svg:stop")
+		    .attr("offset", "0%")
+		    .attr("stop-color", "#008800")
+		    .attr("stop-opacity", 1);
+	
+		gradient.append("svg:stop")
+		    .attr("offset", "50%")
+		    .attr("stop-color", "rgb(202,35,3)")
+		    .attr("stop-opacity", 1);
+		
+		gradient.append("svg:stop")
+		    .attr("offset", "100%")
+		    .attr("stop-color", "black")
+		    .attr("stop-opacity", 1);
+		
 		var legend = chart.selectAll("g.bar")
 		    .data(data)
 		    .enter().append("svg:g")
 		    .attr("class", "bar")
 		    .attr("transform", function(d, i) { return "translate(0" + "," + y(i) + ")"; });
 		
-		legend.append("svg:rect")
-		    .attr("fill", function(d, i) {  return getLegendColour(i); })
-		    .attr('class', function(d, i) { if (i == 2) { return 'flashing'; } } )
+		chart.append("svg:rect")
+			.attr("transform", "translate(0" + "," + y(0) + ")")
+		    .style("fill", "url(#gradient)")
 		    .attr("width", squareSize)
-		    .attr("height", squareSize);
-    
+		    .attr("height", squareHeight);
+		
+		legend.append("svg:line")
+		    .attr("x1", squareSize + 1)
+		    .attr("x2", squareSize + 5)
+		    .attr("y1", 10)
+		    .attr("y2", 10)
+		    .attr("class", "x-rule-line")
+		    .attr("stroke", "black");
+	
 	    legend.append("svg:text")	    	
-		    .attr("dx", 25)
+		    .attr("dx", 27)
 		    .attr("dy", 13)
 		    .attr("fill", "black")
 		    .attr("text-anchor", "start")
-		    .text(String);
-	    
-	    //flashColour();	    	
+		    .text(String);    	
 	};
 	
 	function getLegendColour(i) {
