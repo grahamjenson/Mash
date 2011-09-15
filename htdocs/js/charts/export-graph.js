@@ -157,22 +157,23 @@ function ExportGraph(container) {
 			var partitionedExport = partitionedExports[exportPartitionIndex];
 			
 			for (linkIndex in partitionedExport.data.industryLinks) {
-				var weight = (partitionedExport.value / partitionedExport.data.industryLinks.length) / partitionedExport.value;
+				
 				var exportKey = partitionedExport.data.key;
 				var industryKey = partitionedExport.data.industryLinks[linkIndex].key;
 				
 				var endPointX = ((w - paddingBottom) / 5)*2;
 				var endPointY = exportY(partitionedExport.x) + (exportY(partitionedExport.dx) / 2);
-				var startPointX, startPointY;
-				
-				
 				
 				for (industryPartitionIndex in partitionedIndustries) {
 					var partitionedIndustry = partitionedIndustries[industryPartitionIndex];
 					if (partitionedIndustry.data.key == industryKey) {
-						startPointX = ((w - paddingBottom) / 5);
-						startPointY = industriesY(partitionedIndustry.x) + (industriesY(partitionedIndustry.dx) / 2);
-							
+						var maxWeight = exportY(partitionedExport.dx) < 50 ? exportY(partitionedExport.dx) : 50;  
+						var weightScale = d3.scale.sqrt().domain([0, partitionedIndustry.data.exports.length]).range([maxWeight, 1]).clamp(true);
+						var weight = weightScale(1);
+						
+						var startPointX = ((w - paddingBottom) / 5);
+						var startPointY = industriesY(partitionedIndustry.x) + (industriesY(partitionedIndustry.dx) / 2);
+						
 						var points = [[startPointX, startPointY], [startPointX*1.1, startPointY], [endPointX*.9, endPointY], [endPointX, endPointY]];
 					    vis.append("svg:path")
 						    .data([points])
