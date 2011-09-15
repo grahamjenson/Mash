@@ -1057,14 +1057,20 @@ function NewZealand()
 	
 	this.allpseudocompanies = []
 	
-	var minsize = 4000
-	var maxsize = 10000
+	var minsize = 2000
+	var maxsize = 20000
+	
 	for(var i = 0 ; i < 100; i++)
 	{
 		var ind = "manufacturing"
 		if(i % 10 == 0) { ind = "inform_tele"}
-		var wor = minsize + i*(maxsize-minsize)/100
-		var jitrev = this.avgrevpw + (this.avgrevpw *.05) * (Math.random() - .5) 
+		
+		//var wor = minsize + i*(maxsize-minsize)/100
+		var wor = minsize * Math.pow(maxsize/minsize,Math.random())
+		
+		var jitrev = this.avgrevpw + (this.avgrevpw*1.5) * (Math.random() - .5) 
+		
+		
 		this.allpseudocompanies[i] = {name : randomnames[i], workers : wor , revenue: jitrev*wor, nzsic: ind}
 	}
 	
