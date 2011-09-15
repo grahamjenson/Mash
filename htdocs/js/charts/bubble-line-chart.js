@@ -84,7 +84,7 @@ function BubbleLineChart(container) {
 		var height = 60;
 		
 		
-		var data = ['Manufacturing Companies', 'Other Companies', 'Pseudo Companies', 'Top American Companies'];
+		var data = ['10 Top Technology Companies', 'Major New Zealand Companies', 'Pseudo Companies', 'Top International Companies'];
 		
 		var y = d3.scale.linear().domain([0, data.length]).rangeRound([0, height]);
 		
